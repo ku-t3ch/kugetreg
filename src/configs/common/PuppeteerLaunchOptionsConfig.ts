@@ -1,7 +1,7 @@
 import { type PuppeteerLaunchOptions } from "puppeteer";
 
 export const PuppeteerLaunchOptionsConfig: PuppeteerLaunchOptions = {
-  headless: false,
+  headless: true,
   executablePath:
     process.platform === "win32"
       ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
