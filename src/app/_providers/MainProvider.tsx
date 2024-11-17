@@ -11,6 +11,7 @@ import "@/styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
+import { Suspense } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -18,7 +19,7 @@ interface Props {
 
 const theme = createTheme({
   fontFamily: "var(--font-sans)",
-  
+
   radius: {
     sm: "0.75rem",
   },
@@ -26,13 +27,15 @@ const theme = createTheme({
 
 export default function MainProvider({ children }: Props) {
   return (
-    <SessionProvider>
-      <MantineProvider theme={theme} defaultColorScheme="light">
-        <ConfigProvider>
-          <Notifications position="top-right" />
-          <ModalsProvider>{children}</ModalsProvider>
-        </ConfigProvider>
-      </MantineProvider>
-    </SessionProvider>
+    <Suspense>
+      <SessionProvider>
+        <MantineProvider theme={theme} defaultColorScheme="light">
+          <ConfigProvider>
+            <Notifications position="top-right" />
+            <ModalsProvider>{children}</ModalsProvider>
+          </ConfigProvider>
+        </MantineProvider>
+      </SessionProvider>
+    </Suspense>
   );
 }
