@@ -17,7 +17,7 @@ export default async function Page(props: {
 
         <div id='capture' className="flex flex-col p-3 min-w-[75rem]">
             {getCourseFromRedis && (
-                <TableCourse scheduleData={JSON.parse(getCourseFromRedis)} />
+                <TableCourse scheduleData={getCourseFromRedis} />
             )}
             <div className="flex justify-between">
                 <div>
