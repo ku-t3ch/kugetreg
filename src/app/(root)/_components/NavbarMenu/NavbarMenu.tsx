@@ -26,6 +26,11 @@ export const navigationItems: NavigationItem[] = [
     icon: IconCalendarCheck,
     link: "/schedule-planner",
   },
+  {
+    label: "บริหารหน่วยกิต",
+    icon: IconCalendarCheck,
+    link: "/credit-management",
+  },
 ];
 
 export default function NavbarMenu(props: Props) {
