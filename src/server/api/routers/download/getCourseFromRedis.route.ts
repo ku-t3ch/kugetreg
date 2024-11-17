@@ -2,9 +2,9 @@ import getCourseFromRedisService, {
   getCourseFromRedisSchema,
 } from "@/services/download/getCourseFromRedis.service";
 
-import { protectedProcedure } from "../../trpc";
+import { publicProcedure } from "../../trpc";
 
-const getCourseFromRedis = protectedProcedure
+const getCourseFromRedis = publicProcedure
   .input(getCourseFromRedisSchema)
   .query(async ({ input }) => {
     try {

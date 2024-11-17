@@ -1,3 +1,17 @@
+@font-face {
+  font-family: "thermal-receipt";
+  src: url("/font/thermal-receipt.ttf");
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.thermal-receipt {
+  font-family: "thermal-receipt" !important;
+}
+.receiptContainer {
+  background-image: url(/wrinkled-paper-texture-7.jpg);
+  background-position: center;
+  filter: brightness(105%);
+  padding: 20px;
+}

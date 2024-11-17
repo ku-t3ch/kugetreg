@@ -65,7 +65,7 @@ export default function ScheduleHeader() {
         getReceipt.mutate(downloadPayload, {
             onSuccess: (data) => {
                 notifications.update({ id: noti, ...SuccessNotificationData });
-                saveAs(data, "receipt.pdf");
+                saveAs(data, "receipt.png");
             },
             onError: (error) => {
                 if (error instanceof Error) {

@@ -51,6 +51,7 @@
     "clsx": "^2.1.1",
     "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^7.1.0",
     "file-saver": "^2.0.5",
@@ -59,6 +60,7 @@
     "hybrid-crypto-js": "^0.2.4",
     "ioredis": "^5.4.1",
     "jwt-decode": "^4.0.0",
+    "lodash": "^4.17.21",
     "next": "^15.0.1",
     "next-auth": "5.0.0-beta.25",
     "puppeteer": "^23.8.0",
@@ -75,6 +77,7 @@
   "devDependencies": {
     "@types/eslint": "^8.56.10",
     "@types/file-saver": "^2.0.7",
+    "@types/lodash": "^4.17.13",
     "@types/node": "^20.14.10",
     "@types/qs": "^6.9.17",
     "@types/react": "^18.3.3",

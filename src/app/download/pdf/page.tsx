@@ -1,34 +1,33 @@
-"use client";
-import { useSearchParams } from "next/navigation";
+import { type SearchParams } from 'next/dist/server/request/search-params';
 
-import TableCourse from "@/app/_components/TableCourse/TableCourse";
-import { auth } from "@/server/auth";
-import { api } from "@/trpc/server";
+import TableCourse from '@/app/_components/TableCourse/TableCourse';
+import { api } from '@/trpc/server';
 
-export default function Page() {
-  const searchParams = useSearchParams();
+export default async function Page(props: {
+    searchParams: Promise<SearchParams>;
+}) {
+    const { major, screenType, id } = await props.searchParams;
 
-  const screenType = searchParams.get("screenType");
-  const major = searchParams.get("major");
-  const id = searchParams.get("id");
+    if (!major || !screenType || !id) {
+        return <div>Invalid request</div>;
+    }
 
-  return (
-    <div id="capture" className="flex flex-col p-3">
-      {/* {apiRoute.results &&
-        apiRoute.results.length > 0 &&
-        apiRoute.results[0]?.course && (
-          <TableCourse scheduleData={apiRoute.results[0]?.course} />
-        )}
-      <div className="flex justify-between">
-        <div>
-          Generate by:{" "}
-          <span className="font-semibold">kugetreg.teerut.com</span>
+    const getCourseFromRedis = await api.download.getCourseFromRedis({ id: id.toString() });
+    return (
+
+        <div id='capture' className="flex flex-col p-3 min-w-[75rem]">
+            {getCourseFromRedis && (
+                <TableCourse scheduleData={JSON.parse(getCourseFromRedis)} />
+            )}
+            <div className="flex justify-between">
+                <div>
+                    Generate by:{" "}
+                    <span className="font-semibold">kugetreg.teerut.com</span>
+                </div>
+                <div>
+                    {major}
+                </div>
+            </div>
         </div>
-        <div>
-          {session?.user.student.majorCode} -{" "}
-          {session?.user.student.majorNameEn}
-        </div>
-      </div> */}
-    </div>
-  );
+    );
 }

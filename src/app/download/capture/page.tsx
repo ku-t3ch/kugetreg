@@ -1,4 +1,7 @@
-import { type SearchParams } from "next/dist/server/request/search-params";
+import { type SearchParams } from 'next/dist/server/request/search-params';
+
+import TableCourse from '@/app/_components/TableCourse/TableCourse';
+import { api } from '@/trpc/server';
 
 export default async function Page(props: {
     searchParams: Promise<SearchParams>;
@@ -9,28 +12,22 @@ export default async function Page(props: {
         return <div>Invalid request</div>;
     }
 
-    console.log("major", major);
-    console.log("screenType", screenType);
-    console.log("id", id);
-
+    const getCourseFromRedis = await api.download.getCourseFromRedis({ id: id.toString() });
     return (
-        <div id="capture" className="flex flex-col p-3">
-            test
-            {/* {apiRoute.results &&
-        apiRoute.results.length > 0 &&
-        apiRoute.results[0]?.course && (
-          <TableCourse scheduleData={apiRoute.results[0]?.course} />
-        )}
-      <div className="flex justify-between">
-        <div>
-          Generate by:{" "}
-          <span className="font-semibold">kugetreg.teerut.com</span>
-        </div>
-        <div>
-          {session?.user.student.majorCode} -{" "}
-          {session?.user.student.majorNameEn}
-        </div>
-      </div> */}
+
+        <div id='capture' className="flex flex-col p-3 min-w-[75rem]">
+            {getCourseFromRedis && (
+                <TableCourse scheduleData={JSON.parse(getCourseFromRedis)} />
+            )}
+            <div className="flex justify-between">
+                <div>
+                    Generate by:{" "}
+                    <span className="font-semibold">kugetreg.teerut.com</span>
+                </div>
+                <div>
+                    {major}
+                </div>
+            </div>
         </div>
     );
 }

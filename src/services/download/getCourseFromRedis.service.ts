@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { redisClient } from "@/configs/redis/redis";
+import { type Course } from "@/types/responses/IGroupCourseResponse";
 
 export const getCourseFromRedisSchema = z.object({
   id: z.string(),
@@ -14,7 +15,7 @@ const getCourseFromRedisService = async (props: GetCourseFromRedisInput) => {
     if (!result) {
       throw new Error("Not found");
     }
-    return JSON.parse(result);
+    return JSON.parse(JSON.parse(result)) as Course[];
   } catch (error) {
     throw error;
   }

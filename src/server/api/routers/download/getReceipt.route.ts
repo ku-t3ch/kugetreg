@@ -1,7 +1,7 @@
-import { downloadSchema } from '@/services/download/_schema/download.schema';
-import getReceiptService from '@/services/download/getReceipt.service';
+import { downloadSchema } from "@/services/download/_schema/download.schema";
+import getReceiptService from "@/services/download/getReceipt.service";
 
-import { protectedProcedure } from '../../trpc';
+import { protectedProcedure } from "../../trpc";
 
 const getReceipt = protectedProcedure
   .input(downloadSchema)
