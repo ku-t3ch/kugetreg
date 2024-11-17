@@ -26,9 +26,12 @@ const getCaptureService = async (props: GetCaptureInput) => {
     });
 
     const keyId = uuid();
-    await redisClient.set(keyId, JSON.stringify(props.courseData), {
-      EX: 60, // 1 minute
-    });
+    await redisClient.set(
+      keyId,
+      JSON.stringify(props.courseData),
+      "EX",
+      60, // 1 minute
+    );
 
     const query = qs.stringify(
       {
