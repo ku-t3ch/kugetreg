@@ -1,10 +1,11 @@
 "use client";
 
-import { AppShell, Burger, Group, ScrollArea } from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import NavbarMenu from "../_components/NavbarMenu/NavbarMenu";
-import AccountNavbarMenu from "../_components/NavbarMenu/AccountNavbarMenu";
-import Footer from "@/app/_components/Footer";
+import Footer from '@/app/_components/Footer';
+import { AppShell, Burger, Group, ScrollArea } from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+
+import AccountNavbarMenu from '../_components/NavbarMenu/AccountNavbarMenu';
+import NavbarMenu from '../_components/NavbarMenu/NavbarMenu';
 
 interface Props {
   children: React.ReactNode;

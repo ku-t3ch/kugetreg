@@ -1,17 +1,17 @@
 "use client";
-import { createTheme, MantineProvider } from "@mantine/core";
-import { ConfigProvider } from "antd";
+import '@mantine/dates/styles.css';
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+import '@mantine/core/styles.layer.css';
+import '@/styles/globals.css';
 
-import "@mantine/dates/styles.css";
-import "@mantine/core/styles.css";
-import "@mantine/notifications/styles.css";
-import "@mantine/core/styles.layer.css";
-import "@/styles/globals.css";
+import { ConfigProvider } from 'antd';
+import { SessionProvider } from 'next-auth/react';
+import { Suspense } from 'react';
 
-import { SessionProvider } from "next-auth/react";
-import { Notifications } from "@mantine/notifications";
-import { ModalsProvider } from "@mantine/modals";
-import { Suspense } from "react";
+import { createTheme, MantineProvider } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
+import { Notifications } from '@mantine/notifications';
 
 interface Props {
   children: React.ReactNode;

@@ -1,8 +1,10 @@
-import { auth, signOut } from "@/server/auth";
-import { redirect } from "next/navigation";
-import MainLayout from "./_layouts/MainLayout";
-import { jwtDecode } from "jwt-decode";
-import { type IMYKUToken } from "@/types/IMYKUToken.type";
+import { jwtDecode } from 'jwt-decode';
+import { redirect } from 'next/navigation';
+
+import { auth, signOut } from '@/server/auth';
+import { type IMYKUToken } from '@/types/IMYKUToken.type';
+
+import MainLayout from './_layouts/MainLayout';
 
 export default async function Layout({
   children,

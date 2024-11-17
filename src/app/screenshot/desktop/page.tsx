@@ -1,8 +1,9 @@
 "use client";
-import { api } from "@/trpc/server";
-import { auth } from "@/server/auth";
-import TableCourse from "@/app/_components/TableCourse/TableCourse";
 import { useSearchParams } from "next/navigation";
+
+import TableCourse from "@/app/_components/TableCourse/TableCourse";
+import { auth } from "@/server/auth";
+import { api } from "@/trpc/server";
 
 export default function Page() {
   const searchParams = useSearchParams();
