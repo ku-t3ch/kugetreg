@@ -54,7 +54,8 @@ const getPdfService = async (props: GetPdfInput) => {
     await page.close();
     await redisClient.del(keyId);
     await browser.close();
-    return "data:application/pdf;base64," + pdf?.toString();
+    const base64 = Buffer.from(pdf).toString("base64");
+    return "data:application/pdf;base64," + base64.toString();
   } catch (error) {
     throw error;
   }

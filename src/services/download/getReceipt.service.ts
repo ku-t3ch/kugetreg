@@ -48,7 +48,8 @@ const getReceiptService = async (props: GetReceiptInput) => {
     const result = await logo?.screenshot({ type: "png" });
     await page.close();
     await browser.close();
-    return "data:image/png;base64," + result?.toString();
+    const base64 = Buffer.from(result as Buffer).toString("base64");
+    return "data:image/png;base64," + base64.toString();
   } catch (error) {
     throw error;
   }

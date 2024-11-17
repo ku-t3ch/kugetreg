@@ -53,6 +53,7 @@
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^7.1.0",
+    "file-saver": "^2.0.5",
     "firebase-admin": "^13.0.0",
     "geist": "^1.3.0",
     "hybrid-crypto-js": "^0.2.4",

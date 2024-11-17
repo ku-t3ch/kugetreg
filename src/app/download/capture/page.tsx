@@ -1,21 +1,22 @@
 import { type SearchParams } from "next/dist/server/request/search-params";
 
 export default async function Page(props: {
-  searchParams: Promise<SearchParams>;
+    searchParams: Promise<SearchParams>;
 }) {
-  const { majorCode, majorNameEn, id } = await props.searchParams;
+    const { major, screenType, id } = await props.searchParams;
 
-  if (!majorCode || !majorNameEn || !id) {
-    return <div>Invalid request</div>;
-  }
+    if (!major || !screenType || !id) {
+        return <div>Invalid request</div>;
+    }
 
-  console.log("majorCode", majorCode);
-  console.log("majorNameEn", majorNameEn);
-  console.log("id", id);
+    console.log("major", major);
+    console.log("screenType", screenType);
+    console.log("id", id);
 
-  return (
-    <div id="capture" className="flex flex-col p-3">
-      {/* {apiRoute.results &&
+    return (
+        <div id="capture" className="flex flex-col p-3">
+            test
+            {/* {apiRoute.results &&
         apiRoute.results.length > 0 &&
         apiRoute.results[0]?.course && (
           <TableCourse scheduleData={apiRoute.results[0]?.course} />
@@ -30,6 +31,6 @@ export default async function Page(props: {
           {session?.user.student.majorNameEn}
         </div>
       </div> */}
-    </div>
-  );
+        </div>
+    );
 }

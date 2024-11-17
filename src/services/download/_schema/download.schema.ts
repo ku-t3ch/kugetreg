@@ -6,4 +6,4 @@ export const downloadSchema = z.object({
   major: z.string(),
 });
 
-export type DownloadSchema = z.infer<typeof downloadSchema>;
+export type DownloadInput = z.infer<typeof downloadSchema>;

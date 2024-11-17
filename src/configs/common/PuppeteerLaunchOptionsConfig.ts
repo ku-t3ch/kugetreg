@@ -1,7 +1,7 @@
 import { type PuppeteerLaunchOptions } from "puppeteer";
 
 export const PuppeteerLaunchOptionsConfig: PuppeteerLaunchOptions = {
-  headless: true,
+  headless: false,
   executablePath:
     process.platform === "win32"
       ? "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
@@ -10,7 +10,6 @@ export const PuppeteerLaunchOptionsConfig: PuppeteerLaunchOptions = {
         : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   args: [
     "--no-sandbox",
-    "--headless",
     "--disable-gpu",
     "--disable-dev-shm-usage",
   ],

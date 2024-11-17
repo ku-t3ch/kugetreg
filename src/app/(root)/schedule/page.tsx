@@ -9,13 +9,13 @@ import useCourseStore from "./_store/useCourseStore";
 export default function Page() {
     const getGroupCourse = api.stdProfile.getGroupCourse.useQuery();
     const hasCourse = getGroupCourse.data?.results && getGroupCourse.data?.results.length > 0;
-    const courseStore = useCourseStore();
+    const { setCourses } = useCourseStore();
 
     useEffect(() => {
         if (hasCourse && getGroupCourse.data?.results[0]?.course) {
-            courseStore.setCourses(getGroupCourse.data?.results[0]?.course);
+            setCourses(getGroupCourse.data?.results[0]?.course);
         }
-    }, [courseStore, getGroupCourse.data?.results, hasCourse]);
+    }, [setCourses, getGroupCourse.data?.results, hasCourse]);
 
     return (
         <div className="overflow-x-auto">
