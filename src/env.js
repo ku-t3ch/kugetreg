@@ -18,6 +18,7 @@ export const env = createEnv({
     MYKU_PUBLIC_KEY: z.string(),
     MYKU_APP_KEY: z.string(),
     FIREBASE_ADMIN: z.string(),
+    REDIS_URL: z.string().url(),
   },
 
   /**
@@ -40,6 +41,7 @@ export const env = createEnv({
     MYKU_PUBLIC_KEY: process.env.MYKU_PUBLIC_KEY,
     MYKU_APP_KEY: process.env.MYKU_APP_KEY,
     FIREBASE_ADMIN: process.env.FIREBASE_ADMIN,
+    REDIS_URL: process.env.REDIS_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
