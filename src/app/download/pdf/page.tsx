@@ -1,19 +1,19 @@
 "use client";
-import { api } from "@/trpc/server";
-import { auth } from "@/server/auth";
-import TableCourse from "@/app/_components/TableCourse/TableCourse";
 import { useSearchParams } from "next/navigation";
+
+import TableCourse from "@/app/_components/TableCourse/TableCourse";
+import { auth } from "@/server/auth";
+import { api } from "@/trpc/server";
 
 export default function Page() {
   const searchParams = useSearchParams();
-  //   const apiRoute = await api.stdProfile.getGroupCourse();
-  //   const session = await auth();
-  const majorCode = searchParams.get("majorCode");
-  const majorNameEn = searchParams.get("majorNameEn");
+
+  const screenType = searchParams.get("screenType");
+  const major = searchParams.get("major");
   const id = searchParams.get("id");
 
   return (
-    <div className="flex flex-col p-3">
+    <div id="capture" className="flex flex-col p-3">
       {/* {apiRoute.results &&
         apiRoute.results.length > 0 &&
         apiRoute.results[0]?.course && (

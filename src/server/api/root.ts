@@ -2,6 +2,7 @@ import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { commonRouter } from "./routers/common";
 import { enrollRouter } from "./routers/enroll";
 import { stdProfileRouter } from "./routers/std-profile";
+import { downloadRouter } from "./routers/download";
 
 /**
  * This is the primary router for your server.
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   common: commonRouter,
   enroll: enrollRouter,
   stdProfile: stdProfileRouter,
+  download: downloadRouter,
 });
 
 // export type definition of API

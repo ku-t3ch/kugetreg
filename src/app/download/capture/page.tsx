@@ -8,12 +8,12 @@ import { api } from "@/trpc/server";
 export default function Page() {
   const searchParams = useSearchParams();
 
-  const majorCode = searchParams.get("majorCode");
-  const majorNameEn = searchParams.get("majorNameEn");
+  const screenType = searchParams.get("screenType");
+  const major = searchParams.get("major");
   const id = searchParams.get("id");
 
   return (
-    <div className="flex flex-col p-3">
+    <div id="capture" className="flex flex-col p-3">
       {/* {apiRoute.results &&
         apiRoute.results.length > 0 &&
         apiRoute.results[0]?.course && (
