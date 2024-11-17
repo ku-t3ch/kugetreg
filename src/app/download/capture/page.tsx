@@ -1,16 +1,17 @@
-"use client";
-import { useSearchParams } from "next/navigation";
+import { type SearchParams } from "next/dist/server/request/search-params";
 
-import TableCourse from "@/app/_components/TableCourse/TableCourse";
-import { auth } from "@/server/auth";
-import { api } from "@/trpc/server";
+export default async function Page(props: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const { majorCode, majorNameEn, id } = await props.searchParams;
 
-export default function Page() {
-  const searchParams = useSearchParams();
+  if (!majorCode || !majorNameEn || !id) {
+    return <div>Invalid request</div>;
+  }
 
-  const screenType = searchParams.get("screenType");
-  const major = searchParams.get("major");
-  const id = searchParams.get("id");
+  console.log("majorCode", majorCode);
+  console.log("majorNameEn", majorNameEn);
+  console.log("id", id);
 
   return (
     <div id="capture" className="flex flex-col p-3">

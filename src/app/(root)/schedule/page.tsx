@@ -1,17 +1,32 @@
-import TableCourse from "@/app/_components/TableCourse/TableCourse";
-import { api } from "@/trpc/server";
+"use client";
+import { useEffect } from "react";
 
-export default async function Page() {
-  const apiRoute = await api.stdProfile.getGroupCourse();
-  console.log(apiRoute);
+import TableCourse from "@/app/_components/TableCourse/TableCourse";
+import { api } from "@/trpc/react";
+import { Text } from "@mantine/core";
+import useCourseStore from "./_store/useCourseStore";
+
+export default function Page() {
+  const getGroupCourse = api.stdProfile.getGroupCourse.useQuery();
+  const hasCourse =
+    getGroupCourse.data?.results && getGroupCourse.data?.results.length > 0;
+  const courseStore = useCourseStore();
+
+  useEffect(() => {
+    if (hasCourse && getGroupCourse.data?.results[0]?.course) {
+      courseStore.setCourses(getGroupCourse.data?.results[0]?.course);
+    }
+  }, [courseStore, getGroupCourse.data?.results, hasCourse]);
 
   return (
     <div className="overflow-x-auto">
-      {apiRoute.results &&
-        apiRoute.results.length > 0 &&
-        apiRoute.results[0]?.course && (
-          <TableCourse scheduleData={apiRoute.results[0]?.course} />
-        )}
+      {getGroupCourse.data?.results &&
+      getGroupCourse.data?.results.length > 0 &&
+      getGroupCourse.data?.results[0]?.course ? (
+        <TableCourse scheduleData={getGroupCourse.data?.results[0]?.course} />
+      ) : (
+        <Text c={"dimmed"}>ไม่พบรายวิชา อาจจะยังไม่ได้ลงทะเบียน</Text>
+      )}
     </div>
   );
 }
