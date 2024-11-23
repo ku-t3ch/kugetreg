@@ -1,4 +1,4 @@
-import puppeteer, { PDFOptions } from "puppeteer";
+import puppeteer, { type PDFOptions } from "puppeteer-core";
 import qs from "qs";
 import { v4 as uuid } from "uuid";
 import { type z } from "zod";

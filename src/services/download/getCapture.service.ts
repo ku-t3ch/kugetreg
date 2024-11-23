@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 import qs from "qs";
 import { v4 as uuid } from "uuid";
 import { type z } from "zod";

@@ -53,6 +53,9 @@ importers:
       '@prisma/client':
         specifier: ^5.14.0
         version: 5.22.0(prisma@5.22.0)
+      '@sparticuz/chromium':
+        specifier: ^131.0.0
+        version: 131.0.0
       '@t3-oss/env-nextjs':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.6.3)(zod@3.23.8)
@@ -134,9 +137,9 @@ importers:
       next-auth:
         specifier: 5.0.0-beta.25
         version: 5.0.0-beta.25(next@15.0.3(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
-      puppeteer:
-        specifier: ^23.8.0
-        version: 23.8.0(typescript@5.6.3)
+      puppeteer-core:
+        specifier: ^23.9.0
+        version: 23.9.0
       qs:
         specifier: ^6.13.0
         version: 6.13.0
@@ -968,6 +971,10 @@ packages:
   '@rushstack/eslint-patch@1.10.4':
     resolution: {integrity: sha512-WJgX9nzTqknM393q1QJDJmoW28kUfEnybeTfVNcNAPnIx210RXm2DiXiHzfNPJNIUUb1tJnz/l4QGtJ30PgWmA==}
 
+  '@sparticuz/chromium@131.0.0':
+    resolution: {integrity: sha512-0XkpNOL5HRxSTDNOfmuqQzEa//bQvZvX7hB8+aH5bfo4X4BVA36O72pIjL7voezodRLqfHfOKGDbgOD5BuEeUg==}
+    engines: {node: '>= 16'}
+
   '@swc/counter@0.1.3':
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
 
@@ -1691,15 +1698,6 @@ packages:
     resolution: {integrity: sha512-AdmX6xUzdNASswsFtmwSt7Vj8po9IuqXm0UXz7QKPuEUmPB4XyjGfaAr2PSuELMwkRMVH1EpIkX5bTZGRB3eCA==}
     engines: {node: '>=10'}
 
-  cosmiconfig@9.0.0:
-    resolution: {integrity: sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      typescript: '>=4.9.5'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   crelt@1.0.6:
     resolution: {integrity: sha512-VQ2MBenTq1fWZUH9DJNGti7kKv6EeAuYr3cLwxUWhIu1baTaXh4Ib5W2CqHVqib4/MqbYGJqiL3Zb8GJZr3l4g==}
 
@@ -1921,10 +1919,6 @@ packages:
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
-
-  env-paths@2.2.1:
-    resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
-    engines: {node: '>=6'}
 
   error-ex@1.3.2:
     resolution: {integrity: sha512-7dFHNmqeFSEt2ZBsCriorKnn3Z2pj+fd9kmI6QoWw4//DL+icEBfc0U7qJCisqrTsKTjw4fNFy2pW9OqStD84g==}
@@ -3315,14 +3309,9 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  puppeteer-core@23.8.0:
-    resolution: {integrity: sha512-c2ymGN2M//We7pC+JhP2dE/g4+qnT89BO+EMSZyJmecN3DN6RNqErA7eH7DrWoNIcU75r2nP4VHa4pswAL6NVg==}
+  puppeteer-core@23.9.0:
+    resolution: {integrity: sha512-hLVrav2HYMVdK0YILtfJwtnkBAwNOztUdR4aJ5YKDvgsbtagNr6urUJk9HyjRA9e+PaLI3jzJ0wM7A4jSZ7Qxw==}
     engines: {node: '>=18'}
-
-  puppeteer@23.8.0:
-    resolution: {integrity: sha512-MFWDMWoCcOpwNwQIjA9gPKWrEUbj8bLCzkK56w5lZPMUT6wK4FfpgOEPxKffVmXEMYMZzgcjxzqy15b/Q1ibaw==}
-    engines: {node: '>=18'}
-    hasBin: true
 
   qs@6.13.0:
     resolution: {integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==}
@@ -5150,6 +5139,13 @@ snapshots:
 
   '@rushstack/eslint-patch@1.10.4': {}
 
+  '@sparticuz/chromium@131.0.0':
+    dependencies:
+      follow-redirects: 1.15.9
+      tar-fs: 3.0.6
+    transitivePeerDependencies:
+      - debug
+
   '@swc/counter@0.1.3': {}
 
   '@swc/helpers@0.5.13':
@@ -6051,15 +6047,6 @@ snapshots:
       path-type: 4.0.0
       yaml: 1.10.2
 
-  cosmiconfig@9.0.0(typescript@5.6.3):
-    dependencies:
-      env-paths: 2.2.1
-      import-fresh: 3.3.0
-      js-yaml: 4.1.0
-      parse-json: 5.2.0
-    optionalDependencies:
-      typescript: 5.6.3
-
   crelt@1.0.6: {}
 
   cross-spawn@7.0.5:
@@ -6253,8 +6240,6 @@ snapshots:
       tapable: 2.2.1
 
   entities@4.5.0: {}
-
-  env-paths@2.2.1: {}
 
   error-ex@1.3.2:
     dependencies:
@@ -7946,7 +7931,7 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  puppeteer-core@23.8.0:
+  puppeteer-core@23.9.0:
     dependencies:
       '@puppeteer/browsers': 2.4.1
       chromium-bidi: 0.8.0(devtools-protocol@0.0.1367902)
@@ -7957,20 +7942,6 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - supports-color
-      - utf-8-validate
-
-  puppeteer@23.8.0(typescript@5.6.3):
-    dependencies:
-      '@puppeteer/browsers': 2.4.1
-      chromium-bidi: 0.8.0(devtools-protocol@0.0.1367902)
-      cosmiconfig: 9.0.0(typescript@5.6.3)
-      devtools-protocol: 0.0.1367902
-      puppeteer-core: 23.8.0
-      typed-query-selector: 2.12.0
-    transitivePeerDependencies:
-      - bufferutil
-      - supports-color
-      - typescript
       - utf-8-validate
 
   qs@6.13.0:
