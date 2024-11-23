@@ -3,7 +3,7 @@ import { auth } from "@/server/auth";
 import axios from "axios";
 
 export const getBaseUrl = () => {
-  return process.env.NEXT_PUBLIC_MYKU_API_URL;
+  return "https://myapi.ku.th";
 };
 
 export const axiosAPI = axios.create({
