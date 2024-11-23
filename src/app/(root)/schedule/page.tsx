@@ -19,15 +19,17 @@ export default function Page() {
 
     return (
         <div className="overflow-x-auto">
-            {getGroupCourse.isPending ? <Text>Loading...</Text> : <>
-                {getGroupCourse.data?.results &&
-                    getGroupCourse.data?.results.length > 0 &&
-                    getGroupCourse.data?.results[0]?.course ? (
-                    <TableCourse scheduleData={getGroupCourse.data?.results[0]?.course} />
-                ) : (
-                    <Text c={"dimmed"}>ไม่พบรายวิชา อาจจะยังไม่ได้ลงทะเบียน</Text>
-                )}
-            </>}
+            <div className="min-w-[90rem]">
+                {getGroupCourse.isPending ? <Text>Loading...</Text> : <>
+                    {getGroupCourse.data?.results &&
+                        getGroupCourse.data?.results.length > 0 &&
+                        getGroupCourse.data?.results[0]?.course ? (
+                        <TableCourse scheduleData={getGroupCourse.data?.results[0]?.course} />
+                    ) : (
+                        <Text c={"dimmed"}>ไม่พบรายวิชา อาจจะยังไม่ได้ลงทะเบียน</Text>
+                    )}
+                </>}
+            </div>
         </div>
     );
 }
