@@ -6,6 +6,10 @@ import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
 const config = {
+  env: {
+    NEXT_PUBLIC_MYKU_API_URL: "https://myapi.ku.th",
+  },
+  output: "standalone",
 };
 
 export default config;
