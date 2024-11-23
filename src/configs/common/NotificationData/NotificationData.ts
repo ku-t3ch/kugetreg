@@ -19,4 +19,5 @@ export const LoadingNotificationData: NotificationData = {
   message: "กำลังโหลด...",
   color: "gray",
   loading: true,
+  autoClose: false
 };

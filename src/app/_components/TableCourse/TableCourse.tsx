@@ -3,13 +3,11 @@
 import React from "react";
 import { type Course } from "@/types/responses/IGroupCourseResponse";
 import clsx from "clsx";
+import _ from "lodash";
 
 interface Props {
     scheduleData: Course[];
 }
-
-const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
-const hours = Array.from({ length: 9 }, (_, i) => i + 8); // 8:00 to 16:00
 
 const dayColors: Record<string, { bg: string; border: string; text: string }> =
 {
@@ -64,6 +62,23 @@ const getTimeSlotPosition = (timeStr: string): number => {
 };
 
 const TableCourse = (props: Props) => {
+    const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+    const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+
+    const CourseSorting = (courses: Course[] | undefined) => {
+        const sortedItems = _.orderBy(courses, ["time_start"], "asc");
+        return sortedItems;
+    };
+
+    const maxTime = _.maxBy(CourseSorting(props.scheduleData), (o) => {
+        return parseInt(o.time_to.split(":")[0] ?? "0");
+    });
+
+    const maxIndex = _.findIndex(hours, (time) => time === parseInt(maxTime?.time_to.split(":")[0] ?? "0")) + 1;
+
+    const gridRepeat = hours.slice(0, maxIndex).length * 2
+
+
     const getScheduleItemsForDay = (day: string) => {
         return props.scheduleData
             .filter((item) => item.day_w.trim() === day)
@@ -78,81 +93,81 @@ const TableCourse = (props: Props) => {
     };
 
     return (
-            <div className="grid grid-cols-[100px_repeat(18,minmax(50px,1fr))] border-l border-t border-[#e3e5f8]">
-                {/* Header Row */}
-                <div className="border-b border-r border-[#e3e5f8] bg-[#fafaff] p-2 font-semibold">
-                    Day/Time
-                </div>
-                {hours.map((hour) => (
-                    <React.Fragment key={hour}>
-                        <div className="col-span-2 flex border-b border-r border-[#e3e5f8] bg-[#fafaff] p-2 text-center">
-                            {formatTime(hour, 0)}
-                        </div>
-                    </React.Fragment>
-                ))}
-
-                {/* Schedule Rows */}
-                {days.map((day) => (
-                    <React.Fragment key={day}>
-                        {/* Day Label */}
-                        <div className="border-b border-r border-[#e3e5f8] bg-[#fafaff] p-2">
-                            {day}
-                        </div>
-                        {/* Time Slots - 30-minute intervals */}
-                        <div className="contents">
-                            {Array.from({ length: 18 }).map((_, slotIndex) => {
-                                const currentHour = Math.floor(slotIndex / 2) + 8;
-                                const isHalfHour = slotIndex % 2 === 1;
-                                const timeStr = formatTime(currentHour, isHalfHour ? 30 : 0);
-
-                                const daySchedule = getScheduleItemsForDay(day);
-                                const itemsStartingHere = daySchedule.filter(
-                                    (item) => item.startSlot === slotIndex,
-                                );
-
-                                return (
-                                    <div
-                                        key={`${day}-${timeStr}`}
-                                        className={`relative min-h-[80px] border-b border-r border-[#e3e5f8] ${isHalfHour ? "border-r" : ""
-                                            }`}
-                                    >
-                                        {itemsStartingHere.map((item) => (
-                                            <div
-                                                key={item.section_id}
-                                                className={`absolute left-0 right-0 top-0 rounded-md border p-1 ${dayColors[day]?.bg ?? ""} ${dayColors[day]?.border ?? ""}`}
-                                                style={{
-                                                    gridColumn: `span ${item.duration}`,
-                                                    width: `calc(${item.duration * 100}% + 5px)`,
-                                                    height: "103%",
-                                                    zIndex: 10,
-                                                }}
-                                            >
-                                                <div
-                                                    className={clsx(
-                                                        "truncate text-sm font-medium",
-                                                        dayColors[day]?.text,
-                                                    )}
-                                                >
-                                                    {item.subject_code} {item.subject_name_en}
-                                                </div>
-                                                <div className="text-xs text-gray-600">
-                                                    {item.room_name_en}
-                                                </div>
-                                                <div className="text-xs text-gray-500">
-                                                    {item.time_from} - {item.time_to}
-                                                </div>
-                                                <div className="text-xs text-gray-500">
-                                                    {item.section_code} - {item.section_type_en}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </React.Fragment>
-                ))}
+        <div className={`grid grid-cols-[100px_repeat(${gridRepeat},minmax(50px,1fr))] border-l border-t border-[#e3e5f8]`}>
+            {/* Header Row */}
+            <div className="border-b border-r border-[#e3e5f8] bg-[#fafaff] p-2 font-semibold">
+                Day/Time
             </div>
+            {hours.slice(0, maxIndex).map((hour) => (
+                <React.Fragment key={hour}>
+                    <div className="col-span-2 flex border-b border-r border-[#e3e5f8] bg-[#fafaff] p-2 text-center">
+                        {formatTime(hour, 0)}
+                    </div>
+                </React.Fragment>
+            ))}
+
+            {/* Schedule Rows */}
+            {days.map((day) => (
+                <React.Fragment key={day}>
+                    {/* Day Label */}
+                    <div className="border-b border-r border-[#e3e5f8] bg-[#fafaff] p-2">
+                        {day}
+                    </div>
+                    {/* Time Slots - 30-minute intervals */}
+                    <div className="contents">
+                        {Array.from({ length: gridRepeat }).map((_, slotIndex) => {
+                            const currentHour = Math.floor(slotIndex / 2) + 8;
+                            const isHalfHour = slotIndex % 2 === 1;
+                            const timeStr = formatTime(currentHour, isHalfHour ? 30 : 0);
+
+                            const daySchedule = getScheduleItemsForDay(day);
+                            const itemsStartingHere = daySchedule.filter(
+                                (item) => item.startSlot === slotIndex,
+                            );
+
+                            return (
+                                <div
+                                    key={`${day}-${timeStr}`}
+                                    className={`relative min-h-[80px] border-b border-r border-[#e3e5f8] ${isHalfHour ? "border-r" : ""
+                                        }`}
+                                >
+                                    {itemsStartingHere.map((item) => (
+                                        <div
+                                            key={item.section_id}
+                                            className={`absolute left-0 right-0 top-0 rounded-md border p-1 ${dayColors[day]?.bg ?? ""} ${dayColors[day]?.border ?? ""}`}
+                                            style={{
+                                                gridColumn: `span ${item.duration}`,
+                                                width: `calc(${item.duration * 100}% + 5px)`,
+                                                height: "103%",
+                                                zIndex: 10,
+                                            }}
+                                        >
+                                            <div
+                                                className={clsx(
+                                                    "truncate text-sm font-medium",
+                                                    dayColors[day]?.text,
+                                                )}
+                                            >
+                                                {item.subject_code} {item.subject_name_en}
+                                            </div>
+                                            <div className="text-xs text-gray-600">
+                                                {item.room_name_en}
+                                            </div>
+                                            <div className="text-xs text-gray-500">
+                                                {item.time_from} - {item.time_to}
+                                            </div>
+                                            <div className="text-xs text-gray-500">
+                                                {item.section_code} - {item.section_type_en}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </React.Fragment>
+            ))}
+        </div>
 
     );
 };
