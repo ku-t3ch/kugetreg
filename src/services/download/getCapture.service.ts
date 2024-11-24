@@ -47,8 +47,9 @@ const getCaptureService = async (props: GetCaptureInput) => {
     await page.waitForSelector("#capture");
     const logo = await page.$("#capture");
     const result = await logo?.screenshot({ type: "png" });
-    // await page.close();
-    // await browser.close();
+    await redisClient.del(keyId);
+    await page.close();
+    await browser.close();
     const base64 = Buffer.from(result as Buffer).toString("base64");
     return "data:image/png;base64," + base64?.toString();
   } catch (error) {

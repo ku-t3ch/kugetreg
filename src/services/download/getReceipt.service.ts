@@ -49,6 +49,7 @@ const getReceiptService = async (props: GetReceiptInput) => {
     await page.waitForSelector("#capture");
     const logo = await page.$("#capture");
     const result = await logo?.screenshot({ type: "png" });
+    await redisClient.del(keyId);
     await page.close();
     await browser.close();
     const base64 = Buffer.from(result as Buffer).toString("base64");

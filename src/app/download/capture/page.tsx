@@ -14,11 +14,11 @@ export default async function Page(props: {
 
     const getCourseFromRedis = await api.download.getCourseFromRedis({ id: id.toString() });
     return (
-        <div id='capture' className="flex flex-col p-3 min-w-[78rem]">
+        <div id="capture" className='min-w-fit p-3 flex flex-col'>
             {getCourseFromRedis && (
                 <TableCourse scheduleData={getCourseFromRedis} />
             )}
-            <div className="flex justify-between">
+            <div className='flex items-center justify-between'>
                 <div>
                     Generate by:{" "}
                     <span className="font-semibold">kugetreg.teerut.com</span>

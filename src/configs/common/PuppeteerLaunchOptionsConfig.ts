@@ -11,5 +11,5 @@ export const PuppeteerLaunchOptionsConfig: PuppeteerLaunchOptions = {
         ? "/usr/bin/chromium-browser"
         : "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
     : await chromium.executablePath(),
-  headless: false,
+  headless: chromium.headless,
 };
