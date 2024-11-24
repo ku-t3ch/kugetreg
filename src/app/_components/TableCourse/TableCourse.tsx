@@ -111,12 +111,14 @@ const TableCourse = (props: Props) => {
                     }}>
                         {props.scheduleData.filter(course => course.day_w.trim() === day).map((course, index) => {
                             const day_w = course.day_w.trim();
+                            const dayColor = dayColors[day_w];
+
                             return (
                                 <div onClick={() => {
                                     if (props.canClick && props.onClick) {
                                         props.onClick(course);
                                     }
-                                }} key={`${index}_${course.section_id}_${day}_${course.subject_code}`} className={clsx("w-full border rounded-md px-1 flex-col flex items-center justify-center", heightClass, dayColors[day_w]?.bg, dayColors[day_w]?.border, dayColors[day_w]?.text, props.canClick && dayColors[day_w]?.bgHover, props.canClick && "cursor-pointer")} style={{
+                                }} key={`${index}_${course.section_id}_${day}_${course.subject_code}`} className={clsx("w-full border rounded-md px-1 flex-col flex items-center justify-center", heightClass, dayColor?.bg, dayColor?.border, dayColor?.text, props.canClick && dayColor?.bgHover, props.canClick && "cursor-pointer")} style={{
                                     gridColumn: `${getPosition(course.time_from!)}/${getPosition(course.time_to!)}`,
                                 }} >
                                     <Text fw={600} lineClamp={1}>{course.subject_code}</Text>
