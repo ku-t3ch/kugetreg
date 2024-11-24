@@ -26,7 +26,6 @@ export const navigationItems: NavigationItem[] = [
         label: "วางแผนตารางเรียน",
         icon: IconCalendarCheck,
         link: "/schedule-planner",
-        disabled: true,
     },
     {
         label: "บริหารหน่วยกิต",

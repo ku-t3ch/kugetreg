@@ -1,11 +1,13 @@
-import { Text } from "@mantine/core";
+"use client"
+
+import { Stack } from "@mantine/core";
+import useCourseStore from "./_store/useCourseStore";
 
 export default function Page() {
+    const CourseStore = useCourseStore();
     return (
-        <div>
-            <Text size="xl" fw={600}>
-                วางแผนตารางเรียน
-            </Text>
-        </div>
+        <Stack gap={"md"}>
+            asdf
+        </Stack>
     );
 }
