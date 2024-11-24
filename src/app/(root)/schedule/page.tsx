@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import TableCourse from "@/app/_components/TableCourse/TableCourse";
 import { api } from "@/trpc/react";
-import { Text } from "@mantine/core";
+import { Skeleton, Text } from "@mantine/core";
 import useCourseStore from "./_store/useCourseStore";
 
 export default function Page() {
@@ -19,7 +19,14 @@ export default function Page() {
 
     return (
         <div className="overflow-x-auto">
-            {getGroupCourse.isPending ? <Text>Loading...</Text> : <>
+            {getGroupCourse.isPending ? <div className="flex flex-col gap-1">
+                {Array.from({ length: 7 }).map((_, i) => (
+                    <div className="flex items-center gap-1" key={i}>
+                        <Skeleton height={80} width="20%" />
+                        <Skeleton height={80} width="80%" />
+                    </div>
+                ))}
+            </div> : <>
                 {getGroupCourse.data?.results &&
                     getGroupCourse.data?.results.length > 0 &&
                     getGroupCourse.data?.results[0]?.course ? (
