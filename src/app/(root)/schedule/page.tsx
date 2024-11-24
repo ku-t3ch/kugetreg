@@ -1,5 +1,6 @@
 "use client";
 import clsx from 'clsx';
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import dayColors from 'utils/dayColors';
 
@@ -9,11 +10,10 @@ import {
 } from '@/configs/common/NotificationData/NotificationData';
 import { api } from '@/trpc/react';
 import { type Course } from '@/types/responses/IGroupCourseResponse';
-import { Button, Group, Paper, Skeleton, Stack, Text } from '@mantine/core';
+import { Button, Group, Skeleton, Stack, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { IconCopy, IconEye, IconEyeOff } from '@tabler/icons-react';
-import _ from "lodash"
+import { IconCopy, IconEyeOff } from '@tabler/icons-react';
 
 import useCourseStore from './_store/useCourseStore';
 import useHideCourseStore from './_store/useHideCourseStore';
@@ -123,10 +123,6 @@ export default function Page() {
         modals.closeAll()
     }
 
-    const onShowHiddenCourse = (course: Course) => {
-        HideCourseStore.onShowHiddenCourse(course)
-    }
-
     return (
         <Stack gap={"md"}>
             <div className="overflow-x-auto">
@@ -145,26 +141,6 @@ export default function Page() {
                     )}
                 </>}
             </div>
-            {HideCourseStore.hiddenCourses && HideCourseStore.hiddenCourses.length > 0 && <Stack gap={"sm"}>
-                <Text size="xl" fw={700}>รายวิชาที่ซ่อน</Text>
-                <Stack gap={"sm"}>
-                    {HideCourseStore.hiddenCourses.map((course, i) => (
-                        <Paper key={i} withBorder p="sm">
-                            <Group justify='space-between' >
-                                <Stack gap={0}>
-                                    <Text>{course.subject_code}</Text>
-                                    <Text>{course.subject_name_en}</Text>
-                                    <Text>{course.room_name_en} | Sec {course.section_code}</Text>
-                                </Stack>
-                                <Group gap={0}>
-                                    <Button variant='light' onClick={() => onShowHiddenCourse(course)} leftSection={<IconEye size={16} />}>Show</Button>
-                                </Group>
-                            </Group>
-                        </Paper>
-                    ))}
-                </Stack>
-            </Stack>}
-
         </Stack>
     );
 }
