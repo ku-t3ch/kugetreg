@@ -71,9 +71,15 @@ const TableCourse = (props: Props) => {
         return parseInt(o.time_to.split(":")[0] ?? "0");
     });
 
-    const maxIndex = _.findIndex(hours, (time) => time === parseInt(maxTime?.time_to.split(":")[0] ?? "0")) + 1;
+    const maxIndex = () => {
+        const index = _.findIndex(hours, (time) => time === parseInt(maxTime?.time_to.split(":")[0] ?? "0")) + 1;
+        if (index < 11) {
+            return 11
+        }
+        return index
+    }
 
-    const gridRepeat = hours.slice(0, maxIndex).length * 2
+    const gridRepeat = hours.slice(0, maxIndex()).length * 2
 
     const widthClass = `w-full`;
     const heightClass = `h-[80px]`;
@@ -86,7 +92,7 @@ const TableCourse = (props: Props) => {
                 <div className={clsx("border-b border-r border-l border-t col-span-2 border-[#e3e5f8] bg-[#fafaff] p-2 font-semibold", widthClass)}>
                     Day/Time
                 </div>
-                {hours.slice(0, maxIndex).map((hour) => (
+                {hours.slice(0, maxIndex()).map((hour) => (
                     <React.Fragment key={hour}>
                         <div className={clsx("col-span-2 flex border-b border-t border-r border-[#e3e5f8] bg-[#fafaff] pl-1 items-center text-center", widthClass)}>
                             {hour}
@@ -102,7 +108,7 @@ const TableCourse = (props: Props) => {
                         <div className={clsx("border-r flex items-center justify-center border-l col-span-2 border-[#e3e5f8] bg-[#fafaff] p-2 font-semibold", "border-b", widthClass, heightClass)}>
                             {day}
                         </div>
-                        {hours.slice(0, maxIndex).map((hour) => (
+                        {hours.slice(0, maxIndex()).map((hour) => (
                             <div className={clsx("col-span-2 border-r border-[#e3e5f8]", "border-b", widthClass, heightClass)} key={hour} />
                         ))}
                     </div>

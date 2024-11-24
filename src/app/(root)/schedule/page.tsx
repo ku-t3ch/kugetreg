@@ -1,6 +1,6 @@
 "use client";
 import clsx from 'clsx';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import dayColors from 'utils/dayColors';
 
 import TableCourse from '@/app/_components/TableCourse/TableCourse';
@@ -9,23 +9,45 @@ import {
 } from '@/configs/common/NotificationData/NotificationData';
 import { api } from '@/trpc/react';
 import { type Course } from '@/types/responses/IGroupCourseResponse';
-import { Button, Group, Skeleton, Stack, Text } from '@mantine/core';
+import { Button, Group, Paper, Skeleton, Stack, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { IconCopy } from '@tabler/icons-react';
+import { IconCopy, IconEye, IconEyeOff } from '@tabler/icons-react';
+import _ from "lodash"
 
 import useCourseStore from './_store/useCourseStore';
+import useHideCourseStore from './_store/useHideCourseStore';
 
 export default function Page() {
     const getGroupCourse = api.stdProfile.getGroupCourse.useQuery();
+    const [courses, setCourses] = useState<Course[] | null>(null);
+
     const hasCourse = getGroupCourse.data?.results && getGroupCourse.data?.results.length > 0;
-    const { setCourses } = useCourseStore();
+    const CourseStore = useCourseStore();
+    const HideCourseStore = useHideCourseStore()
 
     useEffect(() => {
         if (hasCourse && getGroupCourse.data?.results[0]?.course) {
             setCourses(getGroupCourse.data?.results[0]?.course);
         }
-    }, [setCourses, getGroupCourse.data?.results, hasCourse]);
+    }, [CourseStore.setCourses, getGroupCourse.data?.results, hasCourse]);
+
+    useEffect(() => {
+        if (courses) {
+            CourseStore.setCourses(courses);
+        }
+    }, [courses, CourseStore.setCourses])
+
+    useEffect(() => {
+        if (getGroupCourse.data?.results[0]?.course) {
+            let tempCourses: Course[] = getGroupCourse.data?.results[0]?.course
+            HideCourseStore.hiddenCourses.forEach((course) => {
+                tempCourses = tempCourses.filter((c) => c.subject_code !== course.subject_code);
+            })
+            setCourses(tempCourses)
+        }
+    }, [HideCourseStore.hiddenCourses, getGroupCourse.data?.results])
+
 
     const onCopySubjectName = async (subjectName: string) => {
         const key = notifications.show(LoadingNotificationData)
@@ -34,7 +56,7 @@ export default function Page() {
             notifications.update({
                 ...SuccessNotificationData,
                 id: key,
-                message: "Copied to clipboard :" + subjectName,
+                message: "Copied to clipboard : " + subjectName,
                 color: "green",
             })
         } catch (error) {
@@ -42,7 +64,7 @@ export default function Page() {
                 notifications.update({
                     ...ErrorNotificationData,
                     id: key,
-                    message: "Failed to copy to clipboard :" + error.message,
+                    message: "Failed to copy to clipboard : " + error.message,
                     color: "red",
                 })
             }
@@ -63,7 +85,7 @@ export default function Page() {
                 <Stack gap={0}>
                     <Group gap={5}>
                         <Text size="sm" fw={700}>Day :</Text>
-                        <Text size="sm" fw={400}>
+                        <Text size="sm" fw={700}>
                             <span className={clsx(dayColors[course.day_w.trim()]?.text)}>
                                 {course.day_w}
                             </span>
@@ -88,31 +110,61 @@ export default function Page() {
                         <Text size="sm" fw={400} key={i}>- {teacher}</Text>
                     ))}
                 </Stack>
-                <div>
+                <Group gap={"sm"}>
                     <Button size='xs' variant='light' onClick={() => onCopySubjectName(`${course.subject_code} ${course.subject_name_en}`)} leftSection={<IconCopy size={16} />}>Subject Name</Button>
-                </div>
+                    <Button size='xs' variant='light' onClick={() => onHiddenCourse(course)} leftSection={<IconEyeOff size={16} />}>Hide</Button>
+                </Group>
             </Stack>,
         })
     }
 
+    const onHiddenCourse = (course: Course) => {
+        HideCourseStore.onHiddenCourse(course)
+        modals.closeAll()
+    }
+
+    const onShowHiddenCourse = (course: Course) => {
+        HideCourseStore.onShowHiddenCourse(course)
+    }
+
     return (
-        <div className="overflow-x-auto">
-            {getGroupCourse.isPending ? <div className="flex flex-col gap-1">
-                {Array.from({ length: 7 }).map((_, i) => (
-                    <div className="flex items-center gap-1" key={i}>
-                        <Skeleton height={80} width="20%" />
-                        <Skeleton height={80} width="80%" />
-                    </div>
-                ))}
-            </div> : <>
-                {getGroupCourse.data?.results &&
-                    getGroupCourse.data?.results.length > 0 &&
-                    getGroupCourse.data?.results[0]?.course ? (
-                    <TableCourse canClick onClick={onShowDetail} scheduleData={getGroupCourse.data?.results[0]?.course} />
-                ) : (
-                    <Text c={"dimmed"}>ไม่พบรายวิชา หรืออาจจะยังไม่ได้ลงทะเบียน</Text>
-                )}
-            </>}
-        </div>
+        <Stack gap={"md"}>
+            <div className="overflow-x-auto">
+                {getGroupCourse.isPending ? <div className="flex flex-col gap-1">
+                    {Array.from({ length: 7 }).map((_, i) => (
+                        <div className="flex items-center gap-1" key={i}>
+                            <Skeleton height={80} width="20%" />
+                            <Skeleton height={80} width="80%" />
+                        </div>
+                    ))}
+                </div> : <>
+                    {courses && courses.length > 0 && courses ? (
+                        <TableCourse canClick onClick={onShowDetail} scheduleData={courses} />
+                    ) : (
+                        <Text c={"dimmed"}>ไม่พบรายวิชา หรืออาจจะยังไม่ได้ลงทะเบียน</Text>
+                    )}
+                </>}
+            </div>
+            {HideCourseStore.hiddenCourses && HideCourseStore.hiddenCourses.length > 0 && <Stack gap={"sm"}>
+                <Text size="xl" fw={700}>รายวิชาที่ซ่อน</Text>
+                <Stack gap={"sm"}>
+                    {HideCourseStore.hiddenCourses.map((course, i) => (
+                        <Paper key={i} withBorder p="sm">
+                            <Group justify='space-between' >
+                                <Stack gap={0}>
+                                    <Text>{course.subject_code}</Text>
+                                    <Text>{course.subject_name_en}</Text>
+                                    <Text>{course.room_name_en} | Sec {course.section_code}</Text>
+                                </Stack>
+                                <Group gap={0}>
+                                    <Button variant='light' onClick={() => onShowHiddenCourse(course)} leftSection={<IconEye size={16} />}>Show</Button>
+                                </Group>
+                            </Group>
+                        </Paper>
+                    ))}
+                </Stack>
+            </Stack>}
+
+        </Stack>
     );
 }
