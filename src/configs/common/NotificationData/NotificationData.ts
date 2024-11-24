@@ -5,6 +5,7 @@ export const SuccessNotificationData: NotificationData = {
   message: "สำเร็จ",
   color: "teal",
   loading: false,
+  autoClose: true,
 };
 
 export const ErrorNotificationData: NotificationData = {
@@ -12,6 +13,7 @@ export const ErrorNotificationData: NotificationData = {
   message: "เกิดข้อผิดพลาด",
   color: "red",
   loading: false,
+  autoClose: true,
 };
 
 export const LoadingNotificationData: NotificationData = {

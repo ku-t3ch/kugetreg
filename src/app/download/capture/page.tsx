@@ -14,8 +14,7 @@ export default async function Page(props: {
 
     const getCourseFromRedis = await api.download.getCourseFromRedis({ id: id.toString() });
     return (
-
-        <div id='capture' className="flex flex-col p-3 min-w-[75rem]">
+        <div id='capture' className="flex flex-col p-3 min-w-[78rem]">
             {getCourseFromRedis && (
                 <TableCourse scheduleData={getCourseFromRedis} />
             )}
