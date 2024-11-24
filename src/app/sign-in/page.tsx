@@ -4,13 +4,12 @@ import {
     Alert,
     Button,
     Card,
-    Group,
     PasswordInput,
     Stack,
     Text,
     TextInput,
 } from "@mantine/core";
-import { IconLock, IconMail, IconUser } from "@tabler/icons-react";
+import { IconLock, IconUser } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import Footer from "../_components/Footer";
 import { useState } from "react";
