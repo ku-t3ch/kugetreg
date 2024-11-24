@@ -4,10 +4,15 @@ import { useEffect } from 'react';
 import dayColors from 'utils/dayColors';
 
 import TableCourse from '@/app/_components/TableCourse/TableCourse';
+import {
+    ErrorNotificationData, LoadingNotificationData, SuccessNotificationData
+} from '@/configs/common/NotificationData/NotificationData';
 import { api } from '@/trpc/react';
 import { type Course } from '@/types/responses/IGroupCourseResponse';
-import { Group, Skeleton, Stack, Text } from '@mantine/core';
+import { Button, Group, Skeleton, Stack, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
+import { IconCopy } from '@tabler/icons-react';
 
 import useCourseStore from './_store/useCourseStore';
 
@@ -21,6 +26,28 @@ export default function Page() {
             setCourses(getGroupCourse.data?.results[0]?.course);
         }
     }, [setCourses, getGroupCourse.data?.results, hasCourse]);
+
+    const onCopySubjectName = async (subjectName: string) => {
+        const key = notifications.show(LoadingNotificationData)
+        try {
+            await navigator.clipboard.writeText(subjectName);
+            notifications.update({
+                ...SuccessNotificationData,
+                id: key,
+                message: "Copied to clipboard :" + subjectName,
+                color: "green",
+            })
+        } catch (error) {
+            if (error instanceof Error) {
+                notifications.update({
+                    ...ErrorNotificationData,
+                    id: key,
+                    message: "Failed to copy to clipboard :" + error.message,
+                    color: "red",
+                })
+            }
+        }
+    }
 
     const onShowDetail = (course: Course) => {
         modals.open({
@@ -57,6 +84,9 @@ export default function Page() {
                         <Text size="sm" fw={400} key={i}>- {teacher}</Text>
                     ))}
                 </Stack>
+                <div>
+                    <Button size='xs' variant='light' onClick={() => onCopySubjectName(`${course.subject_code} ${course.subject_name_en}`)} leftSection={<IconCopy size={16} />}>Subject Name</Button>
+                </div>
             </Stack>,
         })
     }
