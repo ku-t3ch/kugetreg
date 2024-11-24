@@ -77,6 +77,10 @@ export default function Page() {
                         <Text size="sm" fw={700}>Section :</Text>
                         <Text size="sm" fw={400}>{course.section_code}</Text>
                     </Group>
+                    <Group gap={5}>
+                        <Text size="sm" fw={700}>Time :</Text>
+                        <Text size="sm" fw={400}>{course.time_from} - {course.time_to}</Text>
+                    </Group>
                 </Stack>
                 <Stack gap={0}>
                     <Text size="sm" fw={700}>Teacher :</Text>
