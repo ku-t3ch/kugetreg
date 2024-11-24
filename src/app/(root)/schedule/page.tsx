@@ -1,10 +1,15 @@
 "use client";
-import { useEffect } from "react";
+import clsx from 'clsx';
+import { useEffect } from 'react';
+import dayColors from 'utils/dayColors';
 
-import TableCourse from "@/app/_components/TableCourse/TableCourse";
-import { api } from "@/trpc/react";
-import { Skeleton, Text } from "@mantine/core";
-import useCourseStore from "./_store/useCourseStore";
+import TableCourse from '@/app/_components/TableCourse/TableCourse';
+import { api } from '@/trpc/react';
+import { type Course } from '@/types/responses/IGroupCourseResponse';
+import { Group, Skeleton, Stack, Text } from '@mantine/core';
+import { modals } from '@mantine/modals';
+
+import useCourseStore from './_store/useCourseStore';
 
 export default function Page() {
     const getGroupCourse = api.stdProfile.getGroupCourse.useQuery();
@@ -16,6 +21,45 @@ export default function Page() {
             setCourses(getGroupCourse.data?.results[0]?.course);
         }
     }, [setCourses, getGroupCourse.data?.results, hasCourse]);
+
+    const onShowDetail = (course: Course) => {
+        modals.open({
+            title: <div className="flex gap-2 items-center justify-between w-full">
+                <Text size="xl" fw={700}>{course.subject_code}</Text>
+                <Text size="md" fw={600} c={"dimmed"}>[{course.section_type_en}]</Text>
+            </div>,
+            children: <Stack gap={"sm"}>
+                <Stack gap={0}>
+                    <Text size="lg" fw={500}>{course.subject_name_th}</Text>
+                    <Text size="lg" fw={500}>{course.subject_name_en}</Text>
+                </Stack>
+                <Stack gap={0}>
+                    <Group gap={5}>
+                        <Text size="sm" fw={700}>Day :</Text>
+                        <Text size="sm" fw={400}>
+                            <span className={clsx(dayColors[course.day_w.trim()]?.text)}>
+                                {course.day_w}
+                            </span>
+                        </Text>
+                    </Group>
+                    <Group gap={5}>
+                        <Text size="sm" fw={700}>Room :</Text>
+                        <Text size="sm" fw={400}>{course.room_name_en}</Text>
+                    </Group>
+                    <Group gap={5}>
+                        <Text size="sm" fw={700}>Section :</Text>
+                        <Text size="sm" fw={400}>{course.section_code}</Text>
+                    </Group>
+                </Stack>
+                <Stack gap={0}>
+                    <Text size="sm" fw={700}>Teacher :</Text>
+                    {course.teacher_name_en.split(",").map((teacher, i) => (
+                        <Text size="sm" fw={400} key={i}>- {teacher}</Text>
+                    ))}
+                </Stack>
+            </Stack>,
+        })
+    }
 
     return (
         <div className="overflow-x-auto">
@@ -30,9 +74,9 @@ export default function Page() {
                 {getGroupCourse.data?.results &&
                     getGroupCourse.data?.results.length > 0 &&
                     getGroupCourse.data?.results[0]?.course ? (
-                    <TableCourse scheduleData={getGroupCourse.data?.results[0]?.course} />
+                    <TableCourse canClick onClick={onShowDetail} scheduleData={getGroupCourse.data?.results[0]?.course} />
                 ) : (
-                    <Text c={"dimmed"}>ไม่พบรายวิชา อาจจะยังไม่ได้ลงทะเบียน</Text>
+                    <Text c={"dimmed"}>ไม่พบรายวิชา หรืออาจจะยังไม่ได้ลงทะเบียน</Text>
                 )}
             </>}
         </div>

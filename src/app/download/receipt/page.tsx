@@ -14,7 +14,6 @@ export default async function Page(props: {
     }
 
     const getCourseFromRedis = await api.download.getCourseFromRedis({ id: id.toString() });
-    console.log("getCourseFromRedis", getCourseFromRedis);
 
     const courseData = _.uniqBy(getCourseFromRedis, (x) => x.subject_code + x.max_credit);
 

@@ -14,28 +14,28 @@ import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 
 interface Props {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }
 
 const theme = createTheme({
-  fontFamily: "var(--font-sans)",
+    fontFamily: "var(--font-sans)",
 
-  radius: {
-    sm: "0.75rem",
-  },
+    radius: {
+        sm: "0.75rem",
+    },
 });
 
 export default function MainProvider({ children }: Props) {
-  return (
-    <Suspense>
-      <SessionProvider>
-        <MantineProvider theme={theme} defaultColorScheme="light">
-          <ConfigProvider>
-            <Notifications position="top-right" />
-            <ModalsProvider>{children}</ModalsProvider>
-          </ConfigProvider>
-        </MantineProvider>
-      </SessionProvider>
-    </Suspense>
-  );
+    return (
+        <Suspense>
+            <SessionProvider>
+                <MantineProvider theme={theme} defaultColorScheme="light">
+                    <ConfigProvider>
+                        <Notifications position="top-right" />
+                        <ModalsProvider modalProps={{ centered: true }}>{children}</ModalsProvider>
+                    </ConfigProvider>
+                </MantineProvider>
+            </SessionProvider>
+        </Suspense>
+    );
 }

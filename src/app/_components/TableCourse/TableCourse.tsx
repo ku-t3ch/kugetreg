@@ -5,58 +5,13 @@ import { type Course } from "@/types/responses/IGroupCourseResponse";
 import clsx from "clsx";
 import _ from "lodash";
 import { Text } from "@mantine/core";
+import dayColors from "utils/dayColors";
 
 interface Props {
     scheduleData: Course[];
     canClick?: boolean;
+    onClick?: (course: Course) => void;
 }
-
-const dayColors: Record<string, { bg: string; bgHover: string; border: string; text: string }> =
-{
-    MON: { bg: "bg-red-100", bgHover: "hover:bg-red-200", border: "border-red-300", text: "text-red-800" },
-    TUE: {
-        bg: "bg-orange-100",
-        bgHover: "hover:bg-orange-200",
-        border: "border-orange-300",
-        text: "text-orange-500",
-    },
-    WED: {
-        bg: "bg-yellow-100",
-        bgHover: "hover:bg-yellow-200",
-        border: "border-yellow-300",
-        text: "text-yellow-500",
-    },
-    THU: {
-        bg: "bg-green-100",
-        bgHover: "hover:bg-green-200",
-        border: "border-green-300",
-        text: "text-green-500",
-    },
-    FRI: {
-        bg: "bg-blue-100",
-        bgHover: "hover:bg-blue-200",
-        border: "border-blue-300",
-        text: "text-blue-500",
-    },
-    SAT: {
-        bg: "bg-indigo-100",
-        bgHover: "hover:bg-indigo-200",
-        border: "border-indigo-300",
-        text: "text-indigo-500",
-    },
-    SUN: {
-        bg: "bg-purple-100",
-        bgHover: "hover:bg-purple-200",
-        border: "border-purple-300",
-        text: "text-purple-500",
-    },
-    NONE: {
-        bg: "bg-gray-100",
-        bgHover: "hover:bg-gray-200",
-        border: "border-gray-300",
-        text: "text-gray-500",
-    },
-};
 
 const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
@@ -157,7 +112,11 @@ const TableCourse = (props: Props) => {
                         {props.scheduleData.filter(course => course.day_w.trim() === day).map((course, index) => {
                             const day_w = course.day_w.trim();
                             return (
-                                <div key={`${index}_${course.section_id}_${day}_${course.subject_code}`} className={clsx("w-full border rounded-md px-1 flex-col flex items-center justify-center", heightClass, dayColors[day_w]?.bg, dayColors[day_w]?.border, dayColors[day_w]?.text, props.canClick && dayColors[day_w]?.bgHover, props.canClick && "cursor-pointer")} style={{
+                                <div onClick={() => {
+                                    if (props.canClick && props.onClick) {
+                                        props.onClick(course);
+                                    }
+                                }} key={`${index}_${course.section_id}_${day}_${course.subject_code}`} className={clsx("w-full border rounded-md px-1 flex-col flex items-center justify-center", heightClass, dayColors[day_w]?.bg, dayColors[day_w]?.border, dayColors[day_w]?.text, props.canClick && dayColors[day_w]?.bgHover, props.canClick && "cursor-pointer")} style={{
                                     gridColumn: `${getPosition(course.time_from!)}/${getPosition(course.time_to!)}`,
                                 }} >
                                     <Text fw={600} lineClamp={1}>{course.subject_code}</Text>
