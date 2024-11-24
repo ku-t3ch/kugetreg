@@ -1,5 +1,5 @@
-import { type Course } from "@/types/responses/IGroupCourseResponse";
 import { create } from "zustand";
+import { type Course } from "@/types/responses/IGroupCourseResponse";
 
 type Store = {
   courses: Course[];

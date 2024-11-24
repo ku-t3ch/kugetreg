@@ -76,7 +76,7 @@ export default function ScheduleHeader() {
     }
     return (
         <div className="flex items-center justify-between">
-            <Text size="xl" fw={600}>
+            <Text size="xl" fw={700}>
                 ตารางเรียน
             </Text>
             <Menu shadow="md" width={200} position="bottom-end">
