@@ -34,7 +34,7 @@ export default function Page() {
             notifications.update({
                 ...SuccessNotificationData,
                 id: key,
-                message: "Copied to clipboard :" + subjectName,
+                message: "Copied to clipboard : " + subjectName,
                 color: "green",
             })
         } catch (error) {
@@ -42,7 +42,7 @@ export default function Page() {
                 notifications.update({
                     ...ErrorNotificationData,
                     id: key,
-                    message: "Failed to copy to clipboard :" + error.message,
+                    message: "Failed to copy to clipboard : " + error.message,
                     color: "red",
                 })
             }
@@ -63,7 +63,7 @@ export default function Page() {
                 <Stack gap={0}>
                     <Group gap={5}>
                         <Text size="sm" fw={700}>Day :</Text>
-                        <Text size="sm" fw={400}>
+                        <Text size="sm" fw={700}>
                             <span className={clsx(dayColors[course.day_w.trim()]?.text)}>
                                 {course.day_w}
                             </span>
