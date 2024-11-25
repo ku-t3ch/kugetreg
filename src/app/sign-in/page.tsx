@@ -9,14 +9,15 @@ import {
     Text,
     TextInput,
 } from "@mantine/core";
-import { IconLock, IconUser } from "@tabler/icons-react";
-import { useParams } from "next/navigation";
+import { IconError404, IconLock, IconUser, IconX } from "@tabler/icons-react";
+import { useParams, useSearchParams } from "next/navigation";
 import Footer from "../_components/Footer";
 import { useState } from "react";
 
 export default function Page() {
-    const params = useParams<{ error: string }>();
+    const searchParams = useSearchParams()
     const [loading, setLoading] = useState(false);
+
     return (
         <div className="flex min-h-screen flex-col items-center justify-center">
             <Card maw={400} w={"100%"}>
@@ -38,19 +39,23 @@ export default function Page() {
                             ).value;
 
                             try {
-                                setLoading(false);
                                 await signIn("credentials", {
                                     username: username,
                                     password: password,
                                     callbackUrl: "/",
                                 });
+                                setLoading(false);
                             } catch (error) {
                                 setLoading(false);
                                 console.error(error);
                             }
                         }}
                     >
-                        {params.error && <Alert color="red">{params.error}</Alert>}
+                        {searchParams.get("error") &&
+                            <Alert variant="light" color="red" title="Error" icon={<IconX size={15} />}>
+                                {searchParams.get("error")?.toString()}
+                            </Alert>
+                        }
 
                         <TextInput
                             size="md"
