@@ -2,10 +2,11 @@
 
 import Footer from '@/app/_components/Footer';
 import { AppShell, Burger, Group, ScrollArea } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 
 import AccountNavbarMenu from '../_components/NavbarMenu/AccountNavbarMenu';
 import NavbarMenu from '../_components/NavbarMenu/NavbarMenu';
+import Logo from '@/app/_components/Logo/Logo';
 
 interface Props {
     children: React.ReactNode;
@@ -14,7 +15,6 @@ interface Props {
 export default function MainLayout(props: Props) {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
-    const isMobile = useMediaQuery("(max-width: 768px)");
     return (
         <AppShell
             header={{ height: 60 }}
@@ -39,9 +39,7 @@ export default function MainLayout(props: Props) {
                         visibleFrom="sm"
                         size="sm"
                     />
-                    <span className="text-xl font-bold text-blue-600">
-                        KU Get Reg {!isMobile && ": จัดตารางเรียน"}
-                    </span>
+                    <Logo />
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar>
