@@ -4,8 +4,6 @@ import { redirect } from 'next/navigation';
 import { auth, signOut } from '@/server/auth';
 import { type IMYKUToken } from '@/types/IMYKUToken.type';
 
-import MainLayout from './_layouts/MainLayout';
-
 export default async function Layout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -22,7 +20,7 @@ export default async function Layout({
         return redirect("/sign-in");
     }
 
-    return <MainLayout>{children}</MainLayout>;
+    return children;
 }
 
 export const dynamic = "force-dynamic";
