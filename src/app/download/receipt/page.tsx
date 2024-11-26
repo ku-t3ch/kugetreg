@@ -54,7 +54,7 @@ export default async function Page(props: {
             <div className="flex flex-col">
                 <div className="flex justify-between">
                     <div className="thermal-receipt">Item Count</div>
-                    <div className="thermal-receipt">{getCourseFromRedis.length}</div>
+                    <div className="thermal-receipt">{courseData.length}</div>
                 </div>
             </div>
             <div className="my-2 w-full border-b-2 border-dashed border-black"></div>
