@@ -11,6 +11,7 @@ import { notifications } from '@mantine/notifications';
 import { IconDownload, IconFileTypePdf, IconPlus, IconReceipt } from '@tabler/icons-react';
 import useCourseStore from '../../_store/useCourseStore';
 import { useDisclosure } from '@mantine/hooks';
+import AddCourse from '../AddCourse/AddCourse';
 
 export default function ScheduleHeader() {
     const { data: session } = useSession();
@@ -79,8 +80,8 @@ export default function ScheduleHeader() {
 
     return (
         <>
-            <Modal opened={openedAddCourse} onClose={closeAddCourse} title="">
-                asdfsdf
+            <Modal opened={openedAddCourse} fullScreen onClose={closeAddCourse} title={<Text size="lg" fw={700}>Add Course</Text>}>
+                <AddCourse />
             </Modal>
             <div className="flex items-center justify-between">
                 <Text size="xl" fw={700}>
