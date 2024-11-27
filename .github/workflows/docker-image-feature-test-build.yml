@@ -2,8 +2,7 @@ name: Docker Image Feature Test Build
 
 on:
   push:
-    branches: ["*"]
-    branches-ignore: ["develop", "main"]
+    branches: ["feature/*"]
 
 jobs:
   build:
