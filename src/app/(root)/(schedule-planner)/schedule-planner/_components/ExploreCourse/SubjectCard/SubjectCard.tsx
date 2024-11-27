@@ -1,7 +1,7 @@
 "use client";
 
 import { type IOpenSubjectForEnrollResponse } from "@/types/responses/IOpenSubjectForEnrollResponse";
-import { Paper, Stack, Group, Text, Badge, Collapse, ActionIcon, Divider, Button } from "@mantine/core";
+import { Paper, Stack, Group, Text, Badge, Collapse, ActionIcon, Divider, Button, Indicator } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconChevronDown, IconChevronUp, IconUser } from "@tabler/icons-react";
 import _ from "lodash";
@@ -13,7 +13,7 @@ interface Props {
 }
 
 function SubjectCard(props: Props) {
-    const [opened, { toggle, close, open }] = useDisclosure(false);
+    const [opened, { toggle }] = useDisclosure(true);
 
     const CoursedateConverter = (coursedateen: string) => {
         return _.sortBy(coursedateen.split(',').map((item) => {
@@ -33,29 +33,41 @@ function SubjectCard(props: Props) {
         });
     }
 
+    const seatIsFull = parseInt(props.course.totalSeat) >= parseInt(props.course.totalRegistered);
+
+    const calculateSearPercentageColor = () => {
+        const percentage = (parseInt(props.course.totalRegistered) / parseInt(props.course.totalSeat)) * 100;
+        if (percentage >= 100) {
+            return "red";
+        } else if (percentage >= 80) {
+            return "orange";
+        } else if (percentage >= 60) {
+            return "yellow";
+        } else {
+            return "green";
+        }
+    }
+
+
     return (
-        <Paper p="xs" withBorder className="relative border-red-400">
+        <Paper p="xs" withBorder className="relative">
             <div className="absolute top-1 right-3">
                 <ActionIcon variant="subtle" size={"md"} onClick={toggle}>
                     {opened ? <IconChevronUp /> : <IconChevronDown />}
                 </ActionIcon>
             </div>
+
             <Stack gap={2}>
                 {/* <Alert mb={"md"} variant="light" color="red" title="Time conflict with" icon={<IconInfoCircle />}>
-                                    <Stack>
-                                        <Text lineClamp={1} size="sm">- (01418332-65) Information System Security</Text>
-                                    </Stack>
-                                </Alert> */}
+                                        <Stack>
+                                            <Text lineClamp={1} size="sm">- (01418332-65) Information System Security</Text>
+                                        </Stack>
+                                    </Alert> */}
                 <Group gap={3}>
                     <Text size="sm" fw={700}>{props.course.subjectCode}</Text>
                     <Text size="xs" c="dimmed">[ {props.course.maxCredit} Credit ]</Text>
                 </Group>
                 <Text lineClamp={1} size="sm">{props.course.subjectNameEn}</Text>
-                <Group gap={2}>
-                    {CoursedateConverter(props.course.coursedate).map((item, index) => (
-                        <Badge variant="light" tt="none" color={item.dayMap?.color} size="xs" key={index}>{item.dayMap?.en}</Badge>
-                    ))}
-                </Group>
                 <Group justify="space-between">
                     <Group gap={2}>
                         <Text lineClamp={1} size="xs">Sec {props.course.sectionCode}</Text>
@@ -63,9 +75,14 @@ function SubjectCard(props: Props) {
                         <Text lineClamp={1} size="xs">{props.course.sectionTypeEn}</Text>
                     </Group>
                     <Group gap={2} align="center">
-                        <IconUser color="gray" size={13} />
-                        <Text c={"dimmed"} lineClamp={1} size="sm">{props.course.totalSeat}/{props.course.totalRegistered}</Text>
+                        <IconUser color={calculateSearPercentageColor()} size={13} />
+                        <Text c={calculateSearPercentageColor()} lineClamp={1} size="sm">{props.course.totalRegistered}/{props.course.totalSeat}</Text>
                     </Group>
+                </Group>
+                <Group gap={2}>
+                    {CoursedateConverter(props.course.coursedate).map((item, index) => (
+                        <Badge variant="light" tt="none" color={item.dayMap?.color} size="xs" key={index}>{item.dayMap?.en}</Badge>
+                    ))}
                 </Group>
                 <Collapse in={opened}>
                     <Divider my={10} />
