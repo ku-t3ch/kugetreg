@@ -29,7 +29,7 @@ export default function Page() {
                     <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
                 </Group>
             </AppShell.Header>
-            <AppShell.Navbar p="xs">
+            <AppShell.Navbar component={ScrollArea} p="xs">
                 <ExploreCourse />
             </AppShell.Navbar>
             <AppShell.Main>
