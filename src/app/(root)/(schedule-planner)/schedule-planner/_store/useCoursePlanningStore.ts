@@ -29,10 +29,7 @@ const useCoursePlanningStore = create(
         ).filter((course) => !course.is_hidden),
       getCoursesUnique: () =>
         _.sortBy(
-          _.uniqBy(
-            get().courses,
-            (course) => course.subject_code,
-          ),
+          _.uniqBy(get().courses, (course) => course.subject_code),
           (course) => convertKeyToDate(course.day_w.trim())?.value,
         ),
       setCourses: (courses: Course[]) => set({ courses }),
