@@ -9,6 +9,7 @@ type Store = {
   courses: Course[];
   getCourses: () => Course[];
   getCoursesUnique: () => Course[];
+  getTotalCredit: () => number;
   setCourses: (courses: Course[]) => void;
   addCourse: (course: Course[]) => void;
   removeCourses: (course: Course) => void;
@@ -30,7 +31,14 @@ const useCoursePlanningStore = create(
       getCoursesUnique: () =>
         _.sortBy(
           _.uniqBy(get().courses, (course) => course.subject_code),
-          (course) => convertKeyToDate(course.day_w.trim())?.value,
+          (course) => course.subject_name_en,
+        ),
+      getTotalCredit: () =>
+        _.sumBy(
+          _.uniqBy(get().courses, (x) => x.subject_code + x.max_credit).filter(
+            (course) => !course.is_hidden,
+          ),
+          (x) => x.max_credit!,
         ),
       setCourses: (courses: Course[]) => set({ courses }),
       addCourse: (course: Course[]) => {

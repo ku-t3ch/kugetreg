@@ -11,7 +11,7 @@ import {
     ActionIcon, Alert, Badge, Button, Collapse, Divider, Group, Paper, Stack, Text
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconChevronDown, IconChevronUp, IconInfoCircle, IconUser } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronUp, IconInfoCircle, IconPlus, IconUser } from '@tabler/icons-react';
 
 import useCoursePlanningStore from '../../../_store/useCoursePlanningStore';
 
@@ -134,7 +134,7 @@ function SubjectCard(props: Props) {
                             </Stack>
                         </Group>
                         <Group justify="end">
-                            <Button disabled={isConflict} onClick={() => onAddToSchedule(props.course)} size="xs" variant="gradient">{isConflict ? "Can't Add to Schedule" : "Add to Schedule"}</Button>
+                            <Button disabled={isConflict} onClick={() => onAddToSchedule(props.course)} leftSection={<IconPlus size={16} />} size="xs" variant="gradient">{isConflict ? "Can't Add to Schedule" : "Add to Schedule"}</Button>
                         </Group>
                     </Stack>
                 </Collapse>
