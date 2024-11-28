@@ -1,18 +1,26 @@
 "use client";
 
-import { type IOpenSubjectForEnrollResponse } from "@/types/responses/IOpenSubjectForEnrollResponse";
-import { Paper, Stack, Group, Text, Badge, Collapse, ActionIcon, Divider, Button, Indicator } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconChevronDown, IconChevronUp, IconUser } from "@tabler/icons-react";
-import _ from "lodash";
-import React, { } from "react";
-import { convertKeyToDate } from "utils/daysMap";
+import _ from 'lodash';
+import React from 'react';
+import { convertKeyToDate } from 'utils/daysMap';
+
+import {
+    type IOpenSubjectForEnrollResponse, OpenSubjectForEnrollSchemaToCourse
+} from '@/types/responses/IOpenSubjectForEnrollResponse';
+import {
+    ActionIcon, Badge, Button, Collapse, Divider, Group, Paper, Stack, Text
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconChevronDown, IconChevronUp, IconUser } from '@tabler/icons-react';
+
+import useCoursePlanningStore from '../../../_store/useCoursePlanningStore';
 
 interface Props {
     course: IOpenSubjectForEnrollResponse
 }
 
 function SubjectCard(props: Props) {
+    const coursePlanningStore = useCoursePlanningStore()
     const [opened, { toggle }] = useDisclosure(true);
 
     const CoursedateConverter = (coursedateen: string) => {
@@ -48,6 +56,10 @@ function SubjectCard(props: Props) {
         }
     }
 
+    const onAddToSchedule = (course: IOpenSubjectForEnrollResponse) => {
+        const result = OpenSubjectForEnrollSchemaToCourse.parse(course);
+        coursePlanningStore.addCourse(result);
+    }
 
     return (
         <Paper p="xs" withBorder className="relative">
@@ -114,7 +126,7 @@ function SubjectCard(props: Props) {
                             </Stack>
                         </Group>
                         <Group justify="end">
-                            <Button size="xs" variant="gradient">Add to Schedule</Button>
+                            <Button onClick={() => onAddToSchedule(props.course)} size="xs" variant="gradient">Add to Schedule</Button>
                         </Group>
                     </Stack>
                 </Collapse>

@@ -9,7 +9,6 @@ import dayColors from "utils/dayColors";
 
 interface Props {
     scheduleData: Course[];
-    canClick?: boolean;
     onClick?: (course: Course) => void;
 }
 
@@ -121,10 +120,10 @@ const TableCourse = (props: Props) => {
 
                             return (
                                 <div onClick={() => {
-                                    if (props.canClick && props.onClick) {
+                                    if (props.onClick) {
                                         props.onClick(course);
                                     }
-                                }} key={`${index}_${course.section_id}_${day}_${course.subject_code}`} className={clsx("w-full border rounded-md px-1 flex-col flex items-center justify-center", heightClass, dayColor?.bg, dayColor?.border, dayColor?.text, props.canClick && dayColor?.bgHover, props.canClick && "cursor-pointer")} style={{
+                                }} key={`${index}_${course.section_id}_${day}_${course.subject_code}`} className={clsx("w-full border rounded-md px-1 flex-col flex items-center justify-center", heightClass, dayColor?.bg, dayColor?.border, dayColor?.text, props.onClick && dayColor?.bgHover, props.onClick && "cursor-pointer")} style={{
                                     gridColumn: `${getPosition(course.time_from!)}/${getPosition(course.time_to!)}`,
                                 }} >
                                     <Text fw={600} lineClamp={1}>{course.subject_code}</Text>

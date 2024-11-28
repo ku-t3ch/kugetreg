@@ -1,15 +1,38 @@
 "use client"
 
-import Logo from "@/app/_components/Logo/Logo";
-import TableCourse from "@/app/_components/TableCourse/TableCourse";
-import { ActionIcon, AppShell, Burger, Group, ScrollArea } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconChevronLeft } from "@tabler/icons-react";
-import Link from "next/link";
-import ExploreCourse from "./_components/ExploreCourse/ExploreCourse";
+import Link from 'next/link';
+
+import Logo from '@/app/_components/Logo/Logo';
+import {
+    ModalCourseChildren, ModalCourseDetailTitle
+} from '@/app/_components/ModalCourse/ModalCourse';
+import TableCourse from '@/app/_components/TableCourse/TableCourse';
+import { type Course } from '@/types/responses/IGroupCourseResponse';
+import { ActionIcon, AppShell, Burger, Button, Group, ScrollArea } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
+import { IconChevronLeft, IconTrash } from '@tabler/icons-react';
+
+import ExploreCourse from './_components/ExploreCourse/ExploreCourse';
+import useCoursePlanningStore from './_store/useCoursePlanningStore';
 
 export default function Page() {
     const [opened, { toggle }] = useDisclosure();
+    const coursePlanningStore = useCoursePlanningStore()
+
+    const onShowDetail = (course: Course) => {
+        modals.open({
+            title: <ModalCourseDetailTitle course={course} />,
+            children: <ModalCourseChildren course={course}
+                actions={
+                    <Button variant='light' leftSection={<IconTrash size={16} />} color="red" onClick={() => coursePlanningStore.removeCourse(course)}>
+                        Remove
+                    </Button>
+                }
+            />,
+        })
+    }
+
     return (
         <AppShell
             header={{ height: 60 }}
@@ -34,7 +57,9 @@ export default function Page() {
             </AppShell.Navbar>
             <AppShell.Main>
                 <ScrollArea>
-                    <TableCourse scheduleData={[]} />
+                    <TableCourse
+                        onClick={onShowDetail}
+                        scheduleData={coursePlanningStore.courses} />
                 </ScrollArea>
             </AppShell.Main>
         </AppShell>

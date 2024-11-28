@@ -6,11 +6,11 @@ import { useSession } from 'next-auth/react';
 import { ErrorNotificationData, LoadingNotificationData, SuccessNotificationData } from '@/configs/common/NotificationData/NotificationData';
 import { type DownloadInput } from '@/services/download/_schema/download.schema';
 import { api } from '@/trpc/react';
-import { Button, Group, Menu, Modal, rem, Text } from '@mantine/core';
+import { Button, Group, Menu, rem, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconDownload, IconFileTypePdf, IconPlus, IconReceipt } from '@tabler/icons-react';
-import useCourseStore from '../../_store/useCourseStore';
 import { useDisclosure } from '@mantine/hooks';
+import useCoursePlanningStore from '../../_store/useCoursePlanningStore';
 
 export default function ScheduleHeader() {
     const { data: session } = useSession();
@@ -18,7 +18,7 @@ export default function ScheduleHeader() {
     const getReceipt = api.download.getReceipt.useMutation();
     const getPDF = api.download.getPdf.useMutation();
 
-    const { courses } = useCourseStore();
+    const { courses } = useCoursePlanningStore();
     const hasCourses = courses.length > 0;
 
     const downloadPayload: DownloadInput = {
