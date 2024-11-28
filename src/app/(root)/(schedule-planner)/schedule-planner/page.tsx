@@ -87,7 +87,7 @@ export default function Page() {
                     <Stack gap={5}>
                         {coursePlanningStore.getCoursesUnique().map((course, i) => (
                             <Paper key={i} withBorder p="sm">
-                                <Group justify='space-between'>
+                                <div className='flex justify-between flex-col gap-y-2 md:flex-row'>
                                     <Group>
                                         {
                                             course.is_hidden ?
@@ -106,12 +106,12 @@ export default function Page() {
                                         </Stack>
                                     </Group>
 
-                                    <Group gap="xs">
+                                    <div className='flex justify-end items-center'>
                                         <Button onClick={() => onRemoveCourses(course)} color="red" variant="light" leftSection={<IconTrash size={16} />}>
                                             Remove
                                         </Button>
-                                    </Group>
-                                </Group>
+                                    </div>
+                                </div>
                             </Paper>
                         ))}
                     </Stack>

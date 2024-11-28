@@ -91,6 +91,8 @@ function SubjectCard(props: Props) {
                         <Text lineClamp={1} size="xs">Sec {props.course.sectionCode}</Text>
                         <Text lineClamp={1} size="xs">|</Text>
                         <Text lineClamp={1} size="xs">{props.course.sectionTypeEn}</Text>
+                        <Text lineClamp={1} size="xs">|</Text>
+                        <Badge variant='dot' size='xs' tt="none" color={props.course.stdStatusEn === "Special" ? "orange" : "blue"}>{props.course.stdStatusEn}</Badge>
                     </Group>
                     <Group gap={2} align="center">
                         <IconUser color={calculateSearPercentageColor()} size={13} />

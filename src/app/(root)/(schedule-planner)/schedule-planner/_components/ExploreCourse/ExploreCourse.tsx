@@ -9,6 +9,7 @@ import {
 import { IconFilter, IconSearch } from '@tabler/icons-react';
 
 import SubjectCardMemo from './SubjectCard/SubjectCard';
+import _ from 'lodash';
 
 export default function ExploreCourse() {
     const searchSubjectOpenEnr = api.enroll.searchSubjectOpenEnr.useMutation();
@@ -64,9 +65,9 @@ export default function ExploreCourse() {
                         {openSubjectForEnroll.data?.results.length} results
                     </Text>}
                 </Group>
-                <ActionIcon variant="subtle" color="gray">
+                {/* <ActionIcon variant="subtle" color="gray">
                     <IconFilter size={16} />
-                </ActionIcon>
+                </ActionIcon> */}
             </Group>
             <Combobox
                 store={combobox}
@@ -120,7 +121,7 @@ export default function ExploreCourse() {
 
             {/* <ScrollArea scrollHideDelay={0} h={"calc(-10rem + 100vh)"}> */}
             <Stack gap={10} mt={5}>
-                {openSubjectForEnroll.data?.results.map((course, index) => (
+                {_.sortBy(openSubjectForEnroll.data?.results, o => parseInt(o.sectionCode)).map((course, index) => (
                     <SubjectCardMemo key={index} course={course} />
                 ))}
             </Stack>

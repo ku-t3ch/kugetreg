@@ -31,7 +31,7 @@ const useCoursePlanningStore = create(
         _.sortBy(
           _.uniqBy(
             get().courses,
-            (course) => course.subject_code && course.section_code,
+            (course) => course.subject_code,
           ),
           (course) => convertKeyToDate(course.day_w.trim())?.value,
         ),
