@@ -17,6 +17,7 @@ import ExploreCourse from './_components/ExploreCourse/ExploreCourse';
 import useCoursePlanningStore from './_store/useCoursePlanningStore';
 import ScheduleHeader from './_components/ScheduleHeader/ScheduleHeader';
 import { ConfirmDeleteModalData } from '@/configs/common/ModalData/ModalData';
+import Footer from '@/app/_components/Footer';
 
 export default function Page() {
     const [opened, { toggle }] = useDisclosure();
@@ -121,6 +122,7 @@ export default function Page() {
                             </Paper>
                         ))}
                     </Stack>
+                    <Footer />
                 </Stack>
             </AppShell.Main>
         </AppShell>
