@@ -84,6 +84,9 @@ export default function Page() {
                             onClick={onShowDetail}
                             scheduleData={coursePlanningStore.getCourses()} />
                     </div>
+                    <Group>
+                        <div>Total credits {coursePlanningStore.getTotalCredit()}</div>
+                    </Group>
                     <Stack gap={5}>
                         {coursePlanningStore.getCoursesUnique().map((course, i) => (
                             <Paper key={i} withBorder p="sm">
@@ -91,17 +94,20 @@ export default function Page() {
                                     <Group>
                                         {
                                             course.is_hidden ?
-                                                <ActionIcon variant="light" onClick={() => onShow(course)}>
+                                                <ActionIcon variant="light" color='gray' onClick={() => onShow(course)}>
                                                     <IconEyeOff />
                                                 </ActionIcon>
                                                 :
-                                                <ActionIcon variant="light" onClick={() => onHidden(course)}>
+                                                <ActionIcon variant="light" color='green' onClick={() => onHidden(course)}>
                                                     <IconEye />
                                                 </ActionIcon>
                                         }
                                         <Stack gap={0}>
-                                            <Text>{course.subject_code}</Text>
-                                            <Text>{course.subject_name_en}</Text>
+                                            <Group gap={10}>
+                                                <Text>{course.subject_code}</Text>
+                                                <Text c="dimmed">[{course.max_credit} Credit]</Text>
+                                            </Group>
+                                            <Text fw={700} size='lg'>{course.subject_name_en}</Text>
                                             <Text>Sec {course.section_code}</Text>
                                         </Stack>
                                     </Group>
