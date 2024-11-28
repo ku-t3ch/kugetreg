@@ -120,9 +120,9 @@ export default function ScheduleHeader() {
                             </Menu.Item>
                         </Menu.Dropdown>
                     </Menu>
-                    <div>
+                    {/* <div>
                         <Button onClick={openAddCourse} leftSection={<IconPlus size={15} />} >Add Course</Button>
-                    </div>
+                    </div> */}
                 </Group>
             </div>
         </>

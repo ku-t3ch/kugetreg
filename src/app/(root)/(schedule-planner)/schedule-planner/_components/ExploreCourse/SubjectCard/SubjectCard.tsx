@@ -8,10 +8,10 @@ import {
     type IOpenSubjectForEnrollResponse, OpenSubjectForEnrollSchemaToCourse
 } from '@/types/responses/IOpenSubjectForEnrollResponse';
 import {
-    ActionIcon, Badge, Button, Collapse, Divider, Group, Paper, Stack, Text
+    ActionIcon, Alert, Badge, Button, Collapse, Divider, Group, Paper, Stack, Text
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconChevronDown, IconChevronUp, IconUser } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronUp, IconInfoCircle, IconUser } from '@tabler/icons-react';
 
 import useCoursePlanningStore from '../../../_store/useCoursePlanningStore';
 
@@ -61,6 +61,10 @@ function SubjectCard(props: Props) {
         coursePlanningStore.addCourse(result);
     }
 
+    const resultConvert = OpenSubjectForEnrollSchemaToCourse.parse(props.course);
+
+    const isConflict = coursePlanningStore.checkIsConflict(resultConvert).length > 0;
+
     return (
         <Paper p="xs" withBorder className="relative">
             <div className="absolute top-1 right-3">
@@ -70,11 +74,13 @@ function SubjectCard(props: Props) {
             </div>
 
             <Stack gap={2}>
-                {/* <Alert mb={"md"} variant="light" color="red" title="Time conflict with" icon={<IconInfoCircle />}>
-                                        <Stack>
-                                            <Text lineClamp={1} size="sm">- (01418332-65) Information System Security</Text>
-                                        </Stack>
-                                    </Alert> */}
+                {isConflict && <Alert mb={"sm"} w={"90%"} variant="light" color="red" title="Time conflict with" icon={<IconInfoCircle />}>
+                    <Stack gap={0}>
+                        {coursePlanningStore.checkIsConflict(resultConvert).map((item, index) => (
+                            <Text key={index} lineClamp={1} size="sm">- ({item.subject_code}) {item.subject_name_en}</Text>
+                        ))}
+                    </Stack>
+                </Alert>}
                 <Group gap={3}>
                     <Text size="sm" fw={700}>{props.course.subjectCode}</Text>
                     <Text size="xs" c="dimmed">[ {props.course.maxCredit} Credit ]</Text>
@@ -126,7 +132,7 @@ function SubjectCard(props: Props) {
                             </Stack>
                         </Group>
                         <Group justify="end">
-                            <Button onClick={() => onAddToSchedule(props.course)} size="xs" variant="gradient">Add to Schedule</Button>
+                            <Button disabled={isConflict} onClick={() => onAddToSchedule(props.course)} size="xs" variant="gradient">{isConflict ? "Can't Add to Schedule" : "Add to Schedule"}</Button>
                         </Group>
                     </Stack>
                 </Collapse>

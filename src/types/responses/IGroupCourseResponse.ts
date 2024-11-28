@@ -32,6 +32,7 @@ export const CourseSchema = z.object({
   room_name_th: z.string(),
   room_name_en: z.string(),
   time_start: z.number(),
+  is_hidden: z.boolean().default(false).optional().nullable(),
 });
 
 export type Course = z.infer<typeof CourseSchema>;
