@@ -18,11 +18,11 @@ export default function ScheduleHeader() {
     const getReceipt = api.download.getReceipt.useMutation();
     const getPDF = api.download.getPdf.useMutation();
 
-    const { courses } = useCoursePlanningStore();
+    const { courses, getCourses } = useCoursePlanningStore();
     const hasCourses = courses.length > 0;
 
     const downloadPayload: DownloadInput = {
-        courseData: JSON.stringify(courses),
+        courseData: JSON.stringify(getCourses()),
         screenType: "desktop",
         major: `${session?.user.student.majorCode} - ${session?.user.student.majorNameEn}`,
     }
