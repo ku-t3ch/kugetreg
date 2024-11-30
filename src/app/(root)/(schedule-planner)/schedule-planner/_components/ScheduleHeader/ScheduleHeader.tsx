@@ -11,8 +11,11 @@ import { notifications } from '@mantine/notifications';
 import { IconDownload, IconFileTypePdf, IconReceipt } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import useCoursePlanningStore from '../../_store/useCoursePlanningStore';
+import ChangeThemeTable from '@/app/_components/ChangeThemeTable/ChangeThemeTable';
+import { useTableTheme } from '@/app/_store/useTableTheme';
 
 export default function ScheduleHeader() {
+    const tableTheme = useTableTheme()
     const { data: session } = useSession();
     const getCapture = api.download.getCapture.useMutation();
     const getReceipt = api.download.getReceipt.useMutation();
@@ -25,6 +28,7 @@ export default function ScheduleHeader() {
         courseData: JSON.stringify(getCourses()),
         screenType: "desktop",
         major: `${session?.user.student.majorCode} - ${session?.user.student.majorNameEn}`,
+        theme: tableTheme.currentTheme
     }
 
     const onDownloadPNG = () => {
@@ -87,6 +91,7 @@ export default function ScheduleHeader() {
                     วางแผนตารางเรียน
                 </Text>
                 <Group gap={"sm"}>
+                    <ChangeThemeTable />
                     <Menu shadow="md" width={200} position="bottom-end">
                         <Menu.Target>
                             <Button disabled={!hasCourses} leftSection={<IconDownload size={15} />}>Download</Button>

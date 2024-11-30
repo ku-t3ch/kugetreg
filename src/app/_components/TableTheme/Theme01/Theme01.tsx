@@ -11,6 +11,7 @@ import { Itim } from "next/font/google";
 
 const fontItim = Itim({
     weight: "400",
+    subsets: ["thai", "latin"],
 });
 
 const Theme01 = (props: ITableCourseProps) => {

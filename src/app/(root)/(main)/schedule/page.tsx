@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 
 import { ModalCourseChildren, ModalCourseDetailTitle } from '@/app/_components/ModalCourse/ModalCourse';
-import TableCourse from '@/app/_components/TableCourse/TableCourse';
 import { api } from '@/trpc/react';
 import { type Course } from '@/types/responses/IGroupCourseResponse';
 import { Button, Skeleton, Stack, Text } from '@mantine/core';
@@ -12,6 +11,7 @@ import { IconEyeOff } from '@tabler/icons-react';
 
 import useCourseStore from './_store/useCourseStore';
 import useHideCourseStore from './_store/useHideCourseStore';
+import TableTheme from '@/app/_components/TableTheme';
 
 export default function Page() {
     const getGroupCourse = api.stdProfile.getGroupCourse.useQuery();
@@ -72,7 +72,7 @@ export default function Page() {
                     ))}
                 </div> : <>
                     {courses && courses.length > 0 && courses ? (
-                        <TableCourse onClick={onShowDetail} scheduleData={courses} />
+                        <TableTheme onClick={onShowDetail} scheduleData={courses} />
                     ) : (
                         <Text c={"dimmed"}>ไม่พบรายวิชา หรืออาจจะยังไม่ได้ลงทะเบียน</Text>
                     )}

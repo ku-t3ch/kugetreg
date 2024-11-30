@@ -1,19 +1,20 @@
 "use client";
 import { type ITableCourseProps } from "@/types/ITableCourseProps";
-import Theme01 from "./Theme01/Theme01";
-import DefaultTheme from "./DefaultTheme/DefaultTheme";
+import { listTheme, useTableTheme } from "@/app/_store/useTableTheme";
+import { useEffect } from "react";
 
 export default function TableTheme(props: ITableCourseProps) {
-    const target = "Theme01";
+    const tableTheme = useTableTheme()
 
-    const listTheme = {
-        "DefaultTheme": DefaultTheme,
-        "Theme01": Theme01
-    }
+    useEffect(() => {
+        if (props.theme) {
+            tableTheme.setTheme(props.theme)
+        }
+    }, [props.theme]);
 
     return (
         <div className="min-w-fit">
-            {listTheme[target](props)}
+            {tableTheme.currentTheme && listTheme[tableTheme.currentTheme as keyof typeof listTheme]({ ...props })}
         </div>
     )
 }

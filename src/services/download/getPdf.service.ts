@@ -36,8 +36,7 @@ const getPdfService = async (props: GetPdfInput) => {
 
     const query = qs.stringify(
       {
-        screenType: props.screenType,
-        major: props.major,
+        ...props,
         id: keyId,
       },
       QSConfig,
@@ -53,6 +52,9 @@ const getPdfService = async (props: GetPdfInput) => {
           width: width,
           height: 0,
         },
+        gotoOptions: {
+          waitUntil: "networkidle2",
+        },
         options: {
           printBackground: true,
           landscape: true,
@@ -67,9 +69,7 @@ const getPdfService = async (props: GetPdfInput) => {
 
     await redisClient.del(keyId);
 
-    return (
-      "data:application/pdf;base64," + Buffer.from(res.data).toString("base64")
-    );
+    return "data:application/pdf;base64," + Buffer.from(res.data).toString("base64");
 
     // await page.goto(url.toString());
     // await page.waitForSelector("#capture");

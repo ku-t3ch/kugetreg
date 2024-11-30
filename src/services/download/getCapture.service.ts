@@ -8,7 +8,6 @@ import { QSConfig } from "@/configs/common/QSConfig";
 import { redisClient } from "@/configs/redis/redis";
 
 import { downloadSchema } from "./_schema/download.schema";
-import axios from "axios";
 import { axiosBrowserLess } from "utils/axiosAPI";
 
 export const getCaptureSchema = downloadSchema;
@@ -20,13 +19,13 @@ const getCaptureService = async (props: GetCaptureInput) => {
     const width = 700;
     const selector = "#capture";
 
-    // const browser = await puppeteer.launch(PuppeteerLaunchOptionsConfig);
-    // const page = await browser.newPage();
-    // await page.setViewport({
-    //   width: width,
-    //   height: 0,
-    //   deviceScaleFactor: 3,
-    // });
+    const browser = await puppeteer.launch(PuppeteerLaunchOptionsConfig);
+    const page = await browser.newPage();
+    await page.setViewport({
+      width: width,
+      height: 0,
+      deviceScaleFactor: 3,
+    });
 
     const keyId = uuid();
     await redisClient.set(
@@ -38,8 +37,7 @@ const getCaptureService = async (props: GetCaptureInput) => {
 
     const query = qs.stringify(
       {
-        screenType: props.screenType,
-        major: props.major,
+        ...props,
         id: keyId,
       },
       QSConfig,
@@ -56,6 +54,9 @@ const getCaptureService = async (props: GetCaptureInput) => {
           height: 0,
           deviceScaleFactor: 3,
         },
+        gotoOptions: {
+          waitUntil: "networkidle2",
+        },
         selector: selector,
         waitForSelector: {
           selector: selector,
@@ -69,7 +70,10 @@ const getCaptureService = async (props: GetCaptureInput) => {
     await redisClient.del(keyId);
 
     return "data:image/png;base64," + Buffer.from(res.data).toString("base64");
-    // await page.goto(url.toString());
+
+    // await page.goto(url.toString(), {
+    //     waitUntil: "networkidle2",
+    // });
     // await page.waitForSelector("#capture");
     // const logo = await page.$("#capture");
     // const result = await logo?.screenshot({ type: "png" });

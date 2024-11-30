@@ -7,7 +7,6 @@ import Logo from '@/app/_components/Logo/Logo';
 import {
     ModalCourseChildren, ModalCourseDetailTitle
 } from '@/app/_components/ModalCourse/ModalCourse';
-import TableCourse from '@/app/_components/TableCourse/TableCourse';
 import { ConfirmDeleteModalData } from '@/configs/common/ModalData/ModalData';
 import {
     ErrorNotificationData, LoadingNotificationData, SuccessNotificationData
@@ -26,6 +25,7 @@ import ExploreCourse from './_components/ExploreCourse/ExploreCourse';
 import ScheduleHeader from './_components/ScheduleHeader/ScheduleHeader';
 import useCoursePlanningStore from './_store/useCoursePlanningStore';
 import { useEffect } from 'react';
+import TableTheme from '@/app/_components/TableTheme';
 
 export default function Page() {
     const [opened, { toggle }] = useDisclosure();
@@ -33,7 +33,7 @@ export default function Page() {
     const getPlanningCourse = api.planningCourse.getPlanningCourse.useQuery()
     const savePlanningCourse = api.planningCourse.savePlanningCourse.useMutation()
 
-    const coursePlanningStore = useCoursePlanningStore()    
+    const coursePlanningStore = useCoursePlanningStore()
 
     useEffect(() => {
         if (getPlanningCourse.data) {
@@ -130,7 +130,7 @@ export default function Page() {
                 <Stack gap={"lg"}>
                     <ScheduleHeader />
                     <div className='overflow-x-auto'>
-                        <TableCourse
+                        <TableTheme
                             onClick={onShowDetail}
                             scheduleData={coursePlanningStore.getCourses()} />
                     </div>
