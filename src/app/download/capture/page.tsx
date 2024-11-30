@@ -8,7 +8,7 @@ export default async function Page(props: {
 }) {
     const { major, screenType, id, theme } = await props.searchParams;
 
-    if (!major || !screenType || !id) {
+    if (!major || !screenType || !id || !theme) {
         return <div>Invalid request</div>;
     }
 
