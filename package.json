@@ -76,6 +76,7 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/eslint": "^8.56.10",
     "@types/file-saver": "^2.0.7",
     "@types/lodash": "^4.17.13",
