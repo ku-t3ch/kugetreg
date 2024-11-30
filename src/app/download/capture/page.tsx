@@ -1,12 +1,12 @@
 import { type SearchParams } from 'next/dist/server/request/search-params';
 
-import TableCourse from '@/app/_components/TableCourse/TableCourse';
 import { api } from '@/trpc/server';
+import TableTheme from '@/app/_components/TableTheme';
 
 export default async function Page(props: {
     searchParams: Promise<SearchParams>;
 }) {
-    const { major, screenType, id } = await props.searchParams;
+    const { major, screenType, id, theme } = await props.searchParams;
 
     if (!major || !screenType || !id) {
         return <div>Invalid request</div>;
@@ -14,18 +14,10 @@ export default async function Page(props: {
 
     const getCourseFromRedis = await api.download.getCourseFromRedis({ id: id.toString() });
     return (
-        <div id="capture" className='min-w-fit p-3 flex flex-col'>
-            {getCourseFromRedis && (
-                <TableCourse scheduleData={getCourseFromRedis} />
-            )}
-            <div className='flex items-center justify-between'>
-                <div>
-                    Generate by:{" "}
-                    <span className="font-semibold">kugetreg.teerut.com</span>
-                </div>
-                <div>
-                    {major}
-                </div>
+        <div className="min-w-fit p-3 flex flex-col gap-2" id="capture">
+            <TableTheme scheduleData={getCourseFromRedis ?? []} theme={theme?.toString()} />
+            <div>
+                Generate by : <span className='font-bold'>kugetreg.teerut.com</span>
             </div>
         </div>
     );

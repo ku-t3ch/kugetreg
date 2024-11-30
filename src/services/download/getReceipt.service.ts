@@ -37,8 +37,7 @@ const getReceiptService = async (props: GetReceiptInput) => {
 
     const query = qs.stringify(
       {
-        screenType: props.screenType,
-        major: props.major,
+        ...props,
         id: keyId,
       },
       QSConfig,

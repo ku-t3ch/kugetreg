@@ -17,7 +17,7 @@ function ModalCourseDetailTitle({ course }: Props) {
     return (
         <div className="flex gap-2 items-center justify-between w-full">
             <Text size="xl" fw={700}>{course.subject_code}</Text>
-            <Text size="md" fw={600} c={"dimmed"}>[{course.section_type_en}]</Text>
+            {course.max_credit ? <Text size="md" fw={600} c={"dimmed"}>[{course.max_credit} Credit]</Text> : <Text size="md" fw={600} c={"dimmed"}>[{course.section_type_en}]</Text>}
         </div>
     )
 }
@@ -67,6 +67,10 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
                     <Text size="sm" fw={700}>Section :</Text>
                     <Text size="sm" fw={400}>{course.section_code}</Text>
                 </Group>
+                {course.max_credit && <Group gap={5}>
+                    <Text size="sm" fw={700}>Section Type :</Text>
+                    <Text size="sm" fw={400}>{course.section_type_en}</Text>
+                </Group>}
                 <Group gap={5}>
                     <Text size="sm" fw={700}>Time :</Text>
                     <Text size="sm" fw={400}>{course.time_from} - {course.time_to}</Text>
