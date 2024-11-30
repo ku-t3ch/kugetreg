@@ -2,26 +2,45 @@
 
 import Link from 'next/link';
 
+import Footer from '@/app/_components/Footer';
 import Logo from '@/app/_components/Logo/Logo';
 import {
     ModalCourseChildren, ModalCourseDetailTitle
 } from '@/app/_components/ModalCourse/ModalCourse';
 import TableCourse from '@/app/_components/TableCourse/TableCourse';
+import { ConfirmDeleteModalData } from '@/configs/common/ModalData/ModalData';
+import {
+    ErrorNotificationData, LoadingNotificationData, SuccessNotificationData
+} from '@/configs/common/NotificationData/NotificationData';
+import { api } from '@/trpc/react';
 import { type Course } from '@/types/responses/IGroupCourseResponse';
-import { ActionIcon, AppShell, Burger, Button, Code, Group, Paper, ScrollArea, Stack, Text } from '@mantine/core';
+import {
+    ActionIcon, AppShell, Burger, Button, Code, Group, Paper, ScrollArea, Stack, Text
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
+import { notifications } from '@mantine/notifications';
 import { IconChevronLeft, IconEye, IconEyeOff, IconTrash } from '@tabler/icons-react';
 
 import ExploreCourse from './_components/ExploreCourse/ExploreCourse';
-import useCoursePlanningStore from './_store/useCoursePlanningStore';
 import ScheduleHeader from './_components/ScheduleHeader/ScheduleHeader';
-import { ConfirmDeleteModalData } from '@/configs/common/ModalData/ModalData';
-import Footer from '@/app/_components/Footer';
+import useCoursePlanningStore from './_store/useCoursePlanningStore';
+import { useEffect } from 'react';
 
 export default function Page() {
     const [opened, { toggle }] = useDisclosure();
-    const coursePlanningStore = useCoursePlanningStore()
+
+    const getPlanningCourse = api.planningCourse.getPlanningCourse.useQuery()
+    const savePlanningCourse = api.planningCourse.savePlanningCourse.useMutation()
+
+    const coursePlanningStore = useCoursePlanningStore()    
+
+    useEffect(() => {
+        if (getPlanningCourse.data) {
+            coursePlanningStore.setCourses(getPlanningCourse.data)
+        }
+    }, [getPlanningCourse.data])
+
 
     const onRemoveCourses = (course: Course) => {
         modals.openConfirmModal({
@@ -55,6 +74,36 @@ export default function Page() {
         coursePlanningStore.onShow(course)
     }
 
+    const onSavePlanningCourse = () => {
+        const key = notifications.show(LoadingNotificationData)
+        savePlanningCourse.mutate({
+            course: JSON.stringify(coursePlanningStore.getCoursesForSave())
+        },
+            {
+                onSuccess: () => {
+                    notifications.update({ ...SuccessNotificationData, id: key, message: "Save planning course successfully" })
+                    void getPlanningCourse.refetch()
+                },
+                onError: (error) => {
+                    notifications.update({ ...ErrorNotificationData, id: key, message: `Save planning course failed ${error.message}` })
+                }
+            }
+        )
+    }
+
+    const onClearPlanningCourse = () => {
+        modals.openConfirmModal({
+            ...ConfirmDeleteModalData,
+            children: <>Are you sure you want to clear all courses?</>,
+            onConfirm: () => {
+                coursePlanningStore.setCourses([])
+                modals.closeAll()
+            }
+        })
+    }
+
+    const isChange = coursePlanningStore.checkIsChange(getPlanningCourse.data ?? [])
+
     return (
         <AppShell
             header={{ height: 60 }}
@@ -78,15 +127,19 @@ export default function Page() {
                 <ExploreCourse />
             </AppShell.Navbar>
             <AppShell.Main>
-                <Stack gap={"xs"}>
+                <Stack gap={"lg"}>
                     <ScheduleHeader />
                     <div className='overflow-x-auto'>
                         <TableCourse
                             onClick={onShowDetail}
                             scheduleData={coursePlanningStore.getCourses()} />
                     </div>
-                    <Group>
+                    <Group justify='space-between'>
                         <div>Total credits {coursePlanningStore.getTotalCredit()}</div>
+                        <Group>
+                            <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">Clear</Button>
+                            <Button disabled={!isChange} onClick={onSavePlanningCourse} color="blue" variant="light">Save</Button>
+                        </Group>
                     </Group>
                     <Stack gap={5}>
                         {coursePlanningStore.getCoursesUnique().map((course, i) => (

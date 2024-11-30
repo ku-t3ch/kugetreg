@@ -114,7 +114,7 @@ const TableCourse = (props: Props) => {
                     <div className={`grid absolute z-10 top-0 left-0 right-0 bottom-0`} key={day} style={{
                         gridTemplateColumns: `repeat(${gridRepeat + 2}, minmax(50px, 1fr))`
                     }}>
-                        {props.scheduleData.filter(course => course.day_w.trim() === day).map((course, index) => {
+                        {_.sortBy(props.scheduleData.filter(course => course.day_w.trim() === day), (course) => course.time_start).map((course, index) => {
                             const day_w = course.day_w.trim();
                             const dayColor = dayColors[day_w];
 
