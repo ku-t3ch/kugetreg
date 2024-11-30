@@ -1,4 +1,5 @@
 "use client";
+
 import { type ITableCourseProps } from "@/types/ITableCourseProps";
 import { listTheme, useTableTheme } from "@/app/_store/useTableTheme";
 import { useEffect } from "react";
