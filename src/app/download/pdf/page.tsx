@@ -14,8 +14,11 @@ export default async function Page(props: {
 
     const getCourseFromRedis = await api.download.getCourseFromRedis({ id: id.toString() });
     return (
-        getCourseFromRedis && (
-            <TableTheme scheduleData={getCourseFromRedis} theme={theme?.toString()} />
-        )
+        <div className="min-w-fit p-3 flex flex-col gap-2" id="capture">
+            <TableTheme scheduleData={getCourseFromRedis ?? []} theme={theme?.toString()} />
+            <div>
+                Generate by : <span className='font-bold'>kugetreg.teerut.com</span>
+            </div>
+        </div>
     );
 }

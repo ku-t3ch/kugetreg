@@ -58,9 +58,15 @@ export default function Page() {
             title: <ModalCourseDetailTitle course={course} />,
             children: <ModalCourseChildren course={course}
                 actions={
-                    <Button variant='light' leftSection={<IconTrash size={16} />} color="red" onClick={() => onRemoveCourses(course)}>
-                        Remove
-                    </Button>
+                    <>
+                        <Button variant='light' onClick={() => {
+                            onHidden(course)
+                            modals.closeAll()
+                        }} leftSection={<IconEyeOff size={16} />}>Hide</Button>
+                        <Button variant='light' leftSection={<IconTrash size={16} />} color="red" onClick={() => onRemoveCourses(course)}>
+                            Remove
+                        </Button>
+                    </>
                 }
             />,
         })
