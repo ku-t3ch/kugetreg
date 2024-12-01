@@ -7,9 +7,9 @@ import { api } from '@/trpc/server';
 export default async function Page(props: {
     searchParams: Promise<SearchParams>;
 }) {
-    const { major, screenType, id } = await props.searchParams;
+    const { major, id } = await props.searchParams;
 
-    if (!major || !screenType || !id) {
+    if (!major || !id) {
         return <div>Invalid request</div>;
     }
 

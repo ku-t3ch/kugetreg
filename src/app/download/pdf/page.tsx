@@ -6,9 +6,9 @@ import TableTheme from '@/app/_components/TableTheme';
 export default async function Page(props: {
     searchParams: Promise<SearchParams>;
 }) {
-    const { major, screenType, id, theme } = await props.searchParams;
+    const { major, id, theme } = await props.searchParams;
 
-    if (!major || !screenType || !id || !theme) {
+    if (!major || !id || !theme) {
         return <div>Invalid request</div>;
     }
 
