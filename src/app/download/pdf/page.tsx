@@ -14,6 +14,6 @@ export default async function Page(props: {
 
     const getCourseFromRedis = await api.download.getCourseFromRedis({ id: id.toString() });
     return (
-        <TableTheme isExport scheduleData={getCourseFromRedis ?? []} theme={theme?.toString()} />
+        <TableTheme isExport={true} scheduleData={getCourseFromRedis ?? []} theme={theme?.toString()} />
     );
 }

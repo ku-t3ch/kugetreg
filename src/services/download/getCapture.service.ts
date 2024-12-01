@@ -9,6 +9,7 @@ import { redisClient } from "@/configs/redis/redis";
 
 import { downloadSchema } from "./_schema/download.schema";
 import { axiosBrowserLess } from "utils/axiosAPI";
+import _ from "lodash";
 
 export const getCaptureSchema = downloadSchema;
 
@@ -35,15 +36,19 @@ const getCaptureService = async (props: GetCaptureInput) => {
       60, // 1 minute
     );
 
+    const queryProps = _.omit(props, ["courseData"]);
+
     const query = qs.stringify(
       {
-        ...props,
+        ...queryProps,
         id: keyId,
       },
       QSConfig,
     );
 
-    const url = new URL(`${process.env.NEXTAUTH_URL}/download/capture${query}`);
+    // const url = new URL(`${process.env.NEXTAUTH_URL}/download/capture${query}`);
+    const url = new URL(`https://kugetreg.teerut.com/download/capture${query}`);
+    console.log("url", url);
 
     const res = await axiosBrowserLess.post(
       "/chromium/screenshot",
