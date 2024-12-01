@@ -1,19 +1,18 @@
-import { type SearchParams } from 'next/dist/server/request/search-params';
+"use client";
 
-import { api } from '@/trpc/server';
 import TableTheme from '@/app/_components/TableTheme';
+import { useSearchParams } from 'next/navigation';
+import { api } from '@/trpc/react';
 
-export default async function Page(props: {
-    searchParams: Promise<SearchParams>;
-}) {
-    const { major, screenType, id, theme } = await props.searchParams;
+export default function Page() {
+    const searchParams = useSearchParams()
 
-    if (!major || !screenType || !id || !theme) {
-        return <div>Invalid request</div>;
-    }
+    const id = searchParams.get("id");
+    const theme = searchParams.get("theme");
 
-    const getCourseFromRedis = await api.download.getCourseFromRedis({ id: id.toString() });
+    const courseFromRedis = api.download.getCourseFromRedis.useQuery({ id: id?.toString() ?? "" })
+
     return (
-        <TableTheme isExport={true} scheduleData={getCourseFromRedis ?? []} theme={theme?.toString()} />
+        <TableTheme isExport={true} scheduleData={courseFromRedis.data ?? []} theme={theme?.toString()} />
     );
 }

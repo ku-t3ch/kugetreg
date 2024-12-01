@@ -26,7 +26,6 @@ export default function ScheduleHeader() {
 
     const downloadPayload: DownloadInput = {
         courseData: JSON.stringify(getCourses()),
-        screenType: "desktop",
         major: `${session?.user.student.majorCode} - ${session?.user.student.majorNameEn}`,
         theme: tableTheme.currentTheme
     }
