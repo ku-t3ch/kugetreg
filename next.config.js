@@ -8,6 +8,7 @@ import "./src/env.js";
 const config = {
   env: {
     NEXT_PUBLIC_MYKU_API_URL: "https://myapi.ku.th",
+    cdn: "https://s3.tech.nisit.ku.ac.th",
   },
   output: "standalone",
 };

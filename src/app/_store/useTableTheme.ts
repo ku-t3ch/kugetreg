@@ -2,10 +2,12 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import DefaultTheme from "../_components/TableTheme/DefaultTheme/DefaultTheme";
 import Theme01 from "../_components/TableTheme/Theme01/Theme01";
+import Theme02 from "../_components/TableTheme/Theme02/Theme02";
 
 export const listTheme = {
   "DefaultTheme": DefaultTheme,
   "Theme01": Theme01,
+  "Theme02": Theme02,
 };
 
 type Store = {
