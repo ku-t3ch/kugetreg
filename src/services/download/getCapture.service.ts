@@ -46,9 +46,7 @@ const getCaptureService = async (props: GetCaptureInput) => {
       QSConfig,
     );
 
-    // const url = new URL(`${process.env.NEXTAUTH_URL}/download/capture${query}`);
-    const url = new URL(`https://kugetreg.teerut.com/download/capture${query}`);
-    console.log("url", url);
+    const url = new URL(`${process.env.NEXTAUTH_URL}/download/capture${query}`);
 
     const res = await axiosBrowserLess.post(
       "/chromium/screenshot",
