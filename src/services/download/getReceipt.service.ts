@@ -9,6 +9,7 @@ import { redisClient } from "@/configs/redis/redis";
 
 import { downloadSchema } from "./_schema/download.schema";
 import { axiosBrowserLess } from "utils/axiosAPI";
+import _ from "lodash";
 
 export const getReceiptSchema = downloadSchema;
 
@@ -35,9 +36,11 @@ const getReceiptService = async (props: GetReceiptInput) => {
       60, // 1 minute
     );
 
+    const queryProps = _.omit(props, ["courseData"]);
+
     const query = qs.stringify(
       {
-        ...props,
+        ...queryProps,
         id: keyId,
       },
       QSConfig,
