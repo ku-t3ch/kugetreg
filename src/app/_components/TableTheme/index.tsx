@@ -14,7 +14,7 @@ export default function TableTheme(props: ITableCourseProps) {
     }, [props.theme]);
 
     return (
-        <div className="min-w-fit">
+        <div className="min-w-fit" id="capture">
             {tableTheme.currentTheme && listTheme[tableTheme.currentTheme as keyof typeof listTheme]({ ...props })}
         </div>
     )
