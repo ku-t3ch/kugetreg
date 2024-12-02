@@ -1,12 +1,14 @@
 "use client"
 
-import Link from 'next/link';
+import { useEffect } from 'react';
 
+import BackButton from '@/app/_components/BackButton/BackButton';
 import Footer from '@/app/_components/Footer';
 import Logo from '@/app/_components/Logo/Logo';
 import {
     ModalCourseChildren, ModalCourseDetailTitle
 } from '@/app/_components/ModalCourse/ModalCourse';
+import TableTheme from '@/app/_components/TableTheme';
 import { ConfirmDeleteModalData } from '@/configs/common/ModalData/ModalData';
 import {
     ErrorNotificationData, LoadingNotificationData, SuccessNotificationData
@@ -19,13 +21,11 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { IconChevronLeft, IconEye, IconEyeOff, IconTrash } from '@tabler/icons-react';
+import { IconEye, IconEyeOff, IconTrash } from '@tabler/icons-react';
 
 import ExploreCourse from './_components/ExploreCourse/ExploreCourse';
 import ScheduleHeader from './_components/ScheduleHeader/ScheduleHeader';
 import useCoursePlanningStore from './_store/useCoursePlanningStore';
-import { useEffect } from 'react';
-import TableTheme from '@/app/_components/TableTheme';
 
 export default function Page() {
     const [opened, { toggle }] = useDisclosure();
@@ -117,22 +117,16 @@ export default function Page() {
             padding="md"
         >
             <AppShell.Header>
-                <Group h="100%" px="md" align='center' justify="space-between">
-                    <Group align='center' gap="md">
-                        <Link href={'/'} className="flex items-center">
-                            <ActionIcon variant='subtle' onClick={toggle}>
-                                <IconChevronLeft />
-                            </ActionIcon>
-                        </Link>
-                        <Logo element=": วางแผนตารางเรียน" />
-                    </Group>
+                <Group h="100%" px="md" align='center' justify="start">
                     <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+                    <Logo element=": วางแผนตารางเรียน" />
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar component={ScrollArea} p="xs">
                 <ExploreCourse />
             </AppShell.Navbar>
             <AppShell.Main>
+                <BackButton />
                 <Stack gap={"lg"}>
                     <ScheduleHeader />
                     <div className='overflow-x-auto'>
