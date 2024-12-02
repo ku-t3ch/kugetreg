@@ -28,7 +28,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
-                <ColorSchemeScript defaultColorScheme="dark" />
+                <ColorSchemeScript />
             </head>
             <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID!} />
             <body className={fontSansNoto_Sans_Thai.className}>
