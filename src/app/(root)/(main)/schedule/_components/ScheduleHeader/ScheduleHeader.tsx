@@ -78,11 +78,11 @@ export default function ScheduleHeader() {
         })
     }
     return (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col">
             <Text size="xl" fw={700}>
                 ตารางเรียน
             </Text>
-            <Group>
+            <div className='flex flex-col md:flex-row gap-2'>
                 <ChangeThemeTable />
                 <Menu shadow="md" width={200} position="bottom-end">
                     <Menu.Target>
@@ -117,7 +117,7 @@ export default function ScheduleHeader() {
                         </Menu.Item>
                     </Menu.Dropdown>
                 </Menu>
-            </Group>
+            </div>
         </div>
     )
 }
