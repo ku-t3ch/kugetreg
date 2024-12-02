@@ -56,7 +56,7 @@ const getPdfService = async (props: GetPdfInput) => {
           height: 0,
         },
         gotoOptions: {
-          waitUntil: "networkidle0",
+          waitUntil: "networkidle2",
         },
         options: {
           printBackground: true,
