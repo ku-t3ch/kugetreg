@@ -1,10 +1,13 @@
-import "@/styles/globals.css";
-import { type Metadata } from "next";
-import { ColorSchemeScript } from "@mantine/core";
-import { Noto_Sans_Thai } from "next/font/google";
-import { TRPCReactProvider } from "@/trpc/react";
-import MainProvider from "./_providers/MainProvider";
-import { GoogleTagManager } from '@next/third-parties/google'
+import '@/styles/globals.css';
+
+import { type Metadata } from 'next';
+import { Noto_Sans_Thai } from 'next/font/google';
+
+import { TRPCReactProvider } from '@/trpc/react';
+import { ColorSchemeScript } from '@mantine/core';
+import { GoogleTagManager } from '@next/third-parties/google';
+
+import MainProvider from './_providers/MainProvider';
 
 export const metadata: Metadata = {
     title: "KU Get Reg: จัดตารางเรียน",
