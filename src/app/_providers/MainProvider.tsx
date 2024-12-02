@@ -7,8 +7,7 @@ import '@/styles/globals.css';
 
 import { ConfigProvider } from 'antd';
 import { SessionProvider } from 'next-auth/react';
-import { Suspense, useEffect } from 'react';
-import { clarity } from 'react-microsoft-clarity';
+import { Suspense } from 'react';
 
 import { createTheme, MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
@@ -27,11 +26,6 @@ const theme = createTheme({
 });
 
 export default function MainProvider({ children }: Props) {
-
-    useEffect(() => {
-        clarity.init(process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID!);
-    }, []);
-
     return (
         <Suspense>
             <SessionProvider>
