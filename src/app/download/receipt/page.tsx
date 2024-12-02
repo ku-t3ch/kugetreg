@@ -1,21 +1,20 @@
+"use client"
+
+import { api } from '@/trpc/react';
 import { format } from 'date-fns';
 import _ from 'lodash';
-import { type SearchParams } from 'next/dist/server/request/search-params';
 
-import { api } from '@/trpc/server';
+import { useSearchParams } from 'next/navigation';
 
-export default async function Page(props: {
-    searchParams: Promise<SearchParams>;
-}) {
-    const { major, id } = await props.searchParams;
+export default function Page() {
+    const searchParams = useSearchParams()
 
-    if (!major || !id) {
-        return <div>Invalid request</div>;
-    }
+    const id = searchParams.get("id");
+    const major = searchParams.get("major");
 
-    const getCourseFromRedis = await api.download.getCourseFromRedis({ id: id.toString() });
+    const courseFromRedis = api.download.getCourseFromRedis.useQuery({ id: id?.toString() ?? "" })
 
-    const courseData = _.uniqBy(getCourseFromRedis, (x) => x.subject_code + x.max_credit);
+    const courseData = _.uniqBy(courseFromRedis.data ?? [], (x) => x.subject_code + x.max_credit);
 
     return (
 
