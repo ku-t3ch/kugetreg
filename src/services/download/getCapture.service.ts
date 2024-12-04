@@ -20,13 +20,13 @@ const getCaptureService = async (props: GetCaptureInput) => {
     const width = 700;
     const selector = "#capture";
 
-    const browser = await puppeteer.launch(PuppeteerLaunchOptionsConfig);
-    const page = await browser.newPage();
-    await page.setViewport({
-      width: width,
-      height: 0,
-      deviceScaleFactor: 3,
-    });
+    // const browser = await puppeteer.launch(PuppeteerLaunchOptionsConfig);
+    // const page = await browser.newPage();
+    // await page.setViewport({
+    //   width: width,
+    //   height: 0,
+    //   deviceScaleFactor: 3,
+    // });
 
     const keyId = uuid();
     await redisClient.set(
@@ -64,6 +64,7 @@ const getCaptureService = async (props: GetCaptureInput) => {
         waitForSelector: {
           selector: selector,
         },
+        waitForTimeout: 0,
       },
       {
         responseType: "arraybuffer",

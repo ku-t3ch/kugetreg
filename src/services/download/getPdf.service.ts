@@ -64,6 +64,7 @@ const getPdfService = async (props: GetPdfInput) => {
           format: "A4",
           scale: 0.8,
         },
+        waitForTimeout: 0,
       },
       {
         responseType: "arraybuffer",

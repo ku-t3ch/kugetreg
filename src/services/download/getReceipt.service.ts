@@ -64,6 +64,7 @@ const getReceiptService = async (props: GetReceiptInput) => {
         gotoOptions: {
           waitUntil: "networkidle2",
         },
+        waitForTimeout: 0,
       },
       {
         responseType: "arraybuffer",
