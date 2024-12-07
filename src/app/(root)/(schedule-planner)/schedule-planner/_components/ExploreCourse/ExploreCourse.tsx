@@ -59,7 +59,7 @@ export default function ExploreCourse() {
             <Group justify="space-between">
                 <Group gap={"xs"}>
                     <Text size="md" fw={700}>
-                        Explore Course
+                        ค้นหารายวิชา
                     </Text>
                     {(openSubjectForEnroll.data?.results && openSubjectForEnroll.data?.results.length > 0) && <Text size="xs" c="dimmed">
                         {openSubjectForEnroll.data?.results.length} results
@@ -79,7 +79,7 @@ export default function ExploreCourse() {
                 <Combobox.Target>
                     <TextInput
                         size='lg'
-                        placeholder="Search for a course"
+                        placeholder="รหัสวิชา, ชื่อวิชา"
                         leftSection={<IconSearch size={16} />}
                         rightSection={searchSubjectOpenEnr.isPending ? <Loader size={18} /> : <CloseButton
                             aria-label="Clear input"
