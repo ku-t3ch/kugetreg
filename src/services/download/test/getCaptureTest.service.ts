@@ -7,7 +7,7 @@ import { PuppeteerLaunchOptionsConfig } from "@/configs/common/PuppeteerLaunchOp
 import { QSConfig } from "@/configs/common/QSConfig";
 import { redisClient } from "@/configs/redis/redis";
 
-import { downloadSchema } from "./_schema/download.schema";
+import { downloadSchema } from "../_schema/download.schema";
 import _ from "lodash";
 
 export const getCaptureSchema = downloadSchema;
