@@ -5,4 +5,5 @@ export interface ITableCourseProps {
   onClick?: (course: Course) => void;
   theme?: string;
   isExport?: boolean;
+  major?: string;
 }

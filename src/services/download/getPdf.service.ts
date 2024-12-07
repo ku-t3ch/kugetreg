@@ -1,9 +1,7 @@
-import puppeteer, { type PDFOptions } from "puppeteer-core";
 import qs from "qs";
 import { v4 as uuid } from "uuid";
 import { type z } from "zod";
 
-import { PuppeteerLaunchOptionsConfig } from "@/configs/common/PuppeteerLaunchOptionsConfig";
 import { QSConfig } from "@/configs/common/QSConfig";
 import { redisClient } from "@/configs/redis/redis";
 
@@ -19,13 +17,6 @@ const getPdfService = async (props: GetPdfInput) => {
   try {
     const width = 600;
     const selector = "#capture";
-
-    // const browser = await puppeteer.launch(PuppeteerLaunchOptionsConfig);
-    // const page = await browser.newPage();
-    // await page.setViewport({
-    //   width: width,
-    //   height: 0,
-    // });
 
     const keyId = uuid();
     await redisClient.set(
@@ -74,24 +65,6 @@ const getPdfService = async (props: GetPdfInput) => {
     await redisClient.del(keyId);
 
     return "data:application/pdf;base64," + Buffer.from(res.data).toString("base64");
-
-    // await page.goto(url.toString());
-    // await page.waitForSelector("#capture");
-
-    // const pdfOption: PDFOptions = {
-    //   printBackground: true,
-    //   landscape: true,
-    //   scale: 0.8,
-    //   format: "A4",
-    // };
-
-    // const pdf = await page.pdf(pdfOption);
-
-    // await page.close();
-    // await redisClient.del(keyId);
-    // await browser.close();
-    // const base64 = Buffer.from(pdf).toString("base64");
-    // return "data:application/pdf;base64," + base64.toString();
   } catch (error) {
     throw error;
   }
