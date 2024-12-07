@@ -16,7 +16,7 @@ import {
 import { api } from '@/trpc/react';
 import { type Course } from '@/types/responses/IGroupCourseResponse';
 import {
-    ActionIcon, AppShell, Burger, Button, Code, Group, Paper, ScrollArea, Stack, Text
+    ActionIcon, AppShell, Box, Burger, Button, Code, Group, LoadingOverlay, Paper, ScrollArea, Stack, Text
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
@@ -28,7 +28,9 @@ import ScheduleHeader from './_components/ScheduleHeader/ScheduleHeader';
 import useCoursePlanningStore from './_store/useCoursePlanningStore';
 
 export default function Page() {
-    const [opened, { toggle }] = useDisclosure();
+    const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
+    const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
+
 
     const getPlanningCourse = api.planningCourse.getPlanningCourse.useQuery()
     const savePlanningCourse = api.planningCourse.savePlanningCourse.useMutation()
@@ -113,12 +115,13 @@ export default function Page() {
     return (
         <AppShell
             header={{ height: 60 }}
-            navbar={{ width: 400, breakpoint: "xs", collapsed: { mobile: !opened } }}
+            navbar={{ width: 400, breakpoint: "xs", collapsed: { mobile: !mobileOpened, desktop: !desktopOpened } }}
             padding="md"
         >
             <AppShell.Header>
                 <Group h="100%" px="md" align='center' justify="start">
-                    <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+                <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
+                <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
                     <Logo element=": วางแผนตารางเรียน" />
                 </Group>
             </AppShell.Header>
@@ -126,57 +129,60 @@ export default function Page() {
                 <ExploreCourse />
             </AppShell.Navbar>
             <AppShell.Main>
-                <BackButton />
-                <Stack gap={"lg"}>
-                    <ScheduleHeader />
-                    <div className='overflow-x-auto'>
-                        <TableTheme
-                            onClick={onShowDetail}
-                            scheduleData={coursePlanningStore.getCourses()} />
-                    </div>
-                    <Group justify='space-between'>
-                        <div>Total credits {coursePlanningStore.getTotalCredit()}</div>
-                        <Group>
-                            <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">Clear</Button>
-                            <Button disabled={!isChange} onClick={onSavePlanningCourse} color="blue" variant="light">Save</Button>
+                <Box pos="relative">
+                    <LoadingOverlay visible={getPlanningCourse.isPending} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+                    <BackButton />
+                    <Stack gap={"lg"}>
+                        <ScheduleHeader />
+                        <div className='overflow-x-auto'>
+                            <TableTheme
+                                onClick={onShowDetail}
+                                scheduleData={coursePlanningStore.getCourses()} />
+                        </div>
+                        <Group justify='space-between'>
+                            <div>Total credits {coursePlanningStore.getTotalCredit()}</div>
+                            <Group>
+                                <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">Clear</Button>
+                                <Button disabled={!isChange} onClick={onSavePlanningCourse} color="blue" variant="light">Save</Button>
+                            </Group>
                         </Group>
-                    </Group>
-                    <Stack gap={5}>
-                        {coursePlanningStore.getCoursesUnique().map((course, i) => (
-                            <Paper key={i} withBorder p="sm">
-                                <div className='flex justify-between flex-col gap-y-2 md:flex-row'>
-                                    <Group>
-                                        {
-                                            course.is_hidden ?
-                                                <ActionIcon variant="light" color='gray' onClick={() => onShow(course)}>
-                                                    <IconEyeOff />
-                                                </ActionIcon>
-                                                :
-                                                <ActionIcon variant="light" color='green' onClick={() => onHidden(course)}>
-                                                    <IconEye />
-                                                </ActionIcon>
-                                        }
-                                        <Stack gap={0}>
-                                            <Group gap={10}>
-                                                <Text>{course.subject_code}</Text>
-                                                <Text c="dimmed">[{course.max_credit} Credit]</Text>
-                                            </Group>
-                                            <Text fw={700} size='lg'>{course.subject_name_en}</Text>
-                                            <Text>Sec {course.section_code}</Text>
-                                        </Stack>
-                                    </Group>
+                        <Stack gap={5}>
+                            {coursePlanningStore.getCoursesUnique().map((course, i) => (
+                                <Paper key={i} withBorder p="sm">
+                                    <div className='flex justify-between flex-col gap-y-2 md:flex-row'>
+                                        <Group>
+                                            {
+                                                course.is_hidden ?
+                                                    <ActionIcon variant="light" color='gray' onClick={() => onShow(course)}>
+                                                        <IconEyeOff />
+                                                    </ActionIcon>
+                                                    :
+                                                    <ActionIcon variant="light" color='green' onClick={() => onHidden(course)}>
+                                                        <IconEye />
+                                                    </ActionIcon>
+                                            }
+                                            <Stack gap={0}>
+                                                <Group gap={10}>
+                                                    <Text>{course.subject_code}</Text>
+                                                    <Text c="dimmed">[{course.max_credit} Credit]</Text>
+                                                </Group>
+                                                <Text fw={700} size='lg'>{course.subject_name_en}</Text>
+                                                <Text>Sec {course.section_code}</Text>
+                                            </Stack>
+                                        </Group>
 
-                                    <div className='flex justify-end items-center'>
-                                        <Button onClick={() => onRemoveCourses(course)} color="red" variant="light" leftSection={<IconTrash size={16} />}>
-                                            Remove
-                                        </Button>
+                                        <div className='flex justify-end items-center'>
+                                            <Button onClick={() => onRemoveCourses(course)} color="red" variant="light" leftSection={<IconTrash size={16} />}>
+                                                Remove
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
-                            </Paper>
-                        ))}
+                                </Paper>
+                            ))}
+                        </Stack>
+                        <Footer />
                     </Stack>
-                    <Footer />
-                </Stack>
+                </Box>
             </AppShell.Main>
         </AppShell>
     );

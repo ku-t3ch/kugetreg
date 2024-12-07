@@ -8,13 +8,14 @@ import dayColors from "utils/dayColors";
 import { days, daysThaiMap, getGridRepeat, getPosition, hours, hoursMap, maxIndex } from "utils/tableUtils";
 import { type ITableCourseProps } from "@/types/ITableCourseProps";
 import { Mali } from "next/font/google";
+import { getFullUrlCdn } from "utils/cdn";
 
 const fontMali = Mali({
     weight: ["200", "300", "400", "500", "600", "700"],
     subsets: ["thai", "latin"],
 });
 
-const Theme01 = (props: ITableCourseProps) => {
+const Theme02 = (props: ITableCourseProps) => {
     const gridRepeat = getGridRepeat(props.scheduleData)
     const maxIndexData = maxIndex(props.scheduleData)
 
@@ -25,25 +26,25 @@ const Theme01 = (props: ITableCourseProps) => {
     const getDayColor = (day: string) => {
         const dayColorMap = {
             "MON": {
-                bg: "bg-[#ffe5b6]"
+                bg: "bg-[#ffeed0]"
             },
             "TUE": {
-                bg: "bg-[#f6ced2]"
+                bg: "bg-[#ffeed0]"
             },
             "WED": {
-                bg: "bg-[#cbe6cb]"
+                bg: "bg-[#ffeed0]"
             },
             "THU": {
-                bg: "bg-[#efceb8]"
+                bg: "bg-[#ffeed0]"
             },
             "FRI": {
-                bg: "bg-[#cce2ef]"
+                bg: "bg-[#ffeed0]"
             },
             "SAT": {
-                bg: "bg-[#efccee]"
+                bg: "bg-[#ffeed0]"
             },
             "SUN": {
-                bg: "bg-[#ffd3d3]"
+                bg: "bg-[#ffeed0]"
             },
         }
 
@@ -51,41 +52,30 @@ const Theme01 = (props: ITableCourseProps) => {
     }
 
     return (
-        <div className={clsx("min-w-fit flex flex-col gap-3", props.isExport && "p-3", fontMali.className)}>
-            <Group justify="space-between" mx={"xl"}>
-                <Image h={70} src="https://media-public.canva.com/SIl8w/MAEyzhSIl8w/1/t.png" />
-                <div className="text-3xl font-bold">ตารางเรียน : Class Schedule</div>
-                <Image h={70} src="https://media-public.canva.com/nrCPU/MAFUFznrCPU/1/t.png" />
+        <div className={clsx("min-w-fit bg-[#92bff1] relative overflow-hidden flex flex-col", props.isExport && "px-5 pt-5 pb-20", fontMali.className)}>
+            <img className="absolute top-2 z-0 left-2 w-[4rem]" src={getFullUrlCdn("/kugetreg/theme/Theme02/images/01.png")} alt="" />
+            <img className="absolute bottom-[-1rem] left-[-3.25rem] z-0 w-[9rem]" src={getFullUrlCdn("/kugetreg/theme/Theme02/images/03.png")} alt="" />
+            <img className="absolute bottom-[0] z-0 w-[9rem] left-[9rem]" src={getFullUrlCdn("/kugetreg/theme/Theme02/images/04.png")} alt="" />
+            <img className="absolute bottom-[0] z-0 w-[9rem] right-0" src={getFullUrlCdn("/kugetreg/theme/Theme02/images/05.png")} alt="" />
+            <img className="absolute bottom-[0] z-0 h-[9rem] right-[12rem]" src={getFullUrlCdn("/kugetreg/theme/Theme02/images/06.png")} alt="" />
+            <Group justify="center" mx={"xl"}>
+                <div className="text-3xl font-extrabold">ตารางเรียน</div>
             </Group>
-            <div className={clsx("flex flex-col w-full bg-[#fffbf5]")}>
-                <div className={`grid bg-[#f4dccb] rounded-t-3xl`} style={{
-                    gridTemplateColumns: `repeat(${gridRepeat + 2}, minmax(50px, 1fr))`
-                }}>
-                    <div className={clsx("col-span-2 p-2 font-semibold text-center", widthClass)}>
-                        คาบ
-                    </div>
-                    {hours.slice(0, maxIndexData).map((hour, i) => (
-                        <React.Fragment key={hour}>
-                            <div className={clsx("col-span-2 flex pl-1 items-center justify-center", widthClass)}>
-                                <Text size="sm" fw={500}>
-                                    {i + 1}
-                                </Text>
-                            </div>
-                        </React.Fragment>
-                    ))}
-                </div>
+            <div className={clsx("flex flex-col w-full ")}>
                 <div className={`grid`} style={{
                     gridTemplateColumns: `repeat(${gridRepeat + 2}, minmax(50px, 1fr))`
                 }}>
-                    <div className={clsx("border-b border-r bg-[#fffbf5] border-l border-t col-span-2 p-2 font-semibold text-center", widthClass, borderColor)}>
-                        วัน/เวลา
+                    <div className={clsx("col-span-2 font-semibold text-center", widthClass, borderColor)}>
+
                     </div>
                     {hours.slice(0, maxIndexData).map((hour) => (
                         <React.Fragment key={hour}>
-                            <div className={clsx("col-span-2 flex border-b border-t border-r bg-[#fffbf5] pl-1 items-center justify-center", widthClass, borderColor)}>
-                                <Text size="sm" fw={500}>
-                                    {hoursMap[hour as keyof typeof hoursMap]}
-                                </Text>
+                            <div className={clsx("col-span-2 p-1", widthClass, borderColor)}>
+                                <div className="flex items-center justify-center bg-[#ddf3ff] p-1 rounded-md">
+                                    <Text size="sm" fw={500}>
+                                        {hoursMap[hour as keyof typeof hoursMap]}
+                                    </Text>
+                                </div>
                             </div>
                         </React.Fragment>
                     ))}
@@ -95,11 +85,15 @@ const Theme01 = (props: ITableCourseProps) => {
                         <div className={`grid`} style={{
                             gridTemplateColumns: `repeat(${gridRepeat + 2}, minmax(50px, 1fr))`
                         }}>
-                            <div className={clsx("border-r flex items-center justify-center border-l col-span-2 p-2 font-semibold", "border-b", widthClass, heightClass, borderColor, getDayColor(day).bg)}>
-                                {daysThaiMap[day as keyof typeof daysThaiMap]}
+                            <div className={clsx("col-span-2 p-1", widthClass, heightClass)}>
+                                <div className="flex items-center justify-center p-1 bg-[#ffeed0] w-full h-full rounded-md">
+                                    <Text size="xl" fw={500}>{daysThaiMap[day as keyof typeof daysThaiMap]}</Text>
+                                </div>
                             </div>
                             {hours.slice(0, maxIndexData).map((hour) => (
-                                <div className={clsx("col-span-2 border-r", "border-b", widthClass, heightClass, borderColor)} key={hour} />
+                                <div className={clsx("col-span-2 p-1", widthClass, heightClass, borderColor)} key={hour} >
+                                    <div className="bg-white w-full h-full rounded-md"></div>
+                                </div>
                             ))}
                         </div>
                         <div className={`grid absolute z-10 top-0 left-0 right-0 bottom-0`} key={day} style={{
@@ -114,7 +108,7 @@ const Theme01 = (props: ITableCourseProps) => {
                                         if (props.onClick) {
                                             props.onClick(course);
                                         }
-                                    }} key={`${index}_${course.section_id}_${day}_${course.subject_code}`} className={clsx("w-full p-[5px]", props.onClick && "cursor-pointer")} style={{
+                                    }} key={`${index}_${course.section_id}_${day}_${course.subject_code}`} className={clsx("w-full p-1", props.onClick && "cursor-pointer")} style={{
                                         gridColumn: `${getPosition(course.time_from!)}/${getPosition(course.time_to!)}`,
                                     }} >
                                         <div className={clsx("text-center w-full h-full flex flex-col items-center rounded-md", getDayColor(day).bg)}>
@@ -130,12 +124,13 @@ const Theme01 = (props: ITableCourseProps) => {
                 ))}
             </div>
             {props.isExport &&
-                <div>
-                    Generated by : <span className="font-semibold">kugetreg.teerut.com</span>
+                <div className="z-50 flex justify-between mt-3">
+                    <div>Generated by : <span className="font-semibold">kugetreg.teerut.com</span></div>
+                    <div className="font-semibold">{props.major}</div>
                 </div>
             }
         </div>
     );
 };
 
-export default Theme01;
+export default Theme02;

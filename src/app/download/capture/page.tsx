@@ -9,10 +9,11 @@ export default function Page() {
 
     const id = searchParams.get("id");
     const theme = searchParams.get("theme");
+    const major = searchParams.get("major");
 
     const courseFromRedis = api.download.getCourseFromRedis.useQuery({ id: id?.toString() ?? "" })
 
     return (
-        <TableTheme isExport={true} scheduleData={courseFromRedis.data ?? []} theme={theme?.toString()} />
+        <TableTheme isExport={true} scheduleData={courseFromRedis.data ?? []} theme={theme?.toString()} major={major?.toString()} />
     );
 }
