@@ -29,7 +29,7 @@ const Theme01Mobile = (props: ITableCourseProps) => {
                                 <Text lineClamp={1} c="dimmed">{course.subject_name_th}</Text>
                                 <Group justify="space-between">
                                     <Group gap={3}>
-                                        <Text fw={700}>{course.day_w}</Text>
+                                        <Text fw={700}>{_.isEmpty(course.day_w) ? "NONE" : course.day_w}</Text>
                                         <Text>|</Text>
                                         <Text>{course.time_from} - {course.time_to}</Text>
                                         <Text>|</Text>
