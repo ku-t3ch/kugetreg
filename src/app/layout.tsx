@@ -1,6 +1,8 @@
 import '@/styles/globals.css';
 
 import { type Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 import { Noto_Sans_Thai } from 'next/font/google';
 
 import { TRPCReactProvider } from '@/trpc/react';
@@ -22,18 +24,24 @@ const fontSansNoto_Sans_Thai = Noto_Sans_Thai({
     variable: "--font-sans",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{ children: React.ReactNode }>) {
+
+    const locale = await getLocale();
+    const messages = await getMessages();
+
     return (
-        <html lang="en">
+        <html lang={locale}>
             <head>
                 <ColorSchemeScript />
             </head>
             <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID!} />
             <body className={fontSansNoto_Sans_Thai.className}>
                 <TRPCReactProvider>
-                    <MainProvider>{children}</MainProvider>
+                    <NextIntlClientProvider messages={messages}>
+                        <MainProvider>{children}</MainProvider>
+                    </NextIntlClientProvider>
                 </TRPCReactProvider>
             </body>
         </html>
