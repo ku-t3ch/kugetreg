@@ -1,19 +1,22 @@
 "use client";
 
+import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 
 import { api } from '@/trpc/react';
 import {
-    ActionIcon, CloseButton, Combobox, Group, Loader, Stack, Text, TextInput, useCombobox
+    CloseButton, Combobox, Group, Loader, Stack, Text, TextInput, useCombobox
 } from '@mantine/core';
-import { IconFilter, IconSearch } from '@tabler/icons-react';
+import { IconSearch } from '@tabler/icons-react';
 
 import SubjectCardMemo from './SubjectCard/SubjectCard';
-import _ from 'lodash';
+import { useTranslations } from 'next-intl';
 
 export default function ExploreCourse() {
     const searchSubjectOpenEnr = api.enroll.searchSubjectOpenEnr.useMutation();
     const openSubjectForEnroll = api.enroll.openSubjectForEnroll.useMutation()
+
+    const t = useTranslations('schedule_planner');
 
     const [searchValue, setSearchValue] = useState("");
     const [debouncedValue, setDebouncedValue] = useState("");
@@ -59,7 +62,7 @@ export default function ExploreCourse() {
             <Group justify="space-between">
                 <Group gap={"xs"}>
                     <Text size="md" fw={700}>
-                        ค้นหารายวิชา
+                        {t('explore.subject.title')}
                     </Text>
                     {(openSubjectForEnroll.data?.results && openSubjectForEnroll.data?.results.length > 0) && <Text size="xs" c="dimmed">
                         {openSubjectForEnroll.data?.results.length} results
@@ -79,7 +82,7 @@ export default function ExploreCourse() {
                 <Combobox.Target>
                     <TextInput
                         size='lg'
-                        placeholder="รหัสวิชา, ชื่อวิชา"
+                        placeholder={t('explore.subject.input.placeholder')}
                         leftSection={<IconSearch size={16} />}
                         rightSection={searchSubjectOpenEnr.isPending ? <Loader size={18} /> : <CloseButton
                             aria-label="Clear input"

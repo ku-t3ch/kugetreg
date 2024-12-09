@@ -26,11 +26,13 @@ import { IconEye, IconEyeOff, IconTrash } from '@tabler/icons-react';
 import ExploreCourse from './_components/ExploreCourse/ExploreCourse';
 import ScheduleHeader from './_components/ScheduleHeader/ScheduleHeader';
 import useCoursePlanningStore from './_store/useCoursePlanningStore';
+import { useTranslations } from 'next-intl';
 
 export default function Page() {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 
+    const t = useTranslations()
 
     const getPlanningCourse = api.planningCourse.getPlanningCourse.useQuery()
     const savePlanningCourse = api.planningCourse.savePlanningCourse.useMutation()
@@ -120,8 +122,8 @@ export default function Page() {
         >
             <AppShell.Header>
                 <Group h="100%" px="md" align='center' justify="start">
-                <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
-                <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
+                    <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
+                    <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
                     <Logo element=": วางแผนตารางเรียน" />
                 </Group>
             </AppShell.Header>
@@ -140,7 +142,7 @@ export default function Page() {
                                 scheduleData={coursePlanningStore.getCourses()} />
                         </div>
                         <Group justify='space-between'>
-                            <div>Total credits {coursePlanningStore.getTotalCredit()}</div>
+                            <div>{t("schedule_planner.planning.totalCredits")} {coursePlanningStore.getTotalCredit()}</div>
                             <Group>
                                 <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">Clear</Button>
                                 <Button disabled={!isChange} onClick={onSavePlanningCourse} color="blue" variant="light">Save</Button>
@@ -164,16 +166,23 @@ export default function Page() {
                                             <Stack gap={0}>
                                                 <Group gap={10}>
                                                     <Text>{course.subject_code}</Text>
-                                                    <Text c="dimmed">[{course.max_credit} Credit]</Text>
+                                                    <Text c="dimmed">[{course.max_credit} {t("common.subject.credit")}]</Text>
                                                 </Group>
-                                                <Text fw={700} size='lg'>{course.subject_name_en}</Text>
-                                                <Text>Sec {course.section_code}</Text>
+                                                <Text fw={700} size='lg'>
+                                                    {
+                                                        t("common.mask.subject.subject_name", {
+                                                            subject_name_en: course.subject_name_en,
+                                                            subject_name_th: course.subject_name_th
+                                                        })
+                                                    }
+                                                </Text>
+                                                <Text>{t("common.subject.section")} {course.section_code}</Text>
                                             </Stack>
                                         </Group>
 
                                         <div className='flex justify-end items-center'>
                                             <Button onClick={() => onRemoveCourses(course)} color="red" variant="light" leftSection={<IconTrash size={16} />}>
-                                                Remove
+                                                {t("common.button.subject.remove")}
                                             </Button>
                                         </div>
                                     </div>

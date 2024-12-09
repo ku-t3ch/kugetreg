@@ -1,10 +1,8 @@
-import {
-    type Icon,
-    IconCalendarCheck,
-    IconCalendarEvent,
-} from "@tabler/icons-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { type Icon, IconCalendarCheck, IconCalendarEvent } from '@tabler/icons-react';
 
 interface Props { }
 
@@ -16,27 +14,28 @@ interface NavigationItem {
     disabled?: boolean;
 }
 
-export const navigationItems: NavigationItem[] = [
-    {
-        label: "ตารางเรียน",
-        icon: IconCalendarEvent,
-        link: "/schedule",
-    },
-    {
-        label: "วางแผนตารางเรียน",
-        icon: IconCalendarCheck,
-        link: "/schedule-planner"
-    },
-    {
-        label: "บริหารหน่วยกิต",
-        icon: IconCalendarCheck,
-        link: "/credit-management",
-        disabled: true,
-    },
-];
-
 export default function NavbarMenu(props: Props) {
     const pathname = usePathname();
+    const t = useTranslations('');
+
+    const navigationItems: NavigationItem[] = [
+        {
+            label: t("schedule.title"),
+            icon: IconCalendarEvent,
+            link: "/schedule",
+        },
+        {
+            label: t("schedule_planner.title"),
+            icon: IconCalendarCheck,
+            link: "/schedule-planner"
+        },
+        {
+            label: t("credit_management.title"),
+            icon: IconCalendarCheck,
+            link: "/credit-management",
+            disabled: true,
+        },
+    ];
 
     const isActive = (link: string) => {
         return pathname === link;

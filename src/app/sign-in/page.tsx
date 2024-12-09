@@ -13,17 +13,19 @@ import { IconError404, IconLock, IconUser, IconX } from "@tabler/icons-react";
 import { useParams, useSearchParams } from "next/navigation";
 import Footer from "../_components/Footer";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function Page() {
     const searchParams = useSearchParams()
     const [loading, setLoading] = useState(false);
+    const t = useTranslations('sign_in');
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center">
             <Card maw={400} w={"100%"}>
                 <Stack>
                     <Text size="xl" fw={600}>
-                        Sign In
+                        {t("title")}
                     </Text>
                     <form
                         className="flex flex-col gap-3"
@@ -59,22 +61,22 @@ export default function Page() {
 
                         <TextInput
                             size="md"
-                            label="Username"
-                            placeholder="เช่น b63xxxxxxxx หรือ regxxx"
+                            label={t("username.input.label")}
+                            placeholder={t("username.input.placeholder")}
                             name="username"
                             required
                             leftSection={<IconUser size={16} />}
                         />
                         <PasswordInput
                             size="md"
-                            label="Password"
-                            placeholder="รหัสผ่านบัญชีผู้ใช้เครือข่ายนนทรี"
+                            label={t("password.input.label")}
+                            placeholder={t("password.input.placeholder")}
                             required
                             name="password"
                             leftSection={<IconLock size={16} />}
                         />
                         <Button loading={loading} loaderProps={{ size: "xs" }} size="md" type="submit" fullWidth>
-                            Sign in
+                            {t("button")}
                         </Button>
                         <Footer />
                     </form>
