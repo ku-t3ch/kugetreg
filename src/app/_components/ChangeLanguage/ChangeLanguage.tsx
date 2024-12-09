@@ -2,9 +2,11 @@
 
 import { getFlagMap, langs } from "@/configs/common/langs";
 import { Button, Combobox, useCombobox } from "@mantine/core";
+import { useLocale } from "next-intl";
 import { useState } from "react";
 
 export default function ChangeLanguage() {
+    const {  } = useLocale()
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     });
