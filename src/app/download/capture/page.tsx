@@ -1,6 +1,6 @@
 "use client";
 
-import TableTheme from '@/app/_components/TableTheme';
+import TableTheme from '@/app/[locale]/_components/TableTheme';
 import { useSearchParams } from 'next/navigation';
 import { api } from '@/trpc/react';
 

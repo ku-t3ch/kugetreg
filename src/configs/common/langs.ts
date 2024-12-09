@@ -18,4 +18,4 @@ export const flagMap = {
     },
 }
 type LangKey = keyof typeof flagMap;
-export const getFlagMap = (lang: string) => flagMap[lang as LangKey] || flagMap.en;
+export const getFlagMap = (lang: string) => flagMap[lang as LangKey] || flagMap.th;

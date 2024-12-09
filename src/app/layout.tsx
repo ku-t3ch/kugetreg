@@ -1,15 +1,13 @@
 import '@/styles/globals.css';
 
 import { type Metadata } from 'next';
-import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages } from 'next-intl/server';
 import { Noto_Sans_Thai } from 'next/font/google';
 
 import { TRPCReactProvider } from '@/trpc/react';
 import { ColorSchemeScript } from '@mantine/core';
 import { GoogleTagManager } from '@next/third-parties/google';
 
-import MainProvider from './_providers/MainProvider';
+import MainProvider from './[locale]/_providers/MainProvider';
 
 export const metadata: Metadata = {
     title: "KU Get Reg: จัดตารางเรียน",
@@ -25,23 +23,20 @@ const fontSansNoto_Sans_Thai = Noto_Sans_Thai({
 });
 
 export default async function RootLayout({
-    children,
+    children
 }: Readonly<{ children: React.ReactNode }>) {
 
-    const locale = await getLocale();
-    const messages = await getMessages();
-
     return (
-        <html lang={locale}>
+        <html>
             <head>
                 <ColorSchemeScript />
             </head>
             <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID!} />
             <body className={fontSansNoto_Sans_Thai.className}>
                 <TRPCReactProvider>
-                    <NextIntlClientProvider messages={messages}>
-                        <MainProvider>{children}</MainProvider>
-                    </NextIntlClientProvider>
+                    <MainProvider>
+                        {children}
+                    </MainProvider>
                 </TRPCReactProvider>
             </body>
         </html>

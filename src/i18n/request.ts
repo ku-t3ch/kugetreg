@@ -1,9 +1,14 @@
-import { auth } from "@/server/auth";
 import { getRequestConfig } from "next-intl/server";
+import { routing } from "./routing";
 
-export default getRequestConfig(async () => {
-  const session = await auth();
-  const locale = session?.user.lang ?? "th";
+export default getRequestConfig(async ({ requestLocale }) => {
+  // This typically corresponds to the `[locale]` segment
+  let locale = await requestLocale;
+
+  //   Ensure that a valid locale is used
+  if (!locale || !routing.locales.includes(locale?.toString())) {
+    locale = routing.defaultLocale;
+  }
 
   return {
     locale,
