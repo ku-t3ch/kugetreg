@@ -13,8 +13,10 @@ import { IconDownload, IconFileTypePdf, IconReceipt } from '@tabler/icons-react'
 import useCourseStore from '../../_store/useCourseStore';
 import ChangeThemeTable from '@/app/_components/ChangeThemeTable/ChangeThemeTable';
 import { useTableTheme } from '@/app/_store/useTableTheme';
+import { useTranslations } from 'next-intl';
 
 export default function ScheduleHeader() {
+    const t = useTranslations()
     const tableTheme = useTableTheme()
     const { data: session } = useSession();
     const getCapture = api.download.getCapture.useMutation();
@@ -80,17 +82,17 @@ export default function ScheduleHeader() {
     return (
         <div className="flex flex-col">
             <Text size="xl" fw={700}>
-                ตารางเรียน
+                {t("schedule.title")}
             </Text>
             <div className='flex flex-col md:flex-row gap-2'>
                 <ChangeThemeTable />
                 <Menu shadow="md" width={200} position="bottom-end">
                     <Menu.Target>
-                        <Button disabled={!hasCourses} leftSection={<IconDownload size={15} />}>Download</Button>
+                        <Button disabled={!hasCourses} leftSection={<IconDownload size={15} />}>{t("common.button.download")}</Button>
                     </Menu.Target>
 
                     <Menu.Dropdown>
-                        <Menu.Label>Download Options</Menu.Label>
+                        <Menu.Label>{t("common.button.downloadOptions")}</Menu.Label>
                         <Menu.Item
                             leftSection={
                                 <IconDownload style={{ width: rem(14), height: rem(14) }} />

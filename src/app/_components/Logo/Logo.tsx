@@ -12,7 +12,7 @@ export default function Logo({ element }: Props) {
     return (
         <Link href="/">
             <span className="text-xl font-bold text-blue-600">
-                KU Get Reg {!isMobile && (element ?? ": จัดตารางเรียน")}
+                KU Get Reg
             </span>
         </Link>
     )

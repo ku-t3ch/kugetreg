@@ -1,11 +1,9 @@
+import { langs } from '@/configs/common/langs';
 import { promises, readFileSync } from 'fs';
 import { JWT } from 'google-auth-library';
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 import _ from 'lodash';
 import path from 'path';
-
-// same index in column
-const langs = ["th", "en"];
 
 type DynamicObject = Record<string, any>;
 
@@ -23,7 +21,10 @@ async function getObjectValue(doc: GoogleSpreadsheet, position: number) {
   const resultAll = [];
   for (let index = 0; index < doc.sheetCount; index++) {
     const sheet = doc.sheetsByIndex[index];
-    const rows = await sheet?.getCellsInRange("A2:C1000");
+    
+    // change range to get more rows
+    const rows = await sheet?.getCellsInRange("A2:D1000");
+    
     const resultSheet = [];
     for (const row of rows) {
       const result = createNestedObject(row[0], row[position]);

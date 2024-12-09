@@ -2,6 +2,7 @@
 
 import { Text, UnstyledButton } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 
 export default function BackButton({ href, label }: Props) {
     const router = useRouter();
+    const t = useTranslations()
     return (
         <UnstyledButton
             className="w-fit"
@@ -21,7 +23,7 @@ export default function BackButton({ href, label }: Props) {
         >
             <div className="flex items-center gap-1">
                 <IconArrowLeft size={15} />
-                <Text size="xs">{label ?? "ย้อนกลับ"}</Text>
+                <Text size="xs">{label ?? t("common.button.back")}</Text>
             </div>
         </UnstyledButton>
     );

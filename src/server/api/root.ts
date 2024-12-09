@@ -4,6 +4,7 @@ import { enrollRouter } from "./routers/enroll";
 import { stdProfileRouter } from "./routers/std-profile";
 import { downloadRouter } from "./routers/download";
 import { planningCourseRouter } from "./routers/planningCourse";
+import { langRouter } from "./routers/lang";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   stdProfile: stdProfileRouter,
   download: downloadRouter,
   planningCourse: planningCourseRouter,
+  lang: langRouter
 });
 
 // export type definition of API

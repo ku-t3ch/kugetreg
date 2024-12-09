@@ -7,6 +7,7 @@ import { useDisclosure } from '@mantine/hooks';
 import AccountNavbarMenu from '../_components/NavbarMenu/AccountNavbarMenu';
 import NavbarMenu from '../_components/NavbarMenu/NavbarMenu';
 import Logo from '@/app/_components/Logo/Logo';
+import ChangeLanguage from '@/app/_components/ChangeLanguage/ChangeLanguage';
 
 interface Props {
     children: React.ReactNode;
@@ -26,20 +27,25 @@ export default function MainLayout(props: Props) {
             padding="md"
         >
             <AppShell.Header>
-                <Group h="100%" px="md">
-                    <Burger
-                        opened={mobileOpened}
-                        onClick={toggleMobile}
-                        hiddenFrom="sm"
-                        size="sm"
-                    />
-                    <Burger
-                        opened={desktopOpened}
-                        onClick={toggleDesktop}
-                        visibleFrom="sm"
-                        size="sm"
-                    />
-                    <Logo />
+                <Group h="100%" px="md" justify='space-between'>
+                    <Group>
+                        <Burger
+                            opened={mobileOpened}
+                            onClick={toggleMobile}
+                            hiddenFrom="sm"
+                            size="sm"
+                        />
+                        <Burger
+                            opened={desktopOpened}
+                            onClick={toggleDesktop}
+                            visibleFrom="sm"
+                            size="sm"
+                        />
+                        <Logo />
+                    </Group>
+                    <Group>
+                        <ChangeLanguage />
+                    </Group>
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar>
