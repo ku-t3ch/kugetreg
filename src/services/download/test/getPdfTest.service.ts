@@ -45,7 +45,9 @@ const getPdfTestService = async (props: GetPdfInput) => {
 
     const url = new URL(`${process.env.NEXTAUTH_URL}/download/pdf${query}`);
 
-    await page.goto(url.toString());
+    await page.goto(url.toString(), {
+        waitUntil: "networkidle2",
+    });
     await page.waitForSelector("#capture");
 
     const pdfOption: PDFOptions = {

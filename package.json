@@ -18,6 +18,7 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",
+    "i18n:sync": "tsx commands/i18n-sync.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -59,12 +60,15 @@
     "file-saver": "^2.0.5",
     "firebase-admin": "^13.0.0",
     "geist": "^1.3.0",
+    "google-auth-library": "^9.15.0",
+    "google-spreadsheet": "^4.1.4",
     "hybrid-crypto-js": "^0.2.4",
     "ioredis": "^5.4.1",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "next": "^15.0.1",
     "next-auth": "5.0.0-beta.25",
+    "next-intl": "^3.26.0",
     "puppeteer-core": "^23.9.0",
     "qs": "^6.13.0",
     "react": "^18.3.1",
@@ -81,7 +85,7 @@
     "@types/eslint": "^8.56.10",
     "@types/file-saver": "^2.0.7",
     "@types/lodash": "^4.17.13",
-    "@types/node": "^20.14.10",
+    "@types/node": "^20.17.6",
     "@types/qs": "^6.9.17",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -94,7 +98,9 @@
     "prettier-plugin-tailwindcss": "^0.6.5",
     "prisma": "^5.14.0",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5.5.3"
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
   },
   "ct3aMetadata": {
     "initVersion": "7.38.1"

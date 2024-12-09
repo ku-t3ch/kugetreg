@@ -7,7 +7,7 @@ import { TRPCReactProvider } from '@/trpc/react';
 import { ColorSchemeScript } from '@mantine/core';
 import { GoogleTagManager } from '@next/third-parties/google';
 
-import MainProvider from './_providers/MainProvider';
+import MainProvider from './[locale]/_providers/MainProvider';
 
 export const metadata: Metadata = {
     title: "KU Get Reg: จัดตารางเรียน",
@@ -22,18 +22,21 @@ const fontSansNoto_Sans_Thai = Noto_Sans_Thai({
     variable: "--font-sans",
 });
 
-export default function RootLayout({
-    children,
+export default async function RootLayout({
+    children
 }: Readonly<{ children: React.ReactNode }>) {
+
     return (
-        <html lang="en">
+        <html>
             <head>
                 <ColorSchemeScript />
             </head>
             <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID!} />
             <body className={fontSansNoto_Sans_Thai.className}>
                 <TRPCReactProvider>
-                    <MainProvider>{children}</MainProvider>
+                    <MainProvider>
+                        {children}
+                    </MainProvider>
                 </TRPCReactProvider>
             </body>
         </html>

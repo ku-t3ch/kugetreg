@@ -48,6 +48,13 @@ const DaysMap = [
     value: 7,
     color: "red",
   },
+  {
+    th: "ไม่มี",
+    en: "None",
+    key: "NONE",
+    value: 8,
+    color: "gray",
+  },
 ];
 
 const convertKeyToDate = (key: string) => {
