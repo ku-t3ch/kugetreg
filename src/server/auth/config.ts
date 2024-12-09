@@ -7,6 +7,7 @@ import { type Student } from "@/types/responses/ISignInServiceResponse";
 import { jwtDecode } from "jwt-decode";
 import { type IMYKUToken } from "@/types/IMYKUToken.type";
 import getRefreshTokenService from "@/services/getRefreshToken.service";
+import getCurrentLangService from "@/services/lang/getCurrentLang.service";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -15,6 +16,7 @@ declare module "next-auth" {
       refresh_token: string;
       student: Student;
       userType: string;
+      lang: string;
     } & DefaultSession["user"];
   }
 
@@ -23,6 +25,7 @@ declare module "next-auth" {
     refresh_token: string;
     student: Student;
     userType: string;
+    lang: string;
   }
 }
 
@@ -33,6 +36,7 @@ declare module "next-auth/jwt" {
     refresh_token: string;
     student: Student;
     userType: string;
+    lang: string;
   }
 }
 
@@ -70,17 +74,19 @@ export const authConfig = {
             password: credentials.password as string,
           });
 
+          const lang = await getCurrentLangService({
+            studentCode: result.user.idCode,
+          });
+
           return {
             email: result.user.student.email,
             access_token: result.accesstoken,
             refresh_token: result.renewtoken,
             id: result.user.idCode,
-            name:
-              result.user.student.firstNameEn +
-              " " +
-              result.user.student.lastNameEn,
+            name: result.user.student.firstNameEn + " " + result.user.student.lastNameEn,
             student: result.user.student,
             userType: result.user.userType,
+            lang: lang.lang,
           };
         } catch (error) {
           if (error instanceof AxiosError) {
@@ -104,6 +110,7 @@ export const authConfig = {
       session.session.user.image = session.token.image as string;
       session.session.user.student = session.token.student;
       session.session.user.userType = session.token.userType;
+      session.session.user.lang = session.token.lang;
       return session.session;
     },
     async jwt({ user, token }) {
@@ -117,6 +124,7 @@ export const authConfig = {
           image: user.image,
           student: user.student,
           userType: user.userType,
+          lang: user.lang,
         } as JWT;
       }
 

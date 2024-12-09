@@ -1,5 +1,5 @@
+import { Link } from "@/i18n/routing";
 import { Button } from "@mantine/core";
-import Link from "next/link";
 
 export default async function NotFound() {
     return (
