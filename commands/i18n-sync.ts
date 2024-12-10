@@ -23,7 +23,7 @@ async function getObjectValue(doc: GoogleSpreadsheet, position: number) {
     const sheet = doc.sheetsByIndex[index];
     
     // change range to get more rows
-    const rows = await sheet?.getCellsInRange("A2:D1000");
+    const rows = await sheet?.getCellsInRange("A2:F1000");
     
     const resultSheet = [];
     for (const row of rows) {
