@@ -1,6 +1,8 @@
 "use client"
 import clsx from 'clsx';
 import dayColors from 'utils/dayColors';
+import ics from "ics"
+import { saveAs } from "file-saver"
 
 import {
     ErrorNotificationData, LoadingNotificationData, SuccessNotificationData
@@ -8,8 +10,9 @@ import {
 import { type Course } from '@/types/responses/IGroupCourseResponse';
 import { Button, Group, Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconCopy } from '@tabler/icons-react';
+import { IconCopy, IconDownload } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
+import { eachDayOfInterval, endOfMonth, format, getDate, getDay, getDaysInMonth, getMonth, getYear, intervalToDuration, isAfter, parse, startOfMonth } from 'date-fns';
 
 interface Props {
     course: Course
@@ -53,6 +56,113 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
             }
         }
     }
+
+    function getFutureDatesForDay(dayName: string) {
+        const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+        // Find the index of the specified day
+        const targetDayIndex = daysOfWeek.indexOf(dayName.toUpperCase());
+        if (targetDayIndex === -1) {
+            throw new Error("Invalid day name. Use a three-letter day abbreviation like 'MON'.");
+        }
+
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // Strip time
+        const start = startOfMonth(now); // Start of the current month
+        const end = endOfMonth(now); // End of the current month
+
+        // Get all dates in the current month
+        const allDates = eachDayOfInterval({ start, end });
+
+        // Filter dates that match the target weekday and are after today
+        const matchingDates = allDates.filter(
+            date => date.getDay() === targetDayIndex && isAfter(date, today)
+        );
+
+        // Format the matching dates as strings
+        return matchingDates.map(date => date);
+    }
+
+    const onDownloadICS = async () => {
+        const key = notifications.show(LoadingNotificationData)
+        try {
+            const futureDatesForDay = getFutureDatesForDay(course.day_w.trim())[0]
+
+            if (!futureDatesForDay) {
+                notifications.update({
+                    ...ErrorNotificationData,
+                    id: key,
+                    message: "Failed to download to calendar : No future dates",
+                })
+                return
+            }
+
+            const year = getYear(futureDatesForDay);
+            const month = getMonth(futureDatesForDay) + 1
+            const date = getDate(futureDatesForDay)
+
+            const hourStart = parse(course.time_from, "HH:mm", new Date()).getHours()
+            const minuteStart = parse(course.time_from, "HH:mm", new Date()).getMinutes()
+
+            const hourEnd = parse(course.time_to, "HH:mm", new Date()).getHours()
+            const minuteEnd = parse(course.time_to, "HH:mm", new Date()).getMinutes()
+
+            const start: ics.DateTime = [year, month, date, hourStart, minuteStart]
+            
+            const description = prompt("Enter description in calendar", "")
+
+            const event = ics.createEvent({
+                title: course.subject_name_en,
+                description: description ?? "",
+                location: course.room_name_en,
+                busyStatus: "BUSY",
+                start,
+                duration: intervalToDuration({
+                    start: new Date(year, month, date, hourStart, minuteStart),
+                    end: new Date(year, month, date, hourEnd, minuteEnd)
+                }),
+            })
+
+            const { error, value } = event
+
+            if (error) {
+                notifications.update({
+                    ...ErrorNotificationData,
+                    id: key,
+                    message: "Failed to download to calendar : " + error.message
+                })
+            }
+
+            if (value) {
+                const blob = new Blob([value], { type: "text/calendar;charset=utf-8" })
+                saveAs(blob, `${course.subject_code} ${course.subject_name_en}.ics`)
+
+                notifications.update({
+                    ...SuccessNotificationData,
+                    id: key,
+                    message: "Downloaded to calendar",
+                    color: "green",
+                })
+            } else {
+                notifications.update({
+                    ...ErrorNotificationData,
+                    id: key,
+                    message: "Failed to download to calendar: Event value is undefined",
+                    color: "red",
+                })
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                notifications.update({
+                    ...ErrorNotificationData,
+                    id: key,
+                    message: "Failed to download to calendar : " + error.message,
+                    color: "red",
+                })
+            }
+        }
+    }
+
     return (
         <Stack gap={"xs"}>
             <Stack gap={0}>
@@ -110,6 +220,7 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
             </Stack>
             <Group gap={"sm"}>
                 <Button variant='light' onClick={() => onCopySubjectName(`${course.subject_code} ${course.subject_name_en}`)} leftSection={<IconCopy size={16} />}>{t("common.subject.button.copyName")}</Button>
+                <Button variant='light' onClick={onDownloadICS} leftSection={<IconDownload size={16} />}>{t("common.button.subject.downloadICS")}</Button>
                 {actions}
             </Group>
         </Stack>
