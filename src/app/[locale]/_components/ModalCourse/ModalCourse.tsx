@@ -1,7 +1,7 @@
 "use client"
 import clsx from 'clsx';
 import dayColors from 'utils/dayColors';
-import ics from "ics"
+import * as ics from "ics";
 import { saveAs } from "file-saver"
 
 import {
@@ -108,10 +108,10 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
             const minuteEnd = parse(course.time_to, "HH:mm", new Date()).getMinutes()
 
             const start: ics.DateTime = [year, month, date, hourStart, minuteStart]
-            
+
             const description = prompt("Enter description in calendar", "")
 
-            const event = ics.createEvent({
+            ics.createEvent({
                 title: course.subject_name_en,
                 description: description ?? "",
                 location: course.room_name_en,
@@ -121,36 +121,36 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
                     start: new Date(year, month, date, hourStart, minuteStart),
                     end: new Date(year, month, date, hourEnd, minuteEnd)
                 }),
+            }, (error, value) => {
+                if (error) {
+                    notifications.update({
+                        ...ErrorNotificationData,
+                        id: key,
+                        message: "Failed to download to calendar : " + error.message
+                    })
+                }
+
+                if (value) {
+                    const blob = new Blob([value], { type: "text/calendar;charset=utf-8" })
+                    saveAs(blob, `${course.subject_code} ${course.subject_name_en}.ics`)
+
+                    notifications.update({
+                        ...SuccessNotificationData,
+                        id: key,
+                        message: "Downloaded to calendar",
+                        color: "green",
+                    })
+                } else {
+                    notifications.update({
+                        ...ErrorNotificationData,
+                        id: key,
+                        message: "Failed to download to calendar: Event value is undefined",
+                        color: "red",
+                    })
+                }
             })
 
-            const { error, value } = event
 
-            if (error) {
-                notifications.update({
-                    ...ErrorNotificationData,
-                    id: key,
-                    message: "Failed to download to calendar : " + error.message
-                })
-            }
-
-            if (value) {
-                const blob = new Blob([value], { type: "text/calendar;charset=utf-8" })
-                saveAs(blob, `${course.subject_code} ${course.subject_name_en}.ics`)
-
-                notifications.update({
-                    ...SuccessNotificationData,
-                    id: key,
-                    message: "Downloaded to calendar",
-                    color: "green",
-                })
-            } else {
-                notifications.update({
-                    ...ErrorNotificationData,
-                    id: key,
-                    message: "Failed to download to calendar: Event value is undefined",
-                    color: "red",
-                })
-            }
         } catch (error) {
             if (error instanceof Error) {
                 notifications.update({
