@@ -67,9 +67,9 @@ export default function Page() {
                         <Button variant='light' onClick={() => {
                             onHidden(course)
                             modals.closeAll()
-                        }} leftSection={<IconEyeOff size={16} />}>Hide</Button>
+                        }} leftSection={<IconEyeOff size={16} />}>{t("common.button.subject.hide")}</Button>
                         <Button variant='light' leftSection={<IconTrash size={16} />} color="red" onClick={() => onRemoveCourses(course)}>
-                            Remove
+                            {t("common.button.subject.remove")}
                         </Button>
                     </>
                 }

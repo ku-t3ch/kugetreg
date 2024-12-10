@@ -12,10 +12,13 @@ import { IconEyeOff } from '@tabler/icons-react';
 import useCourseStore from './_store/useCourseStore';
 import useHideCourseStore from './_store/useHideCourseStore';
 import TableTheme from '@/app/[locale]/_components/TableTheme';
+import { useTranslations } from 'next-intl';
 
 export default function Page() {
     const getGroupCourse = api.stdProfile.getGroupCourse.useQuery();
     const [courses, setCourses] = useState<Course[] | null>(null);
+
+    const t = useTranslations()
 
     const hasCourse = getGroupCourse.data?.results && getGroupCourse.data?.results.length > 0;
     const CourseStore = useCourseStore();
@@ -49,7 +52,7 @@ export default function Page() {
             title: <ModalCourseDetailTitle course={course} />,
             children: <ModalCourseChildren course={course}
                 actions={
-                    <Button variant='light' onClick={() => onHiddenCourse(course)} leftSection={<IconEyeOff size={16} />}>Hide</Button>
+                    <Button variant='light' onClick={() => onHiddenCourse(course)} leftSection={<IconEyeOff size={16} />}>{t("common.button.subject.hide")}</Button>
                 }
             />,
         })

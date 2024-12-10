@@ -31,8 +31,7 @@ export default function MainProvider({ children }: Props) {
             <SessionProvider>
                 <MantineProvider theme={theme} defaultColorScheme="light">
                     <ConfigProvider>
-                        <Notifications position="top-right" />
-                        <ModalsProvider modalProps={{ centered: true }}>{children}</ModalsProvider>
+                        {children}
                     </ConfigProvider>
                 </MantineProvider>
             </SessionProvider>
