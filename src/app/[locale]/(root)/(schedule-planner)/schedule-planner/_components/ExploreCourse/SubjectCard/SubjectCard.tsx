@@ -153,7 +153,7 @@ function SubjectCard(props: Props) {
                             <Stack gap={2}>
                                 <Text size="xs" c="dimmed">{t("common.subject.room")}</Text>
                                 <Text size="xs">
-                                    {t("schedule_planner.mask.explore.subject.card.roomName", {
+                                    {t("common.mask.subject.roomName", {
                                         roomNameEn: props.course.roomNameEn,
                                         roomNameTh: props.course.roomNameTh,
                                     })}

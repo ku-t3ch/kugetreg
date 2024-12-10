@@ -3,7 +3,7 @@
 import { useRouter } from "@/i18n/routing";
 import { Text, UnstyledButton } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface Props {
     href?: string;
@@ -12,6 +12,7 @@ interface Props {
 
 export default function BackButton({ href, label }: Props) {
     const router = useRouter();
+    const locale = useLocale();
     const t = useTranslations()
     return (
         <UnstyledButton
@@ -19,7 +20,7 @@ export default function BackButton({ href, label }: Props) {
             variant="transparent"
             size="compact-xs"
             c={"dimmed"}
-            onClick={() => href ? router.push(href) : router.back()}
+            onClick={() => href ? router.replace(href, { locale }) : router.back()}
         >
             <div className="flex items-center gap-1">
                 <IconArrowLeft size={15} />

@@ -4,16 +4,18 @@ import {
     Alert,
     Button,
     Card,
+    Group,
     PasswordInput,
     Stack,
     Text,
     TextInput,
 } from "@mantine/core";
-import { IconError404, IconLock, IconUser, IconX } from "@tabler/icons-react";
-import { useParams, useSearchParams } from "next/navigation";
+import { IconLock, IconUser, IconX } from "@tabler/icons-react";
+import { useSearchParams } from "next/navigation";
 import Footer from "../_components/Footer";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import ChangeLanguage from "../_components/ChangeLanguage/ChangeLanguage";
 
 export default function Page() {
     const searchParams = useSearchParams()
@@ -24,9 +26,12 @@ export default function Page() {
         <div className="flex min-h-screen flex-col items-center justify-center">
             <Card maw={400} w={"100%"}>
                 <Stack>
-                    <Text size="xl" fw={600}>
-                        {t("title")}
-                    </Text>
+                    <Group justify="space-between">
+                        <Text size="xl" fw={600}>
+                            {t("title")}
+                        </Text>
+                        <ChangeLanguage />
+                    </Group>
                     <form
                         className="flex flex-col gap-3"
                         onSubmit={async (e) => {
