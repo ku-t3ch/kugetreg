@@ -63,6 +63,7 @@
     "google-auth-library": "^9.15.0",
     "google-spreadsheet": "^4.1.4",
     "hybrid-crypto-js": "^0.2.4",
+    "ics": "^3.8.1",
     "ioredis": "^5.4.1",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
