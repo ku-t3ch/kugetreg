@@ -150,8 +150,10 @@ export default function Page() {
                         <Group justify='space-between'>
                             <div>{t("schedule_planner.planning.totalCredits")} {coursePlanningStore.getTotalCredit()}</div>
                             <Group>
-                                <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">Clear</Button>
-                                <Button disabled={!isChange} onClick={onSavePlanningCourse} color="blue" variant="light">Save</Button>
+                                <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">
+                                    {t("common.button.subject.clear")}
+                                </Button>
+                                <Button disabled={!isChange} onClick={onSavePlanningCourse} color="blue" variant="light">{t("common.button.subject.save")}</Button>
                             </Group>
                         </Group>
                         <Stack gap={5}>
