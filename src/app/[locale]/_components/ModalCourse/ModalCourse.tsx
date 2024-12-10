@@ -1,3 +1,4 @@
+"use client"
 import clsx from 'clsx';
 import dayColors from 'utils/dayColors';
 
@@ -8,21 +9,29 @@ import { type Course } from '@/types/responses/IGroupCourseResponse';
 import { Button, Group, Stack, Text } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCopy } from '@tabler/icons-react';
+import { useTranslations } from 'next-intl';
 
 interface Props {
     course: Course
 }
 
 function ModalCourseDetailTitle({ course }: Props) {
+    const t = useTranslations()
     return (
         <div className="flex gap-2 items-center justify-between w-full">
             <Text size="xl" fw={700}>{course.subject_code}</Text>
-            {course.max_credit ? <Text size="md" fw={600} c={"dimmed"}>[{course.max_credit} Credit]</Text> : <Text size="md" fw={600} c={"dimmed"}>[{course.section_type_en}]</Text>}
+            {course.max_credit ? <Text size="md" fw={600} c={"dimmed"}>[{course.max_credit} {t("common.subject.credit")}]</Text> :
+                <Text size="md" fw={600} c={"dimmed"}>[{t("common.mask.subject.section_type", {
+                    section_type_th: course.section_type_th,
+                    section_type_en: course.section_type_en
+                })}]
+                </Text>}
         </div>
     )
 }
 
 function ModalCourseChildren({ course, actions }: Props & { actions?: React.ReactNode }) {
+    const t = useTranslations()
     const onCopySubjectName = async (subjectName: string) => {
         const key = notifications.show(LoadingNotificationData)
         try {
@@ -45,14 +54,18 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
         }
     }
     return (
-        <Stack gap={"sm"}>
+        <Stack gap={"xs"}>
             <Stack gap={0}>
-                <Text size="lg" fw={500}>{course.subject_name_th}</Text>
-                <Text size="lg" fw={500}>{course.subject_name_en}</Text>
+                <Text size="xl" fw={500}>
+                    {t("common.mask.subject.subject_name", {
+                        subject_name_th: course.subject_name_th,
+                        subject_name_en: course.subject_name_en
+                    })}
+                </Text>
             </Stack>
             <Stack gap={0}>
                 <Group gap={5}>
-                    <Text size="sm" fw={700}>Day :</Text>
+                    <Text size="sm" fw={700}>{t("common.subject.day")} :</Text>
                     <Text size="sm" fw={700}>
                         <span className={clsx(dayColors[course.day_w.trim()]?.text)}>
                             {course.day_w}
@@ -60,30 +73,43 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
                     </Text>
                 </Group>
                 <Group gap={5}>
-                    <Text size="sm" fw={700}>Room :</Text>
-                    <Text size="sm" fw={400}>{course.room_name_en}</Text>
+                    <Text size="sm" fw={700}>{t("common.subject.room")} :</Text>
+                    <Text size="sm" fw={400}>
+                        {t("common.mask.subject.room_name", {
+                            room_name_en: course.room_name_en,
+                            room_name_th: course.room_name_th
+                        })}
+                    </Text>
                 </Group>
                 <Group gap={5}>
-                    <Text size="sm" fw={700}>Section :</Text>
+                    <Text size="sm" fw={700}>{t("common.subject.section")} :</Text>
                     <Text size="sm" fw={400}>{course.section_code}</Text>
                 </Group>
                 {course.max_credit && <Group gap={5}>
-                    <Text size="sm" fw={700}>Section Type :</Text>
-                    <Text size="sm" fw={400}>{course.section_type_en}</Text>
+                    <Text size="sm" fw={700}>{t("common.subject.sectionType")} :</Text>
+                    <Text size="sm" fw={400}>
+                        {t("common.mask.subject.section_type", {
+                            section_type_th: course.section_type_th,
+                            section_type_en: course.section_type_en
+                        })}
+                    </Text>
                 </Group>}
                 <Group gap={5}>
-                    <Text size="sm" fw={700}>Time :</Text>
+                    <Text size="sm" fw={700}>{t("common.subject.time")} :</Text>
                     <Text size="sm" fw={400}>{course.time_from} - {course.time_to}</Text>
                 </Group>
             </Stack>
             <Stack gap={0}>
-                <Text size="sm" fw={700}>Teacher :</Text>
-                {course.teacher_name_en.split(",").map((teacher, i) => (
+                <Text size="sm" fw={700}>{t("common.subject.teacher")} :</Text>
+                {t("common.mask.subject.teacher_name", {
+                    teacher_name: course.teacher_name,
+                    teacher_name_en: course.teacher_name_en
+                }).split(",").map((teacher, i) => (
                     <Text size="sm" fw={400} key={i}>- {teacher}</Text>
                 ))}
             </Stack>
             <Group gap={"sm"}>
-                <Button variant='light' onClick={() => onCopySubjectName(`${course.subject_code} ${course.subject_name_en}`)} leftSection={<IconCopy size={16} />}>Subject Name</Button>
+                <Button variant='light' onClick={() => onCopySubjectName(`${course.subject_code} ${course.subject_name_en}`)} leftSection={<IconCopy size={16} />}>{t("common.subject.button.copyName")}</Button>
                 {actions}
             </Group>
         </Stack>

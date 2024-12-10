@@ -5,6 +5,8 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 import { routing } from '@/i18n/routing';
+import { Notifications } from '@mantine/notifications';
+import { ModalsProvider } from '@mantine/modals';
 
 type Params = Promise<{ locale: string }>
 
@@ -17,12 +19,13 @@ export default async function RootLayout({
     if (!routing.locales.includes(locale as any)) {
         notFound();
     }
-    
+
     const messages = await getMessages();
 
     return (
         <NextIntlClientProvider messages={messages}>
-            {children}
+            <Notifications position="top-right" />
+            <ModalsProvider modalProps={{ centered: true }}>{children}</ModalsProvider>
         </NextIntlClientProvider>
     );
 }

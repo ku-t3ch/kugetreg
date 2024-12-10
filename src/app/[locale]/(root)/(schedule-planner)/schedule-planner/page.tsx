@@ -67,9 +67,9 @@ export default function Page() {
                         <Button variant='light' onClick={() => {
                             onHidden(course)
                             modals.closeAll()
-                        }} leftSection={<IconEyeOff size={16} />}>Hide</Button>
+                        }} leftSection={<IconEyeOff size={16} />}>{t("common.button.subject.hide")}</Button>
                         <Button variant='light' leftSection={<IconTrash size={16} />} color="red" onClick={() => onRemoveCourses(course)}>
-                            Remove
+                            {t("common.button.subject.remove")}
                         </Button>
                     </>
                 }
@@ -150,8 +150,10 @@ export default function Page() {
                         <Group justify='space-between'>
                             <div>{t("schedule_planner.planning.totalCredits")} {coursePlanningStore.getTotalCredit()}</div>
                             <Group>
-                                <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">Clear</Button>
-                                <Button disabled={!isChange} onClick={onSavePlanningCourse} color="blue" variant="light">Save</Button>
+                                <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">
+                                    {t("common.button.subject.clear")}
+                                </Button>
+                                <Button disabled={!isChange} onClick={onSavePlanningCourse} color="blue" variant="light">{t("common.button.subject.save")}</Button>
                             </Group>
                         </Group>
                         <Stack gap={5}>

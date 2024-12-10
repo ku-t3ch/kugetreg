@@ -103,14 +103,14 @@ function SubjectCard(props: Props) {
                         <Text lineClamp={1} size="xs">{t("common.subject.section")} {props.course.sectionCode}</Text>
                         <Text lineClamp={1} size="xs">|</Text>
                         <Text lineClamp={1} size="xs">
-                            {t("schedule_planner.mask.explore.subject.card.sectionType", {
+                            {t("common.mask.subject.sectionType", {
                                 sectionTypeTh: props.course.sectionTypeTh,
                                 sectionTypeEn: props.course.sectionTypeEn
                             })}
                         </Text>
                         <Text lineClamp={1} size="xs">|</Text>
                         <Badge variant='dot' size='xs' tt="none" color={props.course.stdStatusEn === "Special" ? "orange" : "blue"}>
-                            {t("schedule_planner.mask.explore.subject.card.stdStatus", {
+                            {t("common.mask.subject.stdStatus", {
                                 stdStatusTh: props.course.stdStatusTh,
                                 stdStatusEn: props.course.stdStatusEn
                             })}
@@ -137,7 +137,7 @@ function SubjectCard(props: Props) {
                         <Group align="start">
                             <Stack gap={2}>
                                 <Text size="xs" c="dimmed">{t("common.subject.teacher")}</Text>
-                                {TeacherNameConverter(t("schedule_planner.mask.explore.subject.card.teacherName", {
+                                {TeacherNameConverter(t("common.mask.subject.teacherName", {
                                     teacherName: props.course.teacherName,
                                     teacherNameEn: props.course.teacherNameEn
                                 })).map((item, index) => (

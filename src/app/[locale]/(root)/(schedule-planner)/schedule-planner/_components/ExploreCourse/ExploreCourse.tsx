@@ -124,9 +124,12 @@ export default function ExploreCourse() {
 
             {/* <ScrollArea scrollHideDelay={0} h={"calc(-10rem + 100vh)"}> */}
             <Stack gap={10} mt={5}>
-                {_.sortBy(openSubjectForEnroll.data?.results, o => parseInt(o.sectionCode)).map((course, index) => (
-                    <SubjectCardMemo key={index} course={course} />
-                ))}
+                {(!searchSubjectOpenEnr.isPending && openSubjectForEnroll.isSuccess) && <>
+                    {(openSubjectForEnroll.data?.results && openSubjectForEnroll.data?.results.length > 0) ? _.sortBy(openSubjectForEnroll.data?.results, o => parseInt(o.sectionCode)).map((course, index) => (
+                        <SubjectCardMemo key={index} course={course} />
+                    )) : <Text c="dimmed">{t('explore.subject.no_result')}</Text>}
+                </>
+                }
             </Stack>
             {/* </ScrollArea> */}
         </Stack>

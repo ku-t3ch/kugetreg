@@ -1,5 +1,5 @@
 // same index in column
-export const langs = ["th", "en", "cn"];
+export const langs = ["th", "en", "cn", "fr", "ja"];
 export const flagMap = {
     th: {
         name: "th",
@@ -15,6 +15,16 @@ export const flagMap = {
         name: "cn",
         label: "简体中文",
         flag: "https://flagcdn.com/cn.svg",
+    },
+    fr: {
+        name: "fr",
+        label: "Français",
+        flag: "https://flagcdn.com/fr.svg",
+    },
+    ja: {
+        name: "jp",
+        label: "日本語",
+        flag: "https://flagcdn.com/jp.svg",
     },
 }
 type LangKey = keyof typeof flagMap;

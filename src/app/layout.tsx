@@ -7,7 +7,7 @@ import { TRPCReactProvider } from '@/trpc/react';
 import { ColorSchemeScript } from '@mantine/core';
 import { GoogleTagManager } from '@next/third-parties/google';
 
-import MainProvider from './[locale]/_providers/MainProvider';
+import MainProvider from './_providers/MainProvider';
 
 export const metadata: Metadata = {
     title: "KU Get Reg: จัดตารางเรียน",
