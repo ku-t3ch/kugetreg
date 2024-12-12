@@ -15,7 +15,7 @@ export default function TableTheme(props: ITableCourseProps) {
 
     return (
         <div className="min-w-fit" id="capture">
-            {tableTheme.currentTheme && listTheme[tableTheme.currentTheme as keyof typeof listTheme]({ ...props })}
+            {tableTheme.currentTheme && listTheme[tableTheme.currentTheme as keyof typeof listTheme ?? "default_theme_desktop"]({ ...props })}
         </div>
     )
 }
