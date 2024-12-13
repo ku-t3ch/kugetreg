@@ -139,8 +139,8 @@ export const authConfig = {
   },
   trustHost: true,
   pages: {
-    signIn: "/sign-in",
-    error: "/sign-in",
+    signIn: "/th/sign-in",
+    error: "/th/sign-in",
   },
   session: {
     strategy: "jwt",
