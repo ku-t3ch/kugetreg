@@ -81,16 +81,22 @@ const CourseSorting = (courses: Course[] | undefined) => {
 };
 
 const maxIndex = (courses: Course[]) => {
-  const maxTime = _.maxBy(CourseSorting(courses), (o) => {
-    return parseInt(o.time_to.split(":")[0] ?? "0");
-  });
-
-  const index =
-    _.findIndex(hours, (time) => time === parseInt(maxTime?.time_to.split(":")[0] ?? "0")) + 1;
-  if (index < 11) {
-    return 11;
-  }
-  return index;
+    try {
+        const maxTime = _.maxBy(CourseSorting(courses), (o) => {
+            return parseInt(o.time_to.split(":")[0] ?? "0");
+          });
+        
+          const index =
+            _.findIndex(hours, (time) => time === parseInt(maxTime?.time_to.split(":")[0] ?? "0")) + 1;
+            
+          if (index < 11) {
+            return 11;
+          }
+          return index;
+    } catch (error) {
+        return 11;
+    }
+ 
 };
 
 const getGridRepeat = (courses: Course[]) => {
