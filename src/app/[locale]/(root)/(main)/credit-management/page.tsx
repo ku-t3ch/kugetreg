@@ -6,6 +6,7 @@ export default function Page() {
             <Text size="xl" fw={600}>
                 บริหารหน่วยกิต
             </Text>
+            
         </div>
     )
 }
