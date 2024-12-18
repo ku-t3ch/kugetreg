@@ -33,9 +33,9 @@ export default function SubjectsInputForm(props: Props) {
                 <Table className='min-w-fit' striped>
                     <Table.Thead>
                         <Table.Tr>
-                            <Table.Th>{t("common.subject.code")}</Table.Th>
-                            <Table.Th>{t("common.subject.name")}</Table.Th>
-                            <Table.Th>{t("common.subject.credits")}</Table.Th>
+                            <Table.Th miw={100}>{t("common.subject.code")}</Table.Th>
+                            <Table.Th miw={600}>{t("common.subject.name")}</Table.Th>
+                            <Table.Th miw={100}>{t("common.subject.credits")}</Table.Th>
                             <Table.Th></Table.Th>
                         </Table.Tr>
                     </Table.Thead>
