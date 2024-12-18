@@ -98,7 +98,7 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
                 children: <div>
                     <Select
                         ref={CalendarDateSelectRef}
-                        value={futureDatesForDays[0] ? format(futureDatesForDays[0], "dd/MM/yyyy") : ""}
+                        defaultValue={futureDatesForDays[0] ? format(futureDatesForDays[0], "dd/MM/yyyy") : ""}
                         data={futureDatesForDays.map((date) => ({
                             value: format(date, "dd/MM/yyyy"),
                             label: `${format(date, "E, dd MMM yyyy")} (${formatDistanceToNow(date, { addSuffix: true })})`
