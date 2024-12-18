@@ -122,7 +122,7 @@ function SubjectCard(props: Props) {
                     </Group>
                 </Group>
                 <Group gap={2}>
-                    {CoursedateConverter(props.course.coursedate).map((item, index) => (
+                    {props.course.coursedate && CoursedateConverter(props.course.coursedate).map((item, index) => (
                         <Badge variant="light" tt="none" color={item.dayMap?.color} size="xs" key={index}>
                             {t("common.mask.subject.day", {
                                 th: item.dayMap?.th,
@@ -146,7 +146,7 @@ function SubjectCard(props: Props) {
                             </Stack>
                             <Stack gap={2}>
                                 <Text size="xs" c="dimmed">{t("common.subject.time")}</Text>
-                                {CoursedateConverter(props.course.coursedate).map((item, index) => (
+                                {props.course.coursedate && CoursedateConverter(props.course.coursedate).map((item, index) => (
                                     <Text size="xs" key={index}>{item.day} {item.time}</Text>
                                 ))}
                             </Stack>

@@ -10,7 +10,7 @@ export default function GlobalError({
     return (
         <html>
             <body>
-                <div className="flex min-h-screen flex-col items-center justify-center bg-white">
+                <div className="flex min-h-screen flex-col items-center justify-center bg-white text-zinc-900">
                     <div className="flex flex-col gap-3">
                         <h2 className="text-xl font-bold">Something went wrong!</h2>
                         <p className="font-bold">Error: <span className="font-normal text-red-600">{error.message}</span></p>
