@@ -12,9 +12,9 @@ import { ActionIcon, Badge, Group, Paper, Progress, Stack, Text } from '@mantine
 import { useMediaQuery } from '@mantine/hooks';
 import { IconDeviceFloppy, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 
-import SubjectsInputForm from '../SubjectsInputForm/SubjectsInputForm';
+import SubjectsInputForm from '../_components/SubjectsInputForm/SubjectsInputForm';
 import { useTranslations } from 'next-intl';
-import GroupSubjectInput from '../GroupSubjectInput/GroupSubjectInput';
+import GroupSubjectInput from '../_components/GroupSubjectInput/GroupSubjectInput';
 
 interface Props {
     control: Control<CreditManagementSchemaType>
