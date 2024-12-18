@@ -8,11 +8,13 @@ import {
     ErrorNotificationData, LoadingNotificationData, SuccessNotificationData
 } from '@/configs/common/NotificationData/NotificationData';
 import { type Course } from '@/types/responses/IGroupCourseResponse';
-import { Button, Group, Stack, Text } from '@mantine/core';
+import { Button, Group, Select, Stack, Text, Textarea } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconCopy, IconDownload } from '@tabler/icons-react';
 import { useTranslations } from 'next-intl';
-import { eachDayOfInterval, endOfMonth, format, getDate, getDay, getDaysInMonth, getMonth, getYear, intervalToDuration, isAfter, parse, startOfMonth } from 'date-fns';
+import { addMonths, eachDayOfInterval, endOfMonth, format, formatDistanceToNow, getDate, getDay, getDaysInMonth, getMonth, getYear, intervalToDuration, isAfter, parse, startOfMonth } from 'date-fns';
+import { modals } from '@mantine/modals';
+import { useRef } from 'react';
 
 interface Props {
     course: Course
@@ -35,6 +37,10 @@ function ModalCourseDetailTitle({ course }: Props) {
 
 function ModalCourseChildren({ course, actions }: Props & { actions?: React.ReactNode }) {
     const t = useTranslations()
+
+    const CalendarDateSelectRef = useRef<HTMLInputElement>(null)
+    const CalendarDetailRef = useRef<HTMLTextAreaElement>(null)
+
     const onCopySubjectName = async (subjectName: string) => {
         const key = notifications.show(LoadingNotificationData)
         try {
@@ -72,7 +78,7 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
         const end = endOfMonth(now); // End of the current month
 
         // Get all dates in the current month
-        const allDates = eachDayOfInterval({ start, end });
+        const allDates = eachDayOfInterval({ start, end: addMonths(end, 1) });
 
         // Filter dates that match the target weekday and are after today
         const matchingDates = allDates.filter(
@@ -84,78 +90,107 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
     }
 
     const onDownloadICS = async () => {
-        const key = notifications.show(LoadingNotificationData)
         try {
-            const futureDatesForDay = getFutureDatesForDay(course.day_w.trim())[0]
+            const futureDatesForDays = getFutureDatesForDay(course.day_w.trim())
 
-            if (!futureDatesForDay) {
-                notifications.update({
-                    ...ErrorNotificationData,
-                    id: key,
-                    message: "Failed to download to calendar : No future dates",
-                })
-                return
-            }
+            modals.openConfirmModal({
+                title: "Select Date",
+                children: <div>
+                    <Select
+                        ref={CalendarDateSelectRef}
+                        value={futureDatesForDays[0] ? format(futureDatesForDays[0], "dd/MM/yyyy") : ""}
+                        data={futureDatesForDays.map((date) => ({
+                            value: format(date, "dd/MM/yyyy"),
+                            label: `${format(date, "E, dd MMM yyyy")} (${formatDistanceToNow(date, { addSuffix: true })})`
+                        })) ?? []}
+                        label="Select date"
+                    />
+                    <Textarea
+                        ref={CalendarDetailRef}
+                        label="Detail"
+                        placeholder="Enter description in calendar"
+                    />
+                </div>
+                ,
+                labels: {
+                    confirm: "Download to calendar",
+                    cancel: "Cancel"
+                },
+                onConfirm: () => {
+                    if (!CalendarDateSelectRef.current?.value) {
+                        notifications.show({
+                            ...ErrorNotificationData,
+                            message: "Please select date",
+                            color: "red"
+                        })
+                        return
+                    }
 
-            const year = getYear(futureDatesForDay);
-            const month = getMonth(futureDatesForDay) + 1
-            const date = getDate(futureDatesForDay)
+                    const key = notifications.show(LoadingNotificationData)
+                    const futureDatesForDay = parse(CalendarDateSelectRef.current.value.split("(")[0]?.trim() ?? "", "E, dd MMM yyyy", new Date())
 
-            const hourStart = parse(course.time_from, "HH:mm", new Date()).getHours()
-            const minuteStart = parse(course.time_from, "HH:mm", new Date()).getMinutes()
+                    const year = getYear(futureDatesForDay);
+                    const month = getMonth(futureDatesForDay) + 1
+                    const date = getDate(futureDatesForDay)
 
-            const hourEnd = parse(course.time_to, "HH:mm", new Date()).getHours()
-            const minuteEnd = parse(course.time_to, "HH:mm", new Date()).getMinutes()
+                    const hourStart = parse(course.time_from, "HH:mm", new Date()).getHours()
+                    const minuteStart = parse(course.time_from, "HH:mm", new Date()).getMinutes()
 
-            const start: ics.DateTime = [year, month, date, hourStart, minuteStart]
+                    const hourEnd = parse(course.time_to, "HH:mm", new Date()).getHours()
+                    const minuteEnd = parse(course.time_to, "HH:mm", new Date()).getMinutes()
 
-            const description = prompt("Enter description in calendar", "")
+                    const start: ics.DateTime = [year, month, date, hourStart, minuteStart]
 
-            ics.createEvent({
-                title: course.subject_name_en,
-                description: description ?? "",
-                location: course.room_name_en,
-                busyStatus: "BUSY",
-                start,
-                duration: intervalToDuration({
-                    start: new Date(year, month, date, hourStart, minuteStart),
-                    end: new Date(year, month, date, hourEnd, minuteEnd)
-                }),
-            }, (error, value) => {
-                if (error) {
-                    notifications.update({
-                        ...ErrorNotificationData,
-                        id: key,
-                        message: "Failed to download to calendar : " + error.message
-                    })
-                }
+                    const description = CalendarDetailRef.current?.value
 
-                if (value) {
-                    const blob = new Blob([value], { type: "text/calendar;charset=utf-8" })
-                    saveAs(blob, `${course.subject_code} ${course.subject_name_en}.ics`)
+                    ics.createEvent({
+                        title: course.subject_name_en,
+                        description: description ?? "",
+                        location: course.room_name_en,
+                        busyStatus: "BUSY",
+                        start,
+                        duration: intervalToDuration({
+                            start: new Date(year, month, date, hourStart, minuteStart),
+                            end: new Date(year, month, date, hourEnd, minuteEnd)
+                        }),
+                    }, (error, value) => {
+                        if (error) {
+                            notifications.update({
+                                ...ErrorNotificationData,
+                                id: key,
+                                message: "Failed to download to calendar : " + error.message
+                            })
+                        }
 
-                    notifications.update({
-                        ...SuccessNotificationData,
-                        id: key,
-                        message: "Downloaded to calendar",
-                        color: "green",
-                    })
-                } else {
-                    notifications.update({
-                        ...ErrorNotificationData,
-                        id: key,
-                        message: "Failed to download to calendar: Event value is undefined",
-                        color: "red",
+                        if (value) {
+                            const blob = new Blob([value], { type: "text/calendar;charset=utf-8" })
+                            saveAs(blob, `${course.subject_code}_${course.subject_name_en}_${format(futureDatesForDay, "yyyy-MM-dd")}.ics`)
+
+                            notifications.update({
+                                ...SuccessNotificationData,
+                                id: key,
+                                message: "Downloaded to calendar",
+                                color: "green",
+                            })
+                        } else {
+                            notifications.update({
+                                ...ErrorNotificationData,
+                                id: key,
+                                message: "Failed to download to calendar: Event value is undefined",
+                                color: "red",
+                            })
+                        }
                     })
                 }
             })
 
 
+
+
         } catch (error) {
             if (error instanceof Error) {
-                notifications.update({
+                notifications.show({
                     ...ErrorNotificationData,
-                    id: key,
                     message: "Failed to download to calendar : " + error.message,
                     color: "red",
                 })
