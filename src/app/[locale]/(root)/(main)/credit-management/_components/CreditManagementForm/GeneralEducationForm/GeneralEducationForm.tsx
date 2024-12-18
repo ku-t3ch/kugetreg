@@ -13,12 +13,15 @@ import { useMediaQuery } from '@mantine/hooks';
 import { IconDeviceFloppy, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 
 import SubjectsInputForm from '../SubjectsInputForm/SubjectsInputForm';
+import { useTranslations } from 'next-intl';
+import GroupSubjectInput from '../GroupSubjectInput/GroupSubjectInput';
 
 interface Props {
     control: Control<CreditManagementSchemaType>
 }
 
 export default function GeneralEducationForm(props: Props) {
+    const t = useTranslations()
     const isMobile = useMediaQuery("(max-width: 768px)");
     const { control } = props;
     const { setValue, watch } = useFormContext<CreditManagementSchemaType>()
@@ -31,9 +34,6 @@ export default function GeneralEducationForm(props: Props) {
         <Stack>
             <Group justify="space-between">
                 <Text fw="bold" size="lg">หมวดวิชาศึกษาทั่วไป</Text>
-                <ActionIcon onClick={() => generalEducationFields.append({ groupName: "", minCredit: 0, subjects: [], isEdit: true })}>
-                    <IconPlus size={16} />
-                </ActionIcon>
             </Group>
             {generalEducationFields.fields.map((field, index) => {
                 const generalEducationField = watch(`general_education.${index}`);
@@ -42,32 +42,13 @@ export default function GeneralEducationForm(props: Props) {
                         <Stack>
                             <Group justify="space-between">
                                 {generalEducationField.isEdit ? <Group gap={"sm"} wrap={isMobile ? "wrap" : "nowrap"}>
-                                    <ControlledInputText
-                                        name={`general_education.${index}.groupName`}
-                                        control={control}
-                                        props={{
-                                            placeholder: "ชื่อหมวดวิชา",
-                                            w: "100%",
-                                            maw: 300,
-                                            label: "ชื่อหมวดวิชา"
-                                        }}
-                                    />
-                                    <ControlledInputNumber
-                                        name={`general_education.${index}.minCredit`}
-                                        control={control}
-                                        props={{
-                                            placeholder: "กรอกจำนวนหน่วยกิตที่ต้องการ",
-                                            w: "100%",
-                                            maw: isMobile ? 300 : 200,
-                                            label: "จำนวนหน่วยกิตที่ต้องการ"
-                                        }}
-                                    />
+                                    <GroupSubjectInput control={control} name={`general_education.${index}`} />
                                 </Group> : <Group>
                                     <Badge
                                         size="xl"
                                         variant="light"
                                     >
-                                       {_.sumBy(generalEducationField.subjects, (x) => x.credit)}  / {generalEducationField.minCredit}
+                                        {_.sumBy(generalEducationField.subjects, (x) => x.credit)}  / {generalEducationField.minCredit}
                                     </Badge>
                                     <Text size="md" fw={700}>{generalEducationField.groupName}</Text>
                                 </Group>
@@ -92,6 +73,9 @@ export default function GeneralEducationForm(props: Props) {
                     </Paper>
                 )
             })}
+            <ActionIcon onClick={() => generalEducationFields.append({ groupName: "", minCredit: 0, subjects: [], isEdit: true })}>
+                <IconPlus size={16} />
+            </ActionIcon>
         </Stack>
     )
 }

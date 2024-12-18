@@ -3,8 +3,6 @@
 import _ from 'lodash';
 import { type Control, useFieldArray, useFormContext } from 'react-hook-form';
 
-import ControlledInputNumber from '@/app/[locale]/_components/Controlled/ControlledInputNumber';
-import ControlledInputText from '@/app/[locale]/_components/Controlled/ControlledInputText';
 import {
     type CreditManagementSchemaType
 } from '@/schemas/creditManagement/creditManagement.schema';
@@ -13,6 +11,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import { IconDeviceFloppy, IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 
 import SubjectsInputForm from '../SubjectsInputForm/SubjectsInputForm';
+import GroupSubjectInput from '../GroupSubjectInput/GroupSubjectInput';
 
 interface Props {
     control: Control<CreditManagementSchemaType>
@@ -31,9 +30,6 @@ export default function SpecificCoursesForm(props: Props) {
         <Stack>
             <Group justify="space-between">
                 <Text fw="bold" size="lg">หมวดวิชาเฉพาะ</Text>
-                <ActionIcon onClick={() => specificCoursesFields.append({ groupName: "", minCredit: 0, subjects: [], isEdit: true })}>
-                    <IconPlus size={16} />
-                </ActionIcon>
             </Group>
             {specificCoursesFields.fields.map((field, index) => {
                 const generalEducationField = watch(`specific_courses.${index}`) ?? null;
@@ -42,32 +38,13 @@ export default function SpecificCoursesForm(props: Props) {
                         <Stack>
                             <Group justify="space-between">
                                 {(generalEducationField.isEdit) ? <Group gap={"sm"} wrap={isMobile ? "wrap" : "nowrap"}>
-                                    <ControlledInputText
-                                        name={`specific_courses.${index}.groupName`}
-                                        control={control}
-                                        props={{
-                                            placeholder: "ชื่อหมวดวิชา",
-                                            w: "100%",
-                                            maw: 300,
-                                            label: "ชื่อหมวดวิชา"
-                                        }}
-                                    />
-                                    <ControlledInputNumber
-                                        name={`specific_courses.${index}.minCredit`}
-                                        control={control}
-                                        props={{
-                                            placeholder: "กรอกจำนวนหน่วยกิตที่ต้องการ",
-                                            w: "100%",
-                                            maw: isMobile ? 300 : 200,
-                                            label: "จำนวนหน่วยกิตที่ต้องการ"
-                                        }}
-                                    />
+                                   <GroupSubjectInput control={control} name={`specific_courses.${index}`} />
                                 </Group> : <Group>
                                     <Badge
                                         size="xl"
                                         variant="light"
                                     >
-                                       {_.sumBy(generalEducationField.subjects, (x) => x.credit)}  / {generalEducationField.minCredit}
+                                        {_.sumBy(generalEducationField.subjects, (x) => x.credit)}  / {generalEducationField.minCredit}
                                     </Badge>
                                     <Text size="md" fw={700}>{generalEducationField.groupName}</Text>
                                 </Group>
@@ -92,6 +69,9 @@ export default function SpecificCoursesForm(props: Props) {
                     </Paper>
                 )
             })}
+            <ActionIcon onClick={() => specificCoursesFields.append({ groupName: "", minCredit: 0, subjects: [], isEdit: true })}>
+                <IconPlus size={16} />
+            </ActionIcon>
         </Stack>
     )
 }

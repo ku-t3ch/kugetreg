@@ -9,8 +9,10 @@ import GeneralEducationForm from "./GeneralEducationForm/GeneralEducationForm";
 import SpecificCoursesForm from "./SpecificCoursesForm/SpecificCoursesForm";
 import FreeElectiveForm from "./FreeElectiveForm/FreeElectiveForm";
 import { IconCloudUpload } from "@tabler/icons-react";
+import { useTranslations } from "next-intl";
 
 export default function CreditManagementForm(props: FormProps<CreditManagementSchemaType>) {
+    const t = useTranslations();
     const methods = useForm<CreditManagementSchemaType>({
         resolver: zodResolver(creditManagementSchema),
     });
@@ -39,10 +41,10 @@ export default function CreditManagementForm(props: FormProps<CreditManagementSc
             <Stack>
                 <Group justify="space-between">
                     <Text size="xl" fw={600}>
-                        บริหารหน่วยกิต
+                        {t("credit_management.title")}
                     </Text>
                     <Button onClick={handleSubmit(onFinish)} leftSection={<IconCloudUpload size={16} />} variant="light">
-                        บันทึก
+                        {t("common.button.subject.save")}
                     </Button>
                 </Group>
                 <form className="flex flex-col gap-3" onSubmit={handleSubmit(onFinish)}>

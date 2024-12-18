@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { type SubjectSchemaType } from '@/schemas/creditManagement/subject.schema';
+import { useTranslations } from 'next-intl';
 
 interface SearchSubjectFormProps {
     control: Control<CreditManagementSchemaType>;
@@ -22,6 +23,7 @@ interface SearchSubjectFormProps {
 const ControlledSearchSubject = (
     props: SearchSubjectFormProps,
 ) => {
+    const t = useTranslations();
     const searchSubjectOpenEnr = api.enroll.searchSubjectOpenEnr.useMutation();
 
     const [searchValue, setSearchValue] = useState("");
@@ -90,7 +92,7 @@ const ControlledSearchSubject = (
                                     }}
                                     style={{ display: searchValue ? undefined : 'none' }}
                                 />}
-                                placeholder="ค้นหาวิชา"
+                                placeholder={t('schedule_planner.explore.subject.input.placeholder')}
                                 value={searchValue}
                                 onChange={(event) => {
                                     autocompleteOnChange(event.currentTarget.value);

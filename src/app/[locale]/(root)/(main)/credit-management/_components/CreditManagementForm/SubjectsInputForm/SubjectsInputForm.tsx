@@ -10,6 +10,9 @@ import { ActionIcon, Group, Stack, Table, Text } from '@mantine/core';
 import { IconArrowBack, IconPencil, IconPlus, IconTrash, IconX } from '@tabler/icons-react';
 
 import ControlledSearchSubject from '../SearchSubjectForm/SearchSubjectForm';
+import ControlledInputNumber from '@/app/[locale]/_components/Controlled/ControlledInputNumber';
+import CreditRender from './CreditRender/CreditRender';
+import { useTranslations } from 'next-intl';
 
 interface Props {
     control: Control<CreditManagementSchemaType>
@@ -17,6 +20,7 @@ interface Props {
 }
 
 export default function SubjectsInputForm(props: Props) {
+    const t = useTranslations()
     const { watch, setValue } = useFormContext<CreditManagementSchemaType>()
 
     const subjectsFields = useFieldArray({
@@ -27,12 +31,12 @@ export default function SubjectsInputForm(props: Props) {
     return (
         <Stack>
             <div className='overflow-x-auto'>
-                <Table className='min-w-fit'>
+                <Table className='min-w-fit' striped>
                     <Table.Thead>
                         <Table.Tr>
-                            <Table.Th>รหัสวิชา</Table.Th>
-                            <Table.Th>ชื่อวิชา</Table.Th>
-                            <Table.Th>หน่วยกิต</Table.Th>
+                            <Table.Th>{t("common.subject.code")}</Table.Th>
+                            <Table.Th>{t("common.subject.name")}</Table.Th>
+                            <Table.Th>{t("common.subject.credits")}</Table.Th>
                             <Table.Th></Table.Th>
                         </Table.Tr>
                     </Table.Thead>
@@ -48,13 +52,13 @@ export default function SubjectsInputForm(props: Props) {
                                             </Table.Td>
                                             <Table.Td>
                                                 <Text className='whitespace-nowrap'>
-                                                    {resultSubject.subjectNameTh}
+                                                    {t("common.mask.subject.subjectName", {
+                                                        ...resultSubject
+                                                    })}
                                                 </Text>
                                             </Table.Td>
                                             <Table.Td>
-                                                <Text className='whitespace-nowrap'>
-                                                    {resultSubject.credit}
-                                                </Text>
+                                                <CreditRender control={props.control} name={`${props.name}.${index}.credit` as Path<CreditManagementSchemaType>} resultSubject={resultSubject} />
                                             </Table.Td>
                                             <Table.Td>
                                                 <Group gap={5} wrap='nowrap'>
