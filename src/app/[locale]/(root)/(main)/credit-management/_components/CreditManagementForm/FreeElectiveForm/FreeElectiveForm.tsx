@@ -12,12 +12,14 @@ import { IconDeviceFloppy, IconPencil, IconPlus, IconTrash } from '@tabler/icons
 
 import SubjectsInputForm from '../_components/SubjectsInputForm/SubjectsInputForm';
 import GroupSubjectInput from '../_components/GroupSubjectInput/GroupSubjectInput';
+import { useTranslations } from 'next-intl';
 
 interface Props {
     control: Control<CreditManagementSchemaType>
 }
 
 export default function FreeElectiveForm(props: Props) {
+    const t = useTranslations();
     const isMobile = useMediaQuery("(max-width: 768px)");
     const { control } = props;
     const { setValue, watch } = useFormContext<CreditManagementSchemaType>()
@@ -29,7 +31,7 @@ export default function FreeElectiveForm(props: Props) {
     return (
         <Stack>
             <Group justify="space-between">
-                <Text fw="bold" size="lg">หมวดวิชาเลือกเสรี</Text>
+                <Text fw="bold" size="lg">{t("credit_management.free_elective")}</Text>
             </Group>
             {freeElectiveFields.fields.map((field, index) => {
                 const freeElectiveField = watch(`free_elective.${index}`);

@@ -33,7 +33,7 @@ export default function GeneralEducationForm(props: Props) {
     return (
         <Stack>
             <Group justify="space-between">
-                <Text fw="bold" size="lg">หมวดวิชาศึกษาทั่วไป</Text>
+                <Text fw="bold" size="lg">{t("credit_management.general_education")}</Text>
             </Group>
             {generalEducationFields.fields.map((field, index) => {
                 const generalEducationField = watch(`general_education.${index}`);
