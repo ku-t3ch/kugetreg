@@ -4,6 +4,7 @@ import { api } from "@/trpc/react";
 import { type CreditManagementSchemaType } from "@/schemas/creditManagement/creditManagement.schema";
 import { notifications } from "@mantine/notifications";
 import { ErrorNotificationData, LoadingNotificationData, SuccessNotificationData } from "@/configs/common/NotificationData/NotificationData";
+import { Box, LoadingOverlay } from "@mantine/core";
 
 export default function Page() {
     const getCreditManagement = api.creditManagement.getCreditManagement.useQuery();
@@ -26,8 +27,9 @@ export default function Page() {
     }
 
     return (
-        <>
+        <Box pos="relative">
+            <LoadingOverlay visible={getCreditManagement.isPending} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
             {getCreditManagement.data && <CreditManagementForm type="edit" onFinish={handleSave} data={getCreditManagement.data} />}
-        </>
+        </Box>
     )
 }
