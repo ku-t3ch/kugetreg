@@ -103,6 +103,7 @@ function ModalCourseChildren({ course, actions }: Props & { actions?: React.Reac
                             value: format(date, "dd/MM/yyyy"),
                             label: `${format(date, "E, dd MMM yyyy")} (${formatDistanceToNow(date, { addSuffix: true })})`
                         })) ?? []}
+                        unselectable={"off"}
                         label="Select date"
                     />
                     <Textarea
