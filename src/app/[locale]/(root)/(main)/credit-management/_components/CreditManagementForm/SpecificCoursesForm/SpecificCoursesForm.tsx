@@ -32,38 +32,39 @@ export default function SpecificCoursesForm(props: Props) {
                 <Text fw="bold" size="lg">หมวดวิชาเฉพาะ</Text>
             </Group>
             {specificCoursesFields.fields.map((field, index) => {
-                const generalEducationField = watch(`specific_courses.${index}`) ?? null;
+                const specificCoursesField = watch(`specific_courses.${index}`) ?? null;
                 return (
                     <Paper withBorder p="sm" key={field.id}>
                         <Stack>
                             <Group justify="space-between">
-                                {(generalEducationField.isEdit) ? <Group gap={"sm"} wrap={isMobile ? "wrap" : "nowrap"}>
-                                   <GroupSubjectInput control={control} name={`specific_courses.${index}`} />
-                                </Group> : <Group>
-                                    <Badge
-                                        size="xl"
-                                        variant="light"
-                                    >
-                                        {_.sumBy(generalEducationField.subjects, (x) => x.credit)}  / {generalEducationField.minCredit}
-                                    </Badge>
-                                    <Text size="md" fw={700}>{generalEducationField.groupName}</Text>
-                                </Group>
-                                }
-
-                                <Group gap={5}>
-                                    {generalEducationField.isEdit ? <ActionIcon onClick={() => setValue(`specific_courses.${index}.isEdit`, false)}>
+                                <Group align='center'>
+                                    {specificCoursesField.isEdit ? <Group gap={"sm"} wrap={isMobile ? "wrap" : "nowrap"}>
+                                        <GroupSubjectInput control={control} name={`specific_courses.${index}`} />
+                                    </Group> : <Group>
+                                        <Badge
+                                            size="xl"
+                                            variant="light"
+                                        >
+                                            {_.sumBy(specificCoursesField.subjects, (x) => x.credit)}  / {specificCoursesField.minCredit}
+                                        </Badge>
+                                        <Text size="md" fw={700}>{specificCoursesField.groupName}</Text>
+                                    </Group>
+                                    }
+                                    {specificCoursesField.isEdit ? <ActionIcon onClick={() => setValue(`specific_courses.${index}.isEdit`, false)}>
                                         <IconDeviceFloppy size={16} />
                                     </ActionIcon> : <ActionIcon onClick={() => setValue(`specific_courses.${index}.isEdit`, true)}>
                                         <IconPencil size={16} />
                                     </ActionIcon>
                                     }
+                                </Group>
 
+                                <Group gap={5}>
                                     <ActionIcon color="red" onClick={() => specificCoursesFields.remove(index)}>
                                         <IconTrash size={16} />
                                     </ActionIcon>
                                 </Group>
                             </Group>
-                            <Progress size="sm" value={_.sumBy(generalEducationField.subjects, (x) => x.credit) / generalEducationField.minCredit * 100} />
+                            <Progress size="sm" value={_.sumBy(specificCoursesField.subjects, (x) => x.credit) / specificCoursesField.minCredit * 100} />
                             <SubjectsInputForm control={control} name={`specific_courses.${index}.subjects`} />
                         </Stack>
                     </Paper>

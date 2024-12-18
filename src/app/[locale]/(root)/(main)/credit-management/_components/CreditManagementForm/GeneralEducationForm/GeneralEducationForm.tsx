@@ -41,27 +41,28 @@ export default function GeneralEducationForm(props: Props) {
                     <Paper withBorder p="sm" key={field.id}>
                         <Stack>
                             <Group justify="space-between">
-                                {generalEducationField.isEdit ? <Group gap={"sm"} wrap={isMobile ? "wrap" : "nowrap"}>
-                                    <GroupSubjectInput control={control} name={`general_education.${index}`} />
-                                </Group> : <Group>
-                                    <Badge
-                                        size="xl"
-                                        variant="light"
-                                    >
-                                        {_.sumBy(generalEducationField.subjects, (x) => x.credit)}  / {generalEducationField.minCredit}
-                                    </Badge>
-                                    <Text size="md" fw={700}>{generalEducationField.groupName}</Text>
-                                </Group>
-                                }
-
-                                <Group gap={5}>
+                                <Group align='center'>
+                                    {generalEducationField.isEdit ? <Group gap={"sm"} wrap={isMobile ? "wrap" : "nowrap"}>
+                                        <GroupSubjectInput control={control} name={`general_education.${index}`} />
+                                    </Group> : <Group>
+                                        <Badge
+                                            size="xl"
+                                            variant="light"
+                                        >
+                                            {_.sumBy(generalEducationField.subjects, (x) => x.credit)}  / {generalEducationField.minCredit}
+                                        </Badge>
+                                        <Text size="md" fw={700}>{generalEducationField.groupName}</Text>
+                                    </Group>
+                                    }
                                     {generalEducationField.isEdit ? <ActionIcon onClick={() => setValue(`general_education.${index}.isEdit`, false)}>
                                         <IconDeviceFloppy size={16} />
                                     </ActionIcon> : <ActionIcon onClick={() => setValue(`general_education.${index}.isEdit`, true)}>
                                         <IconPencil size={16} />
                                     </ActionIcon>
                                     }
+                                </Group>
 
+                                <Group gap={5}>
                                     <ActionIcon color="red" onClick={() => generalEducationFields.remove(index)}>
                                         <IconTrash size={16} />
                                     </ActionIcon>
