@@ -7,10 +7,9 @@ import {
 } from '@/schemas/creditManagement/creditManagement.schema';
 import { type SubjectSchemaType } from '@/schemas/creditManagement/subject.schema';
 import { ActionIcon, Group, Stack, Table, Text } from '@mantine/core';
-import { IconArrowBack, IconPencil, IconPlus, IconTrash, IconX } from '@tabler/icons-react';
+import { IconArrowBack, IconPlus, IconSearch, IconTrash } from '@tabler/icons-react';
 
 import ControlledSearchSubject from '../SearchSubjectForm/SearchSubjectForm';
-import ControlledInputNumber from '@/app/[locale]/_components/Controlled/ControlledInputNumber';
 import CreditRender from './CreditRender/CreditRender';
 import { useTranslations } from 'next-intl';
 
@@ -63,7 +62,7 @@ export default function SubjectsInputForm(props: Props) {
                                             <Table.Td>
                                                 <Group gap={5} wrap='nowrap'>
                                                     <ActionIcon onClick={() => setValue(`${props.name}.${index}.isEdit` as any, true)}>
-                                                        <IconPencil size={16} />
+                                                        <IconSearch size={16} />
                                                     </ActionIcon>
                                                     <ActionIcon color="red" onClick={() => subjectsFields.remove(index)}>
                                                         <IconTrash size={16} />
