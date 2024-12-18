@@ -17,7 +17,7 @@ export const OpenSubjectForEnrollSchema = z.object({
   studentStatusCode: z.string(),
   stdStatusTh: z.string(),
   stdStatusEn: z.string(),
-  coursedate: z.string(),
+  coursedate: z.string().nullable(),
   coursedateth: z.string(),
   coursedateen: z.string(),
   totalSeat: z.string(),
@@ -35,7 +35,7 @@ export const OpenSubjectForEnrollSchema = z.object({
 
 export const OpenSubjectForEnrollSchemaToCourse =
   OpenSubjectForEnrollSchema.transform((data) =>
-    data.coursedate.split(",").map((item) => {
+    (data.coursedate ?? "").split(",").map((item) => {
       const day = item.split("  ")[0]?.trim() ?? "";
       const time = item.split("  ")[1]?.trim() ?? "";
 
