@@ -32,7 +32,6 @@ export default function NavbarMenu(props: Props) {
             label: t("credit_management.title"),
             icon: IconCalendarCheck,
             link: "/credit-management",
-            disabled: true,
         },
     ];
 
