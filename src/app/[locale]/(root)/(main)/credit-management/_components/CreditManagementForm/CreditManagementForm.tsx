@@ -1,21 +1,25 @@
 "use client";
 import { type FormProps } from "@/types/FormProps.type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Card, Center, Group, Paper, RingProgress, Stack, Text } from "@mantine/core";
-import { useEffect } from "react";
+import { Button, Card, Center, Group, Menu, Paper, rem, RingProgress, Stack, Text } from "@mantine/core";
+import { useEffect, useRef } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { creditManagementSchema, type CreditManagementSchemaType } from "@/schemas/creditManagement/creditManagement.schema";
 import GeneralEducationForm from "./GeneralEducationForm/GeneralEducationForm";
 import SpecificCoursesForm from "./SpecificCoursesForm/SpecificCoursesForm";
 import FreeElectiveForm from "./FreeElectiveForm/FreeElectiveForm";
-import { IconDeviceFloppy } from "@tabler/icons-react";
+import { IconDeviceFloppy, IconDownload, IconSettings, IconUpload } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import _ from "lodash";
 import { useMediaQuery } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
+import { ErrorNotificationData } from "@/configs/common/NotificationData/NotificationData";
+import { saveAs } from "file-saver";
 
 export default function CreditManagementForm(props: FormProps<CreditManagementSchemaType>) {
     const t = useTranslations();
     const isMobile = useMediaQuery("(max-width: 1057px)");
+    const inputFileRef = useRef<HTMLInputElement>(null);
     const methods = useForm<CreditManagementSchemaType>({
         resolver: zodResolver(creditManagementSchema),
     });
@@ -27,7 +31,6 @@ export default function CreditManagementForm(props: FormProps<CreditManagementSc
     } = methods;
 
     const onFinish = (data: CreditManagementSchemaType) => {
-        console.log(data);
         props.onFinish?.(data);
     };
 
@@ -38,6 +41,10 @@ export default function CreditManagementForm(props: FormProps<CreditManagementSc
             setValue("specific_courses", props.data.specific_courses);
         }
     }, [props.data, setValue]);
+
+    const data = useWatch({
+        control,
+    })
 
     const generalEducationWatch = useWatch({
         control,
@@ -66,16 +73,79 @@ export default function CreditManagementForm(props: FormProps<CreditManagementSc
     const requiredCreditFreeElective = _.sumBy(freeElectiveWatch, (x) => x.minCredit)
     const percentFreeElective = ((totalCreditFreeElective / requiredCreditFreeElective) * 100) || 0
 
+    const onDownload = () => {
+        saveAs(new Blob([JSON.stringify(data)], { type: "application/json" }), `credit_management_${new Date().getTime()}.json`);
+    }
+
+    const onUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files?.[0]) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = () => {
+                try {
+                    const content = creditManagementSchema.parse(JSON.parse(reader.result as string));
+                    setValue("general_education", content.general_education);
+                    setValue("free_elective", content.free_elective);
+                    setValue("specific_courses", content.specific_courses);
+                } catch (error) {
+                    if (error instanceof Error) {
+                        notifications.show({
+                            ...ErrorNotificationData,
+                            message: "Invalid file format",
+                        })
+                    }
+                }
+                e.target.value = '';
+            };
+        }
+    }
+
+
     return (
         <FormProvider {...methods}>
+            <input onChange={onUpload} ref={inputFileRef} type="file" style={{ display: "none" }} accept=".json" />
             <Stack>
                 <Group justify="space-between">
                     <Text size="xl" fw={600}>
                         {t("credit_management.title")}
                     </Text>
-                    <Button onClick={handleSubmit(onFinish)} leftSection={<IconDeviceFloppy size={16} />} variant="light">
-                        {t("common.button.subject.save")}
-                    </Button>
+                    <Group gap={5}>
+                        <Menu shadow="md" width={200} position="bottom-end">
+                            <Menu.Target>
+                                <Button leftSection={<IconSettings size={16} />} variant="light">
+                                    {t("credit_management.preset.button.management")}
+                                </Button>
+                            </Menu.Target>
+                            <Menu.Dropdown>
+                                <Menu.Item
+                                    leftSection={
+                                        <IconDownload style={{ width: rem(14), height: rem(14) }} />
+                                    }
+                                    onClick={onDownload}
+                                >
+                                    {t("credit_management.preset.button.download")}
+                                </Menu.Item>
+                                <Menu.Item
+                                    leftSection={
+                                        <IconUpload style={{ width: rem(14), height: rem(14) }} />
+                                    }
+                                    onClick={() => inputFileRef.current?.click()}
+                                >
+                                    {t("credit_management.preset.button.upload")}
+                                </Menu.Item>
+                            </Menu.Dropdown>
+                        </Menu>
+                        <Button onClick={handleSubmit(onFinish)} leftSection={<IconDeviceFloppy size={16} />} variant="light">
+                            {t("common.button.subject.save")}
+                        </Button>
+                        {/* <Button leftSection={<IconDownload size={16} />} variant="light">
+                            {t("credit_management.preset.button.download")}
+                        </Button>
+                        <Button leftSection={<IconUpload size={16} />} variant="light">
+                            {t("credit_management.preset.button.upload")}
+                        </Button> */}
+                    </Group>
                 </Group>
                 <Group wrap={isMobile ? "wrap" : "nowrap"}>
                     <Paper withBorder radius="md" p="xs" w={"100%"}>
