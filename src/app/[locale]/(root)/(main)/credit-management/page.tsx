@@ -29,7 +29,7 @@ export default function Page() {
     return (
         <Box pos="relative">
             <LoadingOverlay visible={getCreditManagement.isPending} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
-            {getCreditManagement.data && <CreditManagementForm type="edit" onFinish={handleSave} data={getCreditManagement.data} />}
+            <CreditManagementForm type="edit" onFinish={handleSave} data={getCreditManagement.data ?? undefined} />
         </Box>
     )
 }
