@@ -8,7 +8,7 @@ import { creditManagementSchema, type CreditManagementSchemaType } from "@/schem
 import GeneralEducationForm from "./GeneralEducationForm/GeneralEducationForm";
 import SpecificCoursesForm from "./SpecificCoursesForm/SpecificCoursesForm";
 import FreeElectiveForm from "./FreeElectiveForm/FreeElectiveForm";
-import { IconCloudUpload } from "@tabler/icons-react";
+import { IconDeviceFloppy } from "@tabler/icons-react";
 import { useTranslations } from "next-intl";
 import _ from "lodash";
 import { useMediaQuery } from "@mantine/hooks";
@@ -73,7 +73,7 @@ export default function CreditManagementForm(props: FormProps<CreditManagementSc
                     <Text size="xl" fw={600}>
                         {t("credit_management.title")}
                     </Text>
-                    <Button onClick={handleSubmit(onFinish)} leftSection={<IconCloudUpload size={16} />} variant="light">
+                    <Button onClick={handleSubmit(onFinish)} leftSection={<IconDeviceFloppy size={16} />} variant="light">
                         {t("common.button.subject.save")}
                     </Button>
                 </Group>
