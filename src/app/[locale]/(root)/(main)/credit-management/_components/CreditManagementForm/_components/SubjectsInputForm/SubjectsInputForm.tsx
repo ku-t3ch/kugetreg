@@ -33,8 +33,8 @@ export default function SubjectsInputForm(props: Props) {
                 <Table className='min-w-fit' striped>
                     <Table.Thead>
                         <Table.Tr>
-                            <Table.Th miw={100}>{t("common.subject.code")}</Table.Th>
-                            <Table.Th miw={600}>{t("common.subject.name")}</Table.Th>
+                            <Table.Th w={200}>{t("common.subject.code")}</Table.Th>
+                            <Table.Th miw={"100%"}>{t("common.subject.name")}</Table.Th>
                             <Table.Th miw={100}>{t("common.subject.credits")}</Table.Th>
                             <Table.Th></Table.Th>
                         </Table.Tr>
@@ -71,11 +71,11 @@ export default function SubjectsInputForm(props: Props) {
                                             </Table.Td>
                                         </>
                                         : <>
-                                            <Table.Td>
-                                                <ControlledSearchSubject control={props.control} name={`${props.name}.${index}` as Path<CreditManagementSchemaType>} />
+                                            <Table.Td colSpan={3}>
+                                                <ControlledSearchSubject props={{
+                                                    size: "lg"
+                                                }} control={props.control} name={`${props.name}.${index}` as Path<CreditManagementSchemaType>} />
                                             </Table.Td>
-                                            <Table.Td></Table.Td>
-                                            <Table.Td></Table.Td>
                                             <Table.Td>
                                                 <Group gap={5}>
                                                     <ActionIcon disabled={resultSubject?.subjectCode === ""} onClick={() => setValue(`${props.name}.${index}.isEdit` as any, false)}>

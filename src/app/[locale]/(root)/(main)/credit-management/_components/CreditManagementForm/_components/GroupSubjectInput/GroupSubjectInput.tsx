@@ -25,7 +25,8 @@ export default function GroupSubjectInput(props: Props) {
                     placeholder: t("credit_management.groupName.input.label"),
                     w: "100%",
                     maw: 300,
-                    label: t("credit_management.groupName.input.label")
+                    label: t("credit_management.groupName.input.label"),
+                    size: "lg"
                 }}
             />
             <ControlledInputNumber
@@ -35,7 +36,8 @@ export default function GroupSubjectInput(props: Props) {
                     placeholder: t("credit_management.minCredit.input.label"),
                     w: "100%",
                     maw: isMobile ? 300 : 200,
-                    label: t("credit_management.minCredit.input.label")
+                    label: t("credit_management.minCredit.input.label"),
+                    size: "lg"
                 }}
             />
         </>
