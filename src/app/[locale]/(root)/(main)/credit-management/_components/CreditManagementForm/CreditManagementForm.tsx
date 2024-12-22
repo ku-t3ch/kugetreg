@@ -13,12 +13,16 @@ import { useTranslations } from "next-intl";
 import _ from "lodash";
 import { useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { ErrorNotificationData } from "@/configs/common/NotificationData/NotificationData";
+import { ErrorNotificationData, LoadingNotificationData, SuccessNotificationData } from "@/configs/common/NotificationData/NotificationData";
 import { saveAs } from "file-saver";
+import { api } from "@/trpc/react";
 
 export default function CreditManagementForm(props: FormProps<CreditManagementSchemaType>) {
     const t = useTranslations();
     const isMobile = useMediaQuery("(max-width: 1057px)");
+
+    const creditManagementPdf = api.download.getCreditManagementPdf.useMutation()
+
     const inputFileRef = useRef<HTMLInputElement>(null);
     const methods = useForm<CreditManagementSchemaType>({
         resolver: zodResolver(creditManagementSchema),
@@ -101,6 +105,23 @@ export default function CreditManagementForm(props: FormProps<CreditManagementSc
         }
     }
 
+    const onDownloadReport = () => {
+        const keyNoti = notifications.show({ ...LoadingNotificationData, message: "Downloading..." })
+        creditManagementPdf.mutate({
+            payload: JSON.stringify(data)
+        }, {
+            onSuccess: (data) => {
+                notifications.update({ id: keyNoti, ...SuccessNotificationData, message: "Download successfully", });
+                saveAs(data, `credit_management_report_${new Date().getTime()}.pdf`);
+            },
+            onError: (error) => {
+                if (error instanceof Error) {
+                    notifications.update({ id: keyNoti, ...ErrorNotificationData, message: error.message });
+                }
+            }
+        })
+    }
+
 
     return (
         <FormProvider {...methods}>
@@ -136,15 +157,12 @@ export default function CreditManagementForm(props: FormProps<CreditManagementSc
                                 </Menu.Item>
                             </Menu.Dropdown>
                         </Menu>
+                        <Button onClick={onDownloadReport} leftSection={<IconDownload size={16} />} variant="light">
+                            {t("credit_management.button.downloadReport")}
+                        </Button>
                         <Button onClick={handleSubmit(onFinish)} leftSection={<IconDeviceFloppy size={16} />} variant="light">
                             {t("common.button.subject.save")}
                         </Button>
-                        {/* <Button leftSection={<IconDownload size={16} />} variant="light">
-                            {t("credit_management.preset.button.download")}
-                        </Button>
-                        <Button leftSection={<IconUpload size={16} />} variant="light">
-                            {t("credit_management.preset.button.upload")}
-                        </Button> */}
                     </Group>
                 </Group>
                 <Group wrap={isMobile ? "wrap" : "nowrap"}>
