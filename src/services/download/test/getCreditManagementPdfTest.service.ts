@@ -50,7 +50,7 @@ const getCreditManagementPdfTestService = async (
     const pdfOption: PDFOptions = {
       printBackground: true,
       landscape: false,
-      scale: 0.8,
+      scale: 1,
       format: "A4",
     };
 
