@@ -12,6 +12,7 @@ export default function Page() {
     const id = searchParams.get("id");
 
     const creditManagement = api.download.getCreditManagementFromRedis.useQuery({ id: id?.toString() ?? "" })
+    // const creditManagement = api.creditManagement.getCreditManagement.useQuery()
 
     const generalEducationWatch = creditManagement.data?.general_education
     const specificCoursesWatch = creditManagement.data?.specific_courses
@@ -36,6 +37,16 @@ export default function Page() {
         _.flatMap(specificCoursesWatch, (x) => x.subjects),
         _.flatMap(freeElectiveWatch, (x) => x.subjects)
     )
+
+    const mergedGroupWithSubjects = _.chain(mergedGroup)
+        .groupBy('groupName').map((value, key) => ({
+            groupName: key,
+            subjects: _.flatMap(value, (x) => x?.subjects)
+        }))
+        .value();
+
+    console.log(mergedGroupWithSubjects);
+
 
     return (
         <div className="a4-vertical p-5">
@@ -152,12 +163,20 @@ export default function Page() {
                             </Table.Tr>
                         </Table.Thead>
                         <Table.Tbody>
-                            {mergedCourses.map((course, key) => (
-                                <Table.Tr key={key}>
-                                    <Table.Td><Text lineClamp={1}>{course.subjectCode}</Text></Table.Td>
-                                    <Table.Td><Text lineClamp={1}>{course.subjectNameTh}</Text></Table.Td>
-                                    <Table.Td align="center"><Text lineClamp={1}>{course.credit}</Text></Table.Td>
-                                </Table.Tr>
+                            {Array.isArray(mergedGroupWithSubjects) && mergedGroupWithSubjects.map((group, key) => (
+                                <>
+                                    <Table.Tr key={key}>
+                                        <Table.Td colSpan={3}><Text lineClamp={1} fw={700}>{group.groupName}</Text></Table.Td>
+                                    </Table.Tr>
+                                    {group.subjects.map((course, key2) => (
+                                        <Table.Tr key={key2}>
+                                            <Table.Td><Text lineClamp={1}>{course?.subjectCode}</Text></Table.Td>
+                                            <Table.Td><Text lineClamp={1}>{course?.subjectNameTh}</Text></Table.Td>
+                                            <Table.Td align="center"><Text lineClamp={1}>{course?.credit}</Text></Table.Td>
+                                        </Table.Tr>
+                                    ))}
+                                </>
+
                             ))}
                         </Table.Tbody>
                     </Table>
