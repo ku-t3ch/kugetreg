@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/print-portrait.css"
 import { api } from "@/trpc/react";
 import { formatInTimeZone } from 'date-fns-tz'
 import { Group, Paper, Progress, Stack, Table, Text } from "@mantine/core";
@@ -50,7 +51,7 @@ export default function Page() {
 
 
     return (
-        <div className="a4-vertical p-5">
+        <div>
             <Stack>
                 <Group justify="space-between" align="flex-start">
                     <Stack gap={0}>

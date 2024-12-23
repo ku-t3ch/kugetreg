@@ -52,6 +52,7 @@ const getCreditManagementPdfTestService = async (
       landscape: false,
       scale: 1,
       format: "A4",
+      preferCSSPageSize: true,
     };
 
     const pdf = await page.pdf(pdfOption);
