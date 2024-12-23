@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/print-landscape.css"
 import TableTheme from '@/app/[locale]/_components/TableTheme';
 import { useSearchParams } from 'next/navigation';
 import { api } from '@/trpc/react';

@@ -52,6 +52,7 @@ const getCreditManagementPdfService = async (
           landscape: false,
           format: "A4",
           scale: 1,
+          preferCSSPageSize: true,
         },
         waitForTimeout: 0,
       },
