@@ -21,7 +21,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { IconEye, IconEyeOff, IconTrash } from '@tabler/icons-react';
+import { IconDeviceFloppy, IconEye, IconEyeOff, IconTrash } from '@tabler/icons-react';
 
 import ExploreCourse from './_components/ExploreCourse/ExploreCourse';
 import ScheduleHeader from './_components/ScheduleHeader/ScheduleHeader';
@@ -153,7 +153,7 @@ export default function Page() {
                                 <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">
                                     {t("common.button.subject.clear")}
                                 </Button>
-                                <Button disabled={!isChange} onClick={onSavePlanningCourse} color="blue" variant="light">{t("common.button.subject.save")}</Button>
+                                <Button disabled={!isChange} onClick={onSavePlanningCourse} leftSection={<IconDeviceFloppy size={16} />} color="blue" variant="light">{t("common.button.subject.save")}</Button>
                             </Group>
                         </Group>
                         <Stack gap={5}>
