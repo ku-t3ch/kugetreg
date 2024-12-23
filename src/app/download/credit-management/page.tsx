@@ -41,6 +41,7 @@ export default function Page() {
     const mergedGroupWithSubjects = _.chain(mergedGroup)
         .groupBy('groupName').map((value, key) => ({
             groupName: key,
+            minCredit: value[0]?.minCredit,
             subjects: _.flatMap(value, (x) => x?.subjects)
         }))
         .value();
@@ -166,7 +167,13 @@ export default function Page() {
                             {Array.isArray(mergedGroupWithSubjects) && mergedGroupWithSubjects.map((group, key) => (
                                 <>
                                     <Table.Tr key={key}>
-                                        <Table.Td colSpan={3}><Text lineClamp={1} fw={700}>{group.groupName}</Text></Table.Td>
+                                        <Table.Td colSpan={2}><Text lineClamp={1} fw={700}>{group.groupName}</Text></Table.Td>
+                                        <Table.Td align="center">
+                                            <Text lineClamp={1} fw={700}>
+                                                {_.sumBy(group.subjects, (x) => x?.credit ?? 0).toLocaleString("th-TH")}
+                                                /{group.minCredit?.toLocaleString("th-TH")}
+                                            </Text>
+                                        </Table.Td>
                                     </Table.Tr>
                                     {group.subjects.map((course, key2) => (
                                         <Table.Tr key={key2}>
