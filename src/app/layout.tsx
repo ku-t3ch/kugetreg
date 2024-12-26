@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     description:
         "ตรวจสอบตารางเรียน เด็กเกษตรศาสตร์ ทุกวิทยาเขต (บางเขน กำแพงแสน ศรีราชา) จัดตารางเรียน",
     icons: [{ rel: "icon", url: "/favicon.ico" }],
+    manifest: "/site.webmanifest",
     metadataBase: new URL('https://kugetreg.teerut.com')
 };
 
