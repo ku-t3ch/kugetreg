@@ -179,7 +179,7 @@ export default function Page() {
                                     {group.subjects.map((course, key2) => (
                                         <Table.Tr key={key2}>
                                             <Table.Td><Text lineClamp={1}>{course?.subjectCode}</Text></Table.Td>
-                                            <Table.Td><Text lineClamp={1}>{course?.subjectNameTh}</Text></Table.Td>
+                                            <Table.Td><Text lineClamp={1}>{course?.subjectNameTh} ({course?.subjectNameEn})</Text></Table.Td>
                                             <Table.Td align="center"><Text lineClamp={1}>{course?.credit}</Text></Table.Td>
                                         </Table.Tr>
                                     ))}
