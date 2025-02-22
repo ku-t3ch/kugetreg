@@ -1,29 +1,66 @@
-# Create T3 App
+# KUGetReg
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+**KUGetReg** is a web application designed for Kasetsart University students to view their current class schedules and create personalized class schedules tailored to their academic needs.
 
-## What's next? How do I make an app with this?
+## Features
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- **View Class Schedules:** Effortlessly check updated class timetables.
+- **Create Customized Schedules:** Build and modify personal schedules based on offered courses.
+- **Responsive UI:** Optimized for both desktop and mobile devices.
+- **Multi-language Support:** Interfaces available in several languages.
+- **Secure Authentication:** Protects user data and ensures secure access.
+- **Downloadable Content:** Export schedules in PDF format and manage receipts.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Getting Started
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### Prerequisites
 
-## Learn More
+- Node.js v14 or later
+- pnpm package manager
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Installation
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/ku-t3ch/kugetreg
+   ```
+2. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
+3. **Configure Environment:**
+   - Copy the example environment file and update it with your configurations:
+     ```bash
+     cp .env.example .env
+     ```
+4. **Run the development server:**
+   ```bash
+   pnpm dev
+   ```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Usage
 
-## How do I deploy this?
+- **View Schedules:** After signing in, navigate to the dashboard to see class schedules.
+- **Create Schedules:** Use the scheduling tool to generate a personalized timetable.
+- **Download:** Export schedules as PDFs or view receipts within the application.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Project Structure
+
+The repository is structured as a Next.js application:
+
+- **/src:** Contains application components, pages, and services.
+- **/public:** Static assets like images and fonts.
+- **/prisma:** Database schema and migrations.
+- **/styles:** Global and component-specific styles.
+- **/services:** API calls and business logic.
+- **/commands & /messages:** CLI commands and internationalization files.
+
+## License
+
+This project is licensed under the MIT License.
+
+## About
+
+KUGetReg provides Kasetsart University students with an intuitive platform to manage their class schedules, ensuring a seamless experience in planning and organizing academic courses.
+
+For any inquiries or contributions, please contact the project maintainers.
