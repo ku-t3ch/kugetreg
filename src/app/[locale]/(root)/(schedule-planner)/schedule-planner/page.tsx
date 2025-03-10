@@ -134,12 +134,12 @@ export default function Page() {
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar component={ScrollArea} p="xs">
+                <BackButton />
                 <ExploreCourse />
             </AppShell.Navbar>
             <AppShell.Main>
                 <Box pos="relative">
                     <LoadingOverlay visible={getPlanningCourse.isPending} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
-                    <BackButton />
                     <Stack gap={"lg"}>
                         <ScheduleHeader />
                         <div className='overflow-x-auto'>
