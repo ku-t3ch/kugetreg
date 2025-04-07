@@ -26,13 +26,13 @@ const openSubjectForEnroll = protectedProcedure
       const academicYear = getSchedule.results[0]?.academicYr;
       const semester = getSchedule.results[0]?.semester;
 
-      if (!academicYear || !semester) {
+      if (academicYear === undefined || semester === undefined) {
         throw new Error("Cannot get academicYear or semester");
       }
 
       return openSubjectForEnrollService({
-        academicYear: academicYear,
-        semester: semester,
+        academicYear,
+        semester,
         campusCode: ctx.session.user.student.campusCode,
         ...input,
       });
