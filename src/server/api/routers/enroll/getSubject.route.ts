@@ -25,7 +25,7 @@ const getSubject = protectedProcedure
       const academicYear = getSchedule.results[0]?.academicYr;
       const semester = getSchedule.results[0]?.semester;
 
-      if (!academicYear || !semester) {
+      if (academicYear === undefined || semester === undefined) {
         throw new Error("Cannot get academicYear or semester");
       }
 

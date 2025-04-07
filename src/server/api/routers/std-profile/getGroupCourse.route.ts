@@ -1,8 +1,6 @@
 import getScheduleService from "@/services/getSchedule.service";
 import { protectedProcedure } from "../../trpc";
-import getGroupCourseService, {
-  getGroupCourseSchema,
-} from "@/services/getGroupCourse.service";
+import getGroupCourseService from "@/services/getGroupCourse.service";
 
 const getGroupCourse = protectedProcedure.query(async ({ ctx }) => {
   try {
@@ -17,7 +15,7 @@ const getGroupCourse = protectedProcedure.query(async ({ ctx }) => {
     const academicYear = getSchedule.results[0]?.academicYr;
     const semester = getSchedule.results[0]?.semester;
 
-    if (!academicYear || !semester) {
+    if (academicYear === undefined || semester === undefined) {
       throw new Error("Cannot get academicYear or semester");
     }
 
