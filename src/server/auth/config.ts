@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import { type IMYKUToken } from "@/types/IMYKUToken.type";
 import getRefreshTokenService from "@/services/getRefreshToken.service";
 import getCurrentLangService from "@/services/lang/getCurrentLang.service";
+import SignInKUAllLoinService from "@/services/signInKUAllLoin.service";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -65,13 +66,15 @@ export const authConfig = {
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
+        otp: { label: "OTP", type: "text", placeholder: "123456" },
       },
 
       async authorize(credentials) {
         try {
-          const result = await SignInService({
+          const result = await SignInKUAllLoinService({
             username: credentials.username as string,
             password: credentials.password as string,
+            otp: credentials.otp as string,
           });
 
           const lang = await getCurrentLangService({
@@ -83,7 +86,10 @@ export const authConfig = {
             access_token: result.accesstoken,
             refresh_token: result.renewtoken,
             id: result.user.idCode,
-            name: result.user.student.firstNameEn + " " + result.user.student.lastNameEn,
+            name:
+              result.user.student.firstNameEn +
+              " " +
+              result.user.student.lastNameEn,
             student: result.user.student,
             userType: result.user.userType,
             lang: lang.lang,

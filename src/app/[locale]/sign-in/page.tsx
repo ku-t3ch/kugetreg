@@ -44,11 +44,15 @@ export default function Page() {
                             const password = (
                                 form.elements.namedItem("password") as HTMLInputElement
                             ).value;
+                            const otp = (
+                                form.elements.namedItem("otp") as HTMLInputElement
+                            ).value;
 
                             try {
                                 await signIn("credentials", {
-                                    username: username,
-                                    password: password,
+                                    username,
+                                    password,
+                                    otp,
                                     callbackUrl: "/",
                                 });
                                 setLoading(false);
@@ -79,6 +83,14 @@ export default function Page() {
                             required
                             name="password"
                             leftSection={<IconLock size={16} />}
+                        />
+                        <TextInput
+                            size="md"
+                            label={t("otp.input.label")}
+                            placeholder={t("otp.input.placeholder")}
+                            name="otp"
+                            required
+                            leftSection={<IconUser size={16} />}
                         />
                         <Button loading={loading} loaderProps={{ size: "xs" }} size="md" type="submit" fullWidth>
                             {t("button")}
