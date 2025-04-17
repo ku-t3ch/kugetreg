@@ -62,9 +62,9 @@ export default function Page() {
                             }
                         }}
                     >
-                        {searchParams.get("error") &&
+                        {searchParams.get("code") &&
                             <Alert variant="light" color="red" title="Error" icon={<IconX size={15} />}>
-                                {searchParams.get("error")?.toString()}
+                                {searchParams.get("code")?.toString()}
                             </Alert>
                         }
 

@@ -1,4 +1,8 @@
-import { type DefaultSession, type NextAuthConfig } from "next-auth";
+import {
+  CredentialsSignin,
+  type DefaultSession,
+  type NextAuthConfig,
+} from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { type JWT } from "next-auth/jwt";
 import { AxiosError } from "axios";
@@ -8,6 +12,14 @@ import { type IMYKUToken } from "@/types/IMYKUToken.type";
 import getRefreshTokenService from "@/services/getRefreshToken.service";
 import getCurrentLangService from "@/services/lang/getCurrentLang.service";
 import SignInKUAllLoinService from "@/services/signInKUAllLoin.service";
+
+class InvalidLoginError extends CredentialsSignin {
+  code = "custom";
+  constructor(message: string) {
+    super(message);
+    this.code = message;
+  }
+}
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -93,14 +105,8 @@ export const authConfig = {
             userType: result.user.userType,
             lang: lang.lang,
           };
-        } catch (error) {
-          if (error instanceof AxiosError) {
-            console.log("error", error);
-
-            return null;
-          }
-          console.log("error", error);
-          throw error;
+        } catch (error: any) {
+          throw new InvalidLoginError(error.message);
         }
       },
     }),
