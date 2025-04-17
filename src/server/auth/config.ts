@@ -1,7 +1,6 @@
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { type JWT } from "next-auth/jwt";
-import SignInService from "@/services/signIn.service";
 import { AxiosError } from "axios";
 import { type Student } from "@/types/responses/ISignInServiceResponse";
 import { jwtDecode } from "jwt-decode";
@@ -133,13 +132,10 @@ export const authConfig = {
           lang: user.lang,
         } as JWT;
       }
-
       const payload = jwtDecode<IMYKUToken>(token.access_token);
-
       if (payload.exp * 1000 > Date.now()) {
         return token;
       }
-
       return refreshAccessToken(token);
     },
   },
