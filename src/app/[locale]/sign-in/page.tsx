@@ -10,7 +10,7 @@ import {
     Text,
     TextInput,
 } from "@mantine/core";
-import { IconLock, IconUser, IconX } from "@tabler/icons-react";
+import { IconClock, IconLock, IconUser, IconX } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
 import Footer from "../_components/Footer";
 import { useState } from "react";
@@ -90,7 +90,7 @@ export default function Page() {
                             placeholder={t("otp.input.placeholder")}
                             name="otp"
                             required
-                            leftSection={<IconUser size={16} />}
+                            leftSection={<IconClock size={16} />}
                         />
                         <Button loading={loading} loaderProps={{ size: "xs" }} size="md" type="submit" fullWidth>
                             {t("button")}
