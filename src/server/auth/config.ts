@@ -1,13 +1,29 @@
-import { type DefaultSession, type NextAuthConfig } from "next-auth";
+import {
+  CredentialsSignin,
+  type DefaultSession,
+  type NextAuthConfig,
+} from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { type JWT } from "next-auth/jwt";
-import SignInService from "@/services/signIn.service";
 import { AxiosError } from "axios";
-import { type Student } from "@/types/responses/ISignInServiceResponse";
+import {
+  type ISignInServiceResponse,
+  type Student,
+} from "@/types/responses/ISignInServiceResponse";
 import { jwtDecode } from "jwt-decode";
 import { type IMYKUToken } from "@/types/IMYKUToken.type";
 import getRefreshTokenService from "@/services/getRefreshToken.service";
 import getCurrentLangService from "@/services/lang/getCurrentLang.service";
+import SignInKUAllLoinService from "@/services/signInKUAllLoin.service";
+import SignInService from "@/services/signIn.service";
+
+class InvalidLoginError extends CredentialsSignin {
+  code = "custom";
+  constructor(message: string) {
+    super(message);
+    this.code = message;
+  }
+}
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -65,14 +81,25 @@ export const authConfig = {
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
+        otp: { label: "OTP", type: "text", placeholder: "123456" },
       },
 
       async authorize(credentials) {
         try {
-          const result = await SignInService({
-            username: credentials.username as string,
-            password: credentials.password as string,
-          });
+          let result: ISignInServiceResponse;
+
+          if (!credentials.otp) {
+            result = await SignInService({
+              username: credentials.username as string,
+              password: credentials.password as string,
+            });
+          } else {
+            result = await SignInKUAllLoinService({
+              username: credentials.username as string,
+              password: credentials.password as string,
+              otp: credentials.otp as string,
+            });
+          }
 
           const lang = await getCurrentLangService({
             studentCode: result.user.idCode,
@@ -83,19 +110,16 @@ export const authConfig = {
             access_token: result.accesstoken,
             refresh_token: result.renewtoken,
             id: result.user.idCode,
-            name: result.user.student.firstNameEn + " " + result.user.student.lastNameEn,
+            name:
+              result.user.student.firstNameEn +
+              " " +
+              result.user.student.lastNameEn,
             student: result.user.student,
             userType: result.user.userType,
             lang: lang.lang,
           };
-        } catch (error) {
-          if (error instanceof AxiosError) {
-            console.log("error", error);
-
-            return null;
-          }
-          console.log("error", error);
-          throw error;
+        } catch (error: any) {
+          throw new InvalidLoginError(error.message);
         }
       },
     }),
@@ -127,13 +151,10 @@ export const authConfig = {
           lang: user.lang,
         } as JWT;
       }
-
       const payload = jwtDecode<IMYKUToken>(token.access_token);
-
       if (payload.exp * 1000 > Date.now()) {
         return token;
       }
-
       return refreshAccessToken(token);
     },
   },

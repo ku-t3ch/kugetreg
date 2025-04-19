@@ -37,8 +37,8 @@ export default function Page() {
     }, [courses, CourseStore.setCourses])
 
     useEffect(() => {
-        if (getGroupCourse.data?.results[0]?.course) {
-            let tempCourses: Course[] = getGroupCourse.data?.results[0]?.course
+        if (getGroupCourse.data?.results && getGroupCourse.data.results.length > 0 && getGroupCourse.data.results[0]?.course) {
+            let tempCourses: Course[] = getGroupCourse.data.results[0].course
             HideCourseStore.hiddenCourses.forEach((course) => {
                 tempCourses = tempCourses.filter((c) => c.subject_code !== course.subject_code);
             })

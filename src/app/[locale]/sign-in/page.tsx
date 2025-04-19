@@ -10,7 +10,7 @@ import {
     Text,
     TextInput,
 } from "@mantine/core";
-import { IconLock, IconUser, IconX } from "@tabler/icons-react";
+import { IconClock, IconLock, IconUser, IconX } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
 import Footer from "../_components/Footer";
 import { useState } from "react";
@@ -44,11 +44,18 @@ export default function Page() {
                             const password = (
                                 form.elements.namedItem("password") as HTMLInputElement
                             ).value;
+                            // const otp = (
+                            //     form.elements.namedItem("otp") as HTMLInputElement
+                            // ).value;
+                            const otp = (
+                                form.elements.namedItem("otp") as HTMLInputElement
+                            )?.value ?? "";
 
                             try {
                                 await signIn("credentials", {
-                                    username: username,
-                                    password: password,
+                                    username,
+                                    password,
+                                    otp,
                                     callbackUrl: "/",
                                 });
                                 setLoading(false);
@@ -58,9 +65,9 @@ export default function Page() {
                             }
                         }}
                     >
-                        {searchParams.get("error") &&
+                        {searchParams.get("code") &&
                             <Alert variant="light" color="red" title="Error" icon={<IconX size={15} />}>
-                                {searchParams.get("error")?.toString()}
+                                {searchParams.get("code")?.toString()}
                             </Alert>
                         }
 
@@ -80,6 +87,14 @@ export default function Page() {
                             name="password"
                             leftSection={<IconLock size={16} />}
                         />
+                        {/* <TextInput
+                            size="md"
+                            label={t("otp.input.label")}
+                            placeholder={t("otp.input.placeholder")}
+                            name="otp"
+                            required
+                            leftSection={<IconClock size={16} />}
+                        /> */}
                         <Button loading={loading} loaderProps={{ size: "xs" }} size="md" type="submit" fullWidth>
                             {t("button")}
                         </Button>

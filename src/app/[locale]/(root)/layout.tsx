@@ -11,7 +11,7 @@ export default async function Layout({
     const session = await auth();
     const locale = await getLocale();
 
-    if (!session) {
+    if (!session || !session.user || !session.user.access_token) {
         return redirect({ href: "/sign-in", locale: locale });
     }
 
