@@ -44,9 +44,12 @@ export default function Page() {
                             const password = (
                                 form.elements.namedItem("password") as HTMLInputElement
                             ).value;
+                            // const otp = (
+                            //     form.elements.namedItem("otp") as HTMLInputElement
+                            // ).value;
                             const otp = (
                                 form.elements.namedItem("otp") as HTMLInputElement
-                            ).value;
+                            )?.value ?? "";
 
                             try {
                                 await signIn("credentials", {
@@ -84,14 +87,14 @@ export default function Page() {
                             name="password"
                             leftSection={<IconLock size={16} />}
                         />
-                        <TextInput
+                        {/* <TextInput
                             size="md"
                             label={t("otp.input.label")}
                             placeholder={t("otp.input.placeholder")}
                             name="otp"
                             required
                             leftSection={<IconClock size={16} />}
-                        />
+                        /> */}
                         <Button loading={loading} loaderProps={{ size: "xs" }} size="md" type="submit" fullWidth>
                             {t("button")}
                         </Button>

@@ -6,12 +6,16 @@ import {
 import Credentials from "next-auth/providers/credentials";
 import { type JWT } from "next-auth/jwt";
 import { AxiosError } from "axios";
-import { type Student } from "@/types/responses/ISignInServiceResponse";
+import {
+  type ISignInServiceResponse,
+  type Student,
+} from "@/types/responses/ISignInServiceResponse";
 import { jwtDecode } from "jwt-decode";
 import { type IMYKUToken } from "@/types/IMYKUToken.type";
 import getRefreshTokenService from "@/services/getRefreshToken.service";
 import getCurrentLangService from "@/services/lang/getCurrentLang.service";
 import SignInKUAllLoinService from "@/services/signInKUAllLoin.service";
+import SignInService from "@/services/signIn.service";
 
 class InvalidLoginError extends CredentialsSignin {
   code = "custom";
@@ -82,11 +86,20 @@ export const authConfig = {
 
       async authorize(credentials) {
         try {
-          const result = await SignInKUAllLoinService({
-            username: credentials.username as string,
-            password: credentials.password as string,
-            otp: credentials.otp as string,
-          });
+          let result: ISignInServiceResponse;
+
+          if (!credentials.otp) {
+            result = await SignInService({
+              username: credentials.username as string,
+              password: credentials.password as string,
+            });
+          } else {
+            result = await SignInKUAllLoinService({
+              username: credentials.username as string,
+              password: credentials.password as string,
+              otp: credentials.otp as string,
+            });
+          }
 
           const lang = await getCurrentLangService({
             studentCode: result.user.idCode,

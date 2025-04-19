@@ -2,6 +2,7 @@ import { env } from "@/env";
 import crypto from "crypto";
 import { type ISignInServiceResponse } from "@/types/responses/ISignInServiceResponse";
 import { axiosAPI } from "utils/axiosAPI";
+import { AxiosError } from "axios";
 
 const encodeString = (str: string) => {
   return crypto
@@ -52,6 +53,9 @@ const SignInService = async (props: ISignInServiceProps) => {
 
     return res.data;
   } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
     throw error;
   }
 };
