@@ -77,7 +77,7 @@ export default function Page() {
                     {courses && courses.length > 0 && courses ? (
                         <TableTheme onClick={onShowDetail} scheduleData={courses} />
                     ) : (
-                        <Text c={"dimmed"}>ไม่พบรายวิชา หรืออาจจะยังไม่ได้ลงทะเบียน</Text>
+                        <Text c={"dimmed"}>{t("schedule.subject.notFound")}</Text>
                     )}
                 </>}
             </div>
