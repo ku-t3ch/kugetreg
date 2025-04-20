@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import BackButton from '@/app/[locale]/_components/BackButton/BackButton';
 import Footer from '@/app/[locale]/_components/Footer';
@@ -14,24 +14,28 @@ import {
     ErrorNotificationData, LoadingNotificationData, SuccessNotificationData
 } from '@/configs/common/NotificationData/NotificationData';
 import { api } from '@/trpc/react';
-import { type Course } from '@/types/responses/IGroupCourseResponse';
+import { CourseSchemaToCourseCustom, type Course } from '@/types/responses/IGroupCourseResponse';
 import {
-    ActionIcon, AppShell, Box, Burger, Button, Code, Group, LoadingOverlay, Paper, ScrollArea, Stack, Text
+    ActionIcon, AppShell, Box, Burger, Button, Code, Group, LoadingOverlay, Modal, Paper, ScrollArea, Stack, Text
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { IconDeviceFloppy, IconEye, IconEyeOff, IconTrash } from '@tabler/icons-react';
+import { IconDeviceFloppy, IconEye, IconEyeOff, IconPencil, IconTrash } from '@tabler/icons-react';
 
 import ExploreCourse from './_components/ExploreCourse/ExploreCourse';
 import ScheduleHeader from './_components/ScheduleHeader/ScheduleHeader';
 import useCoursePlanningStore from './_store/useCoursePlanningStore';
 import { useTranslations } from 'next-intl';
 import ChangeLanguage from '@/app/[locale]/_components/ChangeLanguage/ChangeLanguage';
+import CourseForm from './_components/CourseForm/CourseForm';
+import { courseCustomSchemaToStore, CourseCustomSchemaType } from './schemas/courseCustom.schema';
 
 export default function Page() {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
+    const [editCourseOpened, { open: editCourseOpen, close: editCourseClose }] = useDisclosure(false);
+    const [editCourseData, setEditCourseData] = useState<CourseCustomSchemaType | null>(null);
 
     const t = useTranslations()
 
@@ -58,16 +62,43 @@ export default function Page() {
         })
     }
 
+    const onShowEditCourse = (course: Course) => {
+        editCourseOpen()
+        const result = CourseSchemaToCourseCustom.parse(course)
+        setEditCourseData(result)
+    }
+
+    const onEditCourse = (data: CourseCustomSchemaType) => {
+        const course = courseCustomSchemaToStore.parse(data)
+        coursePlanningStore.editCourse(course)
+        editCourseClose()
+    }
+
     const onShowDetail = (course: Course) => {
         modals.open({
             title: <ModalCourseDetailTitle course={course} />,
             children: <ModalCourseChildren course={course}
                 actions={
                     <>
-                        <Button variant='light' onClick={() => {
-                            onHidden(course)
-                            modals.closeAll()
-                        }} leftSection={<IconEyeOff size={16} />}>{t("common.button.subject.hide")}</Button>
+                        <Button variant='light'
+                            onClick={() => {
+                                onHidden(course)
+                                modals.closeAll()
+                            }}
+                            leftSection={<IconEyeOff size={16} />}
+                        >
+                            {t("common.button.subject.hide")}
+                        </Button>
+                        {course.is_custom && <Button
+                            variant='light'
+                            onClick={() => {
+                                onShowEditCourse(course)
+                                modals.closeAll()
+                            }}
+                            leftSection={<IconPencil size={16} />}
+                        >
+                            {t("common.button.subject.edit")}
+                        </Button>}
                         <Button variant='light' leftSection={<IconTrash size={16} />} color="red" onClick={() => onRemoveCourses(course)}>
                             {t("common.button.subject.remove")}
                         </Button>
@@ -116,91 +147,96 @@ export default function Page() {
     const isChange = coursePlanningStore.checkIsChange(getPlanningCourse.data ?? [])
 
     return (
-        <AppShell
-            header={{ height: 60 }}
-            navbar={{ width: 400, breakpoint: "xs", collapsed: { mobile: !mobileOpened, desktop: !desktopOpened } }}
-            padding="md"
-        >
-            <AppShell.Header>
-                <Group h="100%" px="md" align='center' justify="space-between">
-                    <Group>
-                        <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
-                        <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
-                        <Logo element=": วางแผนตารางเรียน" />
-                    </Group>
-                    <Group>
-                        <ChangeLanguage />
-                    </Group>
-                </Group>
-            </AppShell.Header>
-            <AppShell.Navbar component={ScrollArea} p="xs">
-                <BackButton />
-                <ExploreCourse />
-            </AppShell.Navbar>
-            <AppShell.Main>
-                <Box pos="relative">
-                    <LoadingOverlay visible={getPlanningCourse.isPending} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
-                    <Stack gap={"lg"}>
-                        <ScheduleHeader />
-                        <div className='overflow-x-auto'>
-                            <TableTheme
-                                onClick={onShowDetail}
-                                scheduleData={coursePlanningStore.getCourses()} />
-                        </div>
-                        <Group justify='space-between'>
-                            <div>{t("schedule_planner.planning.totalCredits")} {coursePlanningStore.getTotalCredit()}</div>
-                            <Group>
-                                <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">
-                                    {t("common.button.subject.clear")}
-                                </Button>
-                                <Button disabled={!isChange} onClick={onSavePlanningCourse} leftSection={<IconDeviceFloppy size={16} />} color="blue" variant="light">{t("common.button.subject.save")}</Button>
-                            </Group>
+        <>
+            <Modal opened={editCourseOpened} onClose={editCourseClose} title={t("schedule_planner.editCourse.modal.title")}>
+                <CourseForm type="edit" data={editCourseData ?? undefined} onFinish={onEditCourse} />
+            </Modal>
+            <AppShell
+                header={{ height: 60 }}
+                navbar={{ width: 400, breakpoint: "xs", collapsed: { mobile: !mobileOpened, desktop: !desktopOpened } }}
+                padding="md"
+            >
+                <AppShell.Header>
+                    <Group h="100%" px="md" align='center' justify="space-between">
+                        <Group>
+                            <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
+                            <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
+                            <Logo element=": วางแผนตารางเรียน" />
                         </Group>
-                        <Stack gap={5}>
-                            {coursePlanningStore.getCoursesUnique().map((course, i) => (
-                                <Paper key={i} withBorder p="sm">
-                                    <div className='flex justify-between flex-col gap-y-2 md:flex-row'>
-                                        <Group>
-                                            {
-                                                course.is_hidden ?
-                                                    <ActionIcon variant="light" color='gray' onClick={() => onShow(course)}>
-                                                        <IconEyeOff />
-                                                    </ActionIcon>
-                                                    :
-                                                    <ActionIcon variant="light" color='green' onClick={() => onHidden(course)}>
-                                                        <IconEye />
-                                                    </ActionIcon>
-                                            }
-                                            <Stack gap={0}>
-                                                <Group gap={10}>
-                                                    <Text>{course.subject_code}</Text>
-                                                    <Text c="dimmed">[{course.max_credit} {t("common.subject.credit")}]</Text>
-                                                </Group>
-                                                <Text fw={700} size='lg'>
-                                                    {
-                                                        t("common.mask.subject.subject_name", {
-                                                            subject_name_en: course.subject_name_en,
-                                                            subject_name_th: course.subject_name_th
-                                                        })
-                                                    }
-                                                </Text>
-                                                <Text>{t("common.subject.section")} {course.section_code}</Text>
-                                            </Stack>
-                                        </Group>
+                        <Group>
+                            <ChangeLanguage />
+                        </Group>
+                    </Group>
+                </AppShell.Header>
+                <AppShell.Navbar component={ScrollArea} p="xs">
+                    <BackButton />
+                    <ExploreCourse />
+                </AppShell.Navbar>
+                <AppShell.Main>
+                    <Box pos="relative">
+                        <LoadingOverlay visible={getPlanningCourse.isPending} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+                        <Stack gap={"lg"}>
+                            <ScheduleHeader />
+                            <div className='overflow-x-auto'>
+                                <TableTheme
+                                    onClick={onShowDetail}
+                                    scheduleData={coursePlanningStore.getCourses()} />
+                            </div>
+                            <Group justify='space-between'>
+                                <div>{t("schedule_planner.planning.totalCredits")} {coursePlanningStore.getTotalCredit()}</div>
+                                <Group>
+                                    <Button disabled={coursePlanningStore.courses.length === 0} onClick={onClearPlanningCourse} color="red" variant="light">
+                                        {t("common.button.subject.clear")}
+                                    </Button>
+                                    <Button disabled={!isChange} onClick={onSavePlanningCourse} leftSection={<IconDeviceFloppy size={16} />} color="blue" variant="light">{t("common.button.subject.save")}</Button>
+                                </Group>
+                            </Group>
+                            <Stack gap={5}>
+                                {coursePlanningStore.getCoursesUnique().map((course, i) => (
+                                    <Paper key={i} withBorder p="sm">
+                                        <div className='flex justify-between flex-col gap-y-2 md:flex-row'>
+                                            <Group>
+                                                {
+                                                    course.is_hidden ?
+                                                        <ActionIcon variant="light" color='gray' onClick={() => onShow(course)}>
+                                                            <IconEyeOff />
+                                                        </ActionIcon>
+                                                        :
+                                                        <ActionIcon variant="light" color='green' onClick={() => onHidden(course)}>
+                                                            <IconEye />
+                                                        </ActionIcon>
+                                                }
+                                                <Stack gap={0}>
+                                                    <Group gap={10}>
+                                                        <Text>{course.subject_code}</Text>
+                                                        <Text c="dimmed">[{course.max_credit} {t("common.subject.credit")}]</Text>
+                                                    </Group>
+                                                    <Text fw={700} size='lg'>
+                                                        {
+                                                            t("common.mask.subject.subject_name", {
+                                                                subject_name_en: course.subject_name_en,
+                                                                subject_name_th: course.subject_name_th
+                                                            })
+                                                        }
+                                                    </Text>
+                                                    <Text>{t("common.subject.section")} {course.section_code}</Text>
+                                                </Stack>
+                                            </Group>
 
-                                        <div className='flex justify-end items-center'>
-                                            <Button onClick={() => onRemoveCourses(course)} color="red" variant="light" leftSection={<IconTrash size={16} />}>
-                                                {t("common.button.subject.remove")}
-                                            </Button>
+                                            <div className='flex justify-end items-center'>
+                                                <Button onClick={() => onRemoveCourses(course)} color="red" variant="light" leftSection={<IconTrash size={16} />}>
+                                                    {t("common.button.subject.remove")}
+                                                </Button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Paper>
-                            ))}
+                                    </Paper>
+                                ))}
+                            </Stack>
+                            <Footer />
                         </Stack>
-                        <Footer />
-                    </Stack>
-                </Box>
-            </AppShell.Main>
-        </AppShell>
+                    </Box>
+                </AppShell.Main>
+            </AppShell>
+        </>
     );
 }

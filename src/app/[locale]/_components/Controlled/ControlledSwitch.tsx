@@ -4,21 +4,17 @@ import {
   type Control,
   Controller,
 } from "react-hook-form";
-import {
-  type ComboboxData,
-  MultiSelect,
-  MultiSelectProps,
-} from "@mantine/core";
+import { Switch, type SwitchProps } from "@mantine/core";
 import React from "react";
 
-interface ControlledMultiSelectProps<T extends FieldValues> {
+interface ControlledSwitchProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
-  props?: MultiSelectProps;
+  props?: SwitchProps;
 }
 
-const ControlledMultiSelect = <T extends FieldValues>(
-  props: ControlledMultiSelectProps<T>,
+const ControlledSwitch = <T extends FieldValues>(
+  props: ControlledSwitchProps<T>,
 ) => {
   return (
     <Controller
@@ -28,12 +24,11 @@ const ControlledMultiSelect = <T extends FieldValues>(
       render={({ field: { onChange, value, ref }, fieldState: { error } }) => {
         return (
           <>
-            <MultiSelect
+            <Switch
               error={error?.message}
-              onChange={onChange}
-              value={value}
               {...props.props}
-              className="w-full"
+              checked={value}
+              onChange={onChange}
             />
           </>
         );
@@ -42,4 +37,4 @@ const ControlledMultiSelect = <T extends FieldValues>(
   );
 };
 
-export default ControlledMultiSelect;
+export default ControlledSwitch;

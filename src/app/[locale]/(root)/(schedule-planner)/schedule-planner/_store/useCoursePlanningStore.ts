@@ -13,6 +13,7 @@ type Store = {
   getTotalCredit: () => number;
   setCourses: (courses: Course[]) => void;
   addCourse: (course: Course[]) => void;
+  editCourse: (course: Course) => void;
   removeCourses: (course: Course) => void;
   checkIsConflict: (course: Course[]) => Course[];
   onHidden: (course: Course) => void;
@@ -25,7 +26,8 @@ const useCoursePlanningStore = create<Store>()((set, get) => ({
   getCourses: () =>
     _.sortBy(
       get().courses,
-      (course) => convertKeyToDate(course.day_w.trim())?.value && course.time_start,
+      (course) =>
+        convertKeyToDate(course.day_w.trim())?.value && course.time_start,
     ).filter((course) => !course.is_hidden),
   getCoursesUnique: () =>
     _.sortBy(
@@ -45,15 +47,38 @@ const useCoursePlanningStore = create<Store>()((set, get) => ({
   setCourses: (courses: Course[]) => set({ courses }),
   addCourse: (course: Course[]) => {
     const currentCourses = get().courses;
-    const newCourses = [...currentCourses, ...course.map((c) => ({ ...c, is_hidden: false }))];
+    const newCourses = [
+      ...currentCourses,
+      ...course.map((c) => ({ ...c, is_hidden: false })),
+    ];
+    set({ courses: newCourses });
+  },
+  editCourse: (course: Course) => {
+    const currentCourses = get().courses;
+    const newCourses = _.map(currentCourses, (courseMap) => {
+      if (courseMap.uuid === course.uuid) {
+        return { ...course };
+      }
+      return courseMap;
+    });
     set({ courses: newCourses });
   },
   removeCourses: (course: Course) => {
-    const currentCourses = get().courses;
-    const newCourses = currentCourses.filter(
-      (c) => !(c.subject_code === course.subject_code && c.section_code === course.section_code),
-    );
-    set({ courses: newCourses });
+    if (course.is_custom) {
+      const currentCourses = get().courses;
+      const newCourses = currentCourses.filter((c) => c.uuid !== course.uuid);
+      set({ courses: newCourses });
+    } else {
+      const currentCourses = get().courses;
+      const newCourses = currentCourses.filter(
+        (c) =>
+          !(
+            c.subject_code === course.subject_code &&
+            c.section_code === course.section_code
+          ),
+      );
+      set({ courses: newCourses });
+    }
   },
   checkIsConflict: (courses: Course[]) => {
     try {
@@ -121,10 +146,12 @@ const useCoursePlanningStore = create<Store>()((set, get) => ({
     set({ courses: newCourses });
   },
   checkIsChange: (course: Course[]) => {
-    const hashNew = CryptoJS.SHA256(JSON.stringify(course)).toString(CryptoJS.enc.Hex);
-    const hashOld = CryptoJS.SHA256(JSON.stringify(get().getCoursesForSave())).toString(
+    const hashNew = CryptoJS.SHA256(JSON.stringify(course)).toString(
       CryptoJS.enc.Hex,
     );
+    const hashOld = CryptoJS.SHA256(
+      JSON.stringify(get().getCoursesForSave()),
+    ).toString(CryptoJS.enc.Hex);
     return hashNew !== hashOld;
   },
 }));

@@ -1,8 +1,16 @@
-import React from 'react';
-import { type Control, Controller, type FieldValues, type Path } from 'react-hook-form';
-import { IMaskInput } from 'react-imask';
-
-import { InputBase, type InputBaseProps, type PolymorphicComponentProps } from '@mantine/core';
+import {
+  type FieldValues,
+  type Path,
+  type Control,
+  Controller,
+} from "react-hook-form";
+import React from "react";
+import { IMaskInput } from "react-imask";
+import {
+  InputBase,
+  type InputBaseProps,
+  type PolymorphicComponentProps,
+} from "@mantine/core";
 
 interface ControlledInputBaseProps<T extends FieldValues> {
   control: Control<T>;
