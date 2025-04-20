@@ -26,6 +26,10 @@ function SubjectCard(props: Props) {
     const [opened, { toggle }] = useDisclosure(true);
 
     const CoursedateConverter = (coursedateen: string) => {
+        if (!coursedateen.trim() || coursedateen.trim() === "0:00 - 0:00") {
+            return [];
+        }
+
         return _.sortBy(coursedateen.split(',').map((item) => {
             const day = (item.split('  ')[0])?.trim();
             const time = (item.split('  ')[1])?.trim();
@@ -65,7 +69,20 @@ function SubjectCard(props: Props) {
 
     const resultConvert = OpenSubjectForEnrollSchemaToCourse.parse(props.course);
 
-    const isConflict = coursePlanningStore.checkIsConflict(resultConvert).length > 0;
+    const isConflict = () => {
+        if (coursePlanningStore.checkIsConflict(resultConvert).length > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    const isNoDay = () => {
+        if (props.course.coursedate && CoursedateConverter(props.course.coursedate).length === 0) {
+            return true;
+        }
+        return false;
+    }
 
     return (
         <Paper p="xs" withBorder className="relative">
@@ -76,7 +93,7 @@ function SubjectCard(props: Props) {
             </div>
 
             <Stack gap={2}>
-                {isConflict && <Alert mb={"sm"} w={"90%"} variant="light" color="red" title={t("schedule_planner.explore.subject.card.timeConflict")} icon={<IconInfoCircle />}>
+                {isConflict() && <Alert mb={"sm"} w={"90%"} variant="light" color="red" title={t("schedule_planner.explore.subject.card.timeConflict")} icon={<IconInfoCircle />}>
                     <Stack gap={0}>
                         {coursePlanningStore.checkIsConflict(resultConvert).map((item, index) => (
                             <Text key={index} lineClamp={1} size="sm">
@@ -122,14 +139,18 @@ function SubjectCard(props: Props) {
                     </Group>
                 </Group>
                 <Group gap={2}>
-                    {props.course.coursedate && CoursedateConverter(props.course.coursedate).map((item, index) => (
+                    {!isNoDay() ? (props.course.coursedate && CoursedateConverter(props.course.coursedate).map((item, index) => (
                         <Badge variant="light" tt="none" color={item.dayMap?.color} size="xs" key={index}>
                             {t("common.mask.subject.day", {
                                 th: item.dayMap?.th,
                                 en: item.dayMap?.en
                             })}
                         </Badge>
-                    ))}
+                    ))) : (
+                        <Badge variant="light" tt="none" color="gray" size="xs">
+                            {t("common.subject.noDay")}
+                        </Badge>
+                    )}
                 </Group>
                 <Collapse in={opened}>
                     <Divider my={10} />
@@ -146,9 +167,11 @@ function SubjectCard(props: Props) {
                             </Stack>
                             <Stack gap={2}>
                                 <Text size="xs" c="dimmed">{t("common.subject.time")}</Text>
-                                {props.course.coursedate && CoursedateConverter(props.course.coursedate).map((item, index) => (
+                                {props.course.coursedate && CoursedateConverter(props.course.coursedate).length > 0 ? CoursedateConverter(props.course.coursedate).map((item, index) => (
                                     <Text size="xs" key={index}>{item.day} {item.time}</Text>
-                                ))}
+                                )) : (
+                                    <Text size="xs">-</Text>
+                                )}
                             </Stack>
                             <Stack gap={2}>
                                 <Text size="xs" c="dimmed">{t("common.subject.room")}</Text>
@@ -169,8 +192,8 @@ function SubjectCard(props: Props) {
                             </Stack>
                         </Group>
                         <Group justify="end">
-                            <Button disabled={isConflict} onClick={() => onAddToSchedule(props.course)} leftSection={<IconPlus size={16} />} size="xs" variant="gradient">
-                                {isConflict ? t("schedule_planner.explore.subject.card.button.canNotAdd") : t("schedule_planner.explore.subject.card.button.canAdd")}
+                            <Button disabled={isConflict() || isNoDay()} onClick={() => onAddToSchedule(props.course)} leftSection={<IconPlus size={16} />} size="xs" variant="gradient">
+                                {(isConflict() || isNoDay()) ? t("schedule_planner.explore.subject.card.button.canNotAdd") : t("schedule_planner.explore.subject.card.button.canAdd")}
                             </Button>
                         </Group>
                     </Stack>
