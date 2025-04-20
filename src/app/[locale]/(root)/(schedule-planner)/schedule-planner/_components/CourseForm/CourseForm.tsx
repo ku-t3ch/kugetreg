@@ -30,6 +30,10 @@ export default function CourseForm(props: Props) {
         formState: { errors },
     } = useForm<CourseCustomSchemaType>({
         resolver: zodResolver(courseCustomSchema),
+        defaultValues: {
+            section_type: "lecture",
+            credit: 3,
+        }
     });
 
     const onFinish = (data: CourseCustomSchemaType) => {
@@ -104,7 +108,6 @@ export default function CourseForm(props: Props) {
                         label: t("schedule_planner.addCourse.form.input.section_type.label"),
                         placeholder: t("schedule_planner.addCourse.form.input.section_type.placeholder"),
                         required: true,
-                        defaultValue: "lecture",
                         allowDeselect: false,
                         data: sectionTypeMap.map((section) => ({
                             value: section.key,
