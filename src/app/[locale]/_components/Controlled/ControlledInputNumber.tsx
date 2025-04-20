@@ -1,7 +1,11 @@
-import React from 'react';
-import { type Control, Controller, type FieldValues, type Path } from 'react-hook-form';
-
-import { NumberInput, type NumberInputProps } from '@mantine/core';
+import {
+  type FieldValues,
+  type Path,
+  type Control,
+  Controller,
+} from "react-hook-form";
+import { NumberInput, type NumberInputProps } from "@mantine/core";
+import React from "react";
 
 interface ControlledInputNumberProps<T extends FieldValues> {
   control: Control<T>;

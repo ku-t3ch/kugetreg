@@ -1,7 +1,11 @@
-import React from 'react';
-import { type Control, Controller, type FieldValues, type Path } from 'react-hook-form';
-
-import { TextInput, type TextInputProps } from '@mantine/core';
+import {
+  type FieldValues,
+  type Path,
+  type Control,
+  Controller,
+} from "react-hook-form";
+import { TextInput, type TextInputProps } from "@mantine/core";
+import React from "react";
 
 interface ControlledInputTextProps<T extends FieldValues> {
   control: Control<T>;

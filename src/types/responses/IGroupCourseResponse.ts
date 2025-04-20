@@ -1,3 +1,8 @@
+import {
+  courseCustomSchema,
+  CourseCustomSchemaType,
+} from "@/app/[locale]/(root)/(schedule-planner)/schedule-planner/schemas/courseCustom.schema";
+import { convertEnToSectionType } from "utils/sectionTypeMap";
 import { z } from "zod";
 
 export interface IGroupCourseResponse {
@@ -33,6 +38,26 @@ export const CourseSchema = z.object({
   room_name_en: z.string(),
   time_start: z.number(),
   is_hidden: z.boolean().default(false).optional().nullable(),
+  is_custom: z.boolean().default(false).optional().nullable(),
+});
+
+export const CourseSchemaToCourseCustom = CourseSchema.transform((data) => {
+  const courseCustomTemp: CourseCustomSchemaType = {
+    uuid: data.uuid,
+    subject_code: data.subject_code,
+    credit: data.max_credit ?? 0,
+    section_code: data.section_code,
+    section_type: convertEnToSectionType(data.section_type_en).key,
+    subject_name_en: data.subject_name_en,
+    subject_name_th: data.subject_name_th,
+    teacher_name: data.teacher_name,
+    room: data.room_name_th,
+    time_from: data.time_from,
+    time_to: data.time_to,
+    day: data.day_w.trim(),
+  };
+  const result = courseCustomSchema.parse(courseCustomTemp);
+  return result;
 });
 
 export type Course = z.infer<typeof CourseSchema>;
