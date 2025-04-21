@@ -16,6 +16,9 @@ export default function Footer() {
                     <IconBrandInstagram size={16} /><Text>teerut_1t</Text>
                 </Text>
             </a>
+            <span>
+                <Text size="xs" c={"red"}>*ระบบนี้ไม่ใช่ของมหาวิทยาลัย ระบบนี้สร้างขึ้นเพื่ออำนวยความสะดวกให้แก่เพื่อนนิสิตด้วยกันเองเท่านั้น</Text>
+            </span>
         </div>
     )
 }
