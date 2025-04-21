@@ -11,8 +11,8 @@ import {
 } from '@/configs/common/NotificationData/NotificationData';
 import { type DownloadInput } from '@/services/download/_schema/download.schema';
 import { api } from '@/trpc/react';
-import { Button, Menu, Modal, rem, Text } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { Button, Menu, Modal, rem, Text, Title } from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { IconDownload, IconFileTypePdf, IconPlus, IconReceipt } from '@tabler/icons-react';
 
@@ -24,6 +24,7 @@ import CourseForm from '../CourseForm/CourseForm';
 
 export default function ScheduleHeader() {
     const t = useTranslations()
+    const isMobile = useMediaQuery("(max-width: 768px)");
     const tableTheme = useTableTheme()
     const [addCourseOpened, { open: addCourseOpen, close: addCourseClose }] = useDisclosure(false);
     const { data: session } = useSession();
@@ -97,7 +98,7 @@ export default function ScheduleHeader() {
 
     return (
         <>
-            <Modal opened={addCourseOpened} onClose={addCourseClose} title={t("schedule_planner.addCourse.modal.title")} size="lg">
+            <Modal fullScreen={isMobile} opened={addCourseOpened} onClose={addCourseClose} title={<Title order={3}>{t("schedule_planner.addCourse.modal.title")}</Title>} size="lg">
                 <CourseForm type="create" onFinish={onAddCourse} />
             </Modal>
             <div className="flex flex-col">

@@ -79,6 +79,7 @@ export default function CourseForm(props: Props) {
                         label: t("schedule_planner.addCourse.form.input.subject_code.label"),
                         placeholder: t("schedule_planner.addCourse.form.input.subject_code.placeholder"),
                         required: true,
+                        size: "md",
                     }}
                 />
                 <ControlledInputNumber
@@ -88,6 +89,7 @@ export default function CourseForm(props: Props) {
                         label: t("schedule_planner.addCourse.form.input.credit.label"),
                         placeholder: t("schedule_planner.addCourse.form.input.credit.placeholder"),
                         required: true,
+                        size: "md",
                     }}
                 />
             </div>
@@ -99,6 +101,7 @@ export default function CourseForm(props: Props) {
                         label: t("schedule_planner.addCourse.form.input.section_code.label"),
                         placeholder: t("schedule_planner.addCourse.form.input.section_code.placeholder"),
                         required: true,
+                        size: "md",
                     }}
                 />
                 <ControlledSelect
@@ -115,7 +118,8 @@ export default function CourseForm(props: Props) {
                                 section_type_th: section.th,
                                 section_type_en: section.en,
                             }),
-                        }))
+                        })),
+                        size: "md",
                     }}
                 />
             </div>
@@ -126,6 +130,7 @@ export default function CourseForm(props: Props) {
                     label: t("schedule_planner.addCourse.form.input.subject_name_en.label"),
                     placeholder: t("schedule_planner.addCourse.form.input.subject_name_en.placeholder"),
                     required: true,
+                    size: "md",
                 }}
             />
             <ControlledInputText
@@ -134,6 +139,7 @@ export default function CourseForm(props: Props) {
                 props={{
                     label: t("schedule_planner.addCourse.form.input.subject_name_th.label"),
                     placeholder: t("schedule_planner.addCourse.form.input.subject_name_th.placeholder"),
+                    size: "md",
                 }}
             />
             <div className="flex flex-row gap-2">
@@ -143,6 +149,7 @@ export default function CourseForm(props: Props) {
                     props={{
                         label: t("schedule_planner.addCourse.form.input.teacher_name.label"),
                         placeholder: t("schedule_planner.addCourse.form.input.teacher_name.placeholder"),
+                        size: "md",
                     }}
                 />
                 <ControlledInputText
@@ -151,6 +158,7 @@ export default function CourseForm(props: Props) {
                     props={{
                         label: t("schedule_planner.addCourse.form.input.room.label"),
                         placeholder: t("schedule_planner.addCourse.form.input.room.placeholder"),
+                        size: "md",
                     }}
                 />
             </div>
@@ -162,6 +170,7 @@ export default function CourseForm(props: Props) {
                         label: t("schedule_planner.addCourse.form.input.time_from.label"),
                         className: "w-full",
                         required: true,
+                        size: "md",
                     }}
                 />
                 <ControlledTimeInput
@@ -171,6 +180,7 @@ export default function CourseForm(props: Props) {
                         label: t("schedule_planner.addCourse.form.input.time_to.label"),
                         className: "w-full",
                         required: true,
+                        size: "md",
                     }}
                 />
             </div>
@@ -189,9 +199,10 @@ export default function CourseForm(props: Props) {
                     })),
                     searchable: true,
                     required: true,
+                    size: "md",
                 }}
             />
-            <Button type="submit" loading={props.isLoading} color="blue" variant="light">
+            <Button size='md' type="submit" loading={props.isLoading} color="blue" variant="light">
                 {props.type === "create"
                     ? t("schedule_planner.addCourse.button.label")
                     : t("common.button.subject.save")}
