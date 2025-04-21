@@ -16,9 +16,10 @@ import {
 import { api } from '@/trpc/react';
 import { CourseSchemaToCourseCustom, type Course } from '@/types/responses/IGroupCourseResponse';
 import {
-    ActionIcon, AppShell, Box, Burger, Button, Code, Group, LoadingOverlay, Modal, Paper, ScrollArea, Stack, Text
+    ActionIcon, AppShell, Box, Burger, Button, Code, Group, LoadingOverlay, Modal, Paper, ScrollArea, Stack, Text,
+    Title
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { IconDeviceFloppy, IconEye, IconEyeOff, IconPencil, IconTrash } from '@tabler/icons-react';
@@ -32,6 +33,7 @@ import CourseForm from './_components/CourseForm/CourseForm';
 import { courseCustomSchemaToStore, CourseCustomSchemaType } from './schemas/courseCustom.schema';
 
 export default function Page() {
+    const isMobile = useMediaQuery("(max-width: 768px)");
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
     const [editCourseOpened, { open: editCourseOpen, close: editCourseClose }] = useDisclosure(false);
@@ -148,7 +150,7 @@ export default function Page() {
 
     return (
         <>
-            <Modal opened={editCourseOpened} onClose={editCourseClose} title={t("schedule_planner.editCourse.modal.title")}>
+            <Modal fullScreen={isMobile} opened={editCourseOpened} onClose={editCourseClose} title={<Title order={3}>{t("schedule_planner.editCourse.modal.title")}</Title>} size="lg">
                 <CourseForm type="edit" data={editCourseData ?? undefined} onFinish={onEditCourse} />
             </Modal>
             <AppShell
