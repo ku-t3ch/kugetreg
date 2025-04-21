@@ -5,7 +5,7 @@ import { type CreditManagementSchemaType } from "@/schemas/creditManagement/cred
 import { notifications } from "@mantine/notifications";
 import { ErrorNotificationData, LoadingNotificationData, SuccessNotificationData } from "@/configs/common/NotificationData/NotificationData";
 import { Alert, Box, LoadingOverlay, Title } from "@mantine/core";
-import { IconBell } from "@tabler/icons-react";
+import { IconAlertTriangle, IconBell } from "@tabler/icons-react";
 
 export default function Page() {
     const getCreditManagement = api.creditManagement.getCreditManagement.useQuery();
@@ -58,7 +58,7 @@ export default function Page() {
                     ))}
                 </p>
             </Alert>
-            <Alert title={<Title order={4}>หมายเหตุ</Title>} color="red" mb="md" icon={<IconBell size={30} />} radius="md">
+            <Alert title={<Title order={4}>หมายเหตุ</Title>} color="red" mb="md" icon={<IconAlertTriangle size={30} />} radius="md">
                 <p>โปรดตรวจสอบกับทางมหาวิทยาลัยอีกครั้งเพื่อยื่นจบ</p>
             </Alert>
             <LoadingOverlay visible={getCreditManagement.isPending} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
