@@ -6,10 +6,25 @@ import { notifications } from "@mantine/notifications";
 import { ErrorNotificationData, LoadingNotificationData, SuccessNotificationData } from "@/configs/common/NotificationData/NotificationData";
 import { Alert, Box, LoadingOverlay, Title } from "@mantine/core";
 import { IconAlertTriangle, IconBell } from "@tabler/icons-react";
+import { useLocalStorage } from "@mantine/hooks";
 
 export default function Page() {
     const getCreditManagement = api.creditManagement.getCreditManagement.useQuery();
     const saveCreditManagement = api.creditManagement.saveCreditManagement.useMutation();
+
+    const [showRecommendationAlert, setShowRecommendationAlert] = useLocalStorage({
+        key: "recommendation_alert",
+        defaultValue: {
+            show: true,
+        }
+    })
+
+    const [showNoteAlert, setShowNoteAlert] = useLocalStorage({
+        key: "note_alert",
+        defaultValue: {
+            show: true,
+        }
+    })
 
     const handleSave = (data: CreditManagementSchemaType) => {
         const keyNoti = notifications.show(LoadingNotificationData)
@@ -29,7 +44,7 @@ export default function Page() {
 
     return (
         <Box pos="relative">
-            <Alert title={<Title order={4}>คําแนะนํา</Title>} color="blue" mb="md" icon={<IconBell size={30} />} radius="md">
+            {showRecommendationAlert.show && <Alert withCloseButton onClose={() => setShowRecommendationAlert({ show: false })} title={<Title order={4}>คําแนะนํา</Title>} color="blue" mb="md" icon={<IconBell size={30} />} radius="md">
                 <p>คุณสามารถกรอกหมวดวิชาหรือรายวิชาตามเอกสารโครงสร้างหลักสูตร
                     {[
                         {
@@ -57,10 +72,12 @@ export default function Page() {
                         </a>
                     ))}
                 </p>
-            </Alert>
-            <Alert title={<Title order={4}>หมายเหตุ</Title>} color="red" mb="md" icon={<IconAlertTriangle size={30} />} radius="md">
+            </Alert>}
+
+            {showNoteAlert.show && <Alert withCloseButton  onClose={() => setShowNoteAlert({ show: false })} title={<Title order={4}>หมายเหตุ</Title>} color="red" mb="md" icon={<IconAlertTriangle size={30} />} radius="md">
                 <p>โปรดตรวจสอบกับทางมหาวิทยาลัยอีกครั้งเพื่อยื่นจบ</p>
-            </Alert>
+            </Alert>}
+
             <LoadingOverlay visible={getCreditManagement.isPending} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
             <CreditManagementForm type="edit" onFinish={handleSave} data={getCreditManagement.data ?? undefined} />
         </Box>
