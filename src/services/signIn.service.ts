@@ -24,7 +24,7 @@ interface ISignInServiceProps {
 const SignInService = async (props: ISignInServiceProps) => {
   try {
     const res = await axiosAPI.post<ISignInServiceResponse>(
-      "/myku/api/v2/user-login/login",
+      "/v2/user-login/login",
       {
         username: encodeString(props.username),
         password: encodeString(props.password),
