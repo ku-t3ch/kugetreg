@@ -10,7 +10,7 @@ const withNextIntl = createNextIntlPlugin();
 /** @type {import("next").NextConfig} */
 const config = {
   env: {
-    NEXT_PUBLIC_MYKU_API_URL: "https://myapi.ku.th",
+    NEXT_PUBLIC_MYKU_API_URL: "https://my.ku.th/myku/api",
     cdn: "https://s3.tech.nisit.ku.ac.th",
     NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID: "GTM-WQLCTRM5",
   },
